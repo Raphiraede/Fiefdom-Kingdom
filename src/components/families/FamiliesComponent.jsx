@@ -2,6 +2,7 @@ import React from 'react'
 import { NavBar } from '../shared_components/NavBar.jsx'
 import { connect } from 'react-redux'
 import { FamilyComponent } from './FamilyComponent.jsx'
+import { NextTurnButton } from '../shared_components/NextTurnButton.jsx'
 
 function FamiliesComponent(props){
   return (
@@ -10,6 +11,7 @@ function FamiliesComponent(props){
       {props.families.map(royalFamily => {
         return <FamilyComponent family={royalFamily} />
       })}
+      <NextTurnButton />
     </div>
   )
 }

@@ -17,7 +17,10 @@ class RoyalFamily{
     }
   }
 
-  handleEndTurn(){
+  handleNextTurn(){
+    this.nobles.forEach(noble => {
+      noble.ageOneYear()
+    })
   }
 }
 

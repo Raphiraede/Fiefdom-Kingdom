@@ -1,7 +1,7 @@
 
 import types from './types'
-import { createNewGameState } from './newGameState'
-const initialState = {}
+import { createNewGameState } from './newGameState.js'
+import { handleNextTurn } from './nextTurn.js'
 
 function rootReducer(state, action){
   switch (action.type) {
@@ -10,6 +10,10 @@ function rootReducer(state, action){
       const newGameState = createNewGameState()
       return newGameState
 
+    case types.NEXT_TURN:
+      const nextTurnState = handleNextTurn(state)
+      return nextTurnState
+    
     default:
       return state
   }
