@@ -7,4 +7,10 @@ function newGame(payload){
   }
 }
 
-export { newGame }
+function nextTurn(){
+  return {
+    type: types.NEXT_TURN,
+  }
+}
+
+export { newGame, nextTurn }

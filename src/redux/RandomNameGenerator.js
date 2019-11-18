@@ -1,14 +1,14 @@
 
 
-const firstNames = ['Joe', 'Bob', 'Harry', 'Hagrid', 'Farquad', 'Flint', 'Shrek', 'Fiona', 'Fieri', 'Raphi', 'Madison', 'Gabriel', 'Damien', 'Bradley', 'Peter', 'Henry', 'George', 'Ham', 'Bond', 'James', 'John', 'Caesar', 'Octavian', 'Antony', 'Mark']
+const firstNames = ['Joe', 'Bob', 'Harry', 'Hagrid', 'Farquad', 'Flint', 'Shrek', 'Fiona', 'Fieri', 'Raphael', 'Madison', 'Gabriel', 'Damien', 'Bradley', 'Peter', 'Henry', 'George', 'Ham', 'Bond', 'James', 'John', 'Caesar', 'Octavian', 'Antony', 'Mark']
 
 
-const middleNames = ['The Wise', 'The Brave', 'The Hairy', 'The Coward', 'The Fat', 'The Flossy', 'The Skinny', 'The Short', 'The Tall', 'The Strong', 'The Swampy', 'The Sweaty', 'The Crazy', 'The Insane', 'The Quick', 'The Mean', 'The Ruthless', 'The Harmless', 'The Swag', 'The Dapper', 'The Baby', 'The Happy']
+const middleNames = ['The Wise', 'The Brave', 'The Hairy', 'The Coward', 'The Fat', 'The Flossy', 'The Skinny', 'The Wolfgang', 'The Short', 'The Tall', 'The Strong', 'The Swampy', 'The Sweaty', 'The Crazy', 'The Insane', 'The Quick', 'The Mean', 'The Ruthless', 'The Harmless', 'The Swag', 'The Dapper', 'The Baby', 'The Happy']
 
 class RandomNameGenerator{
-  constructor(){
-    this.randomNames = generateRandomNames()
-    this.counter = -1 //first time newName is called, counter will be 0
+  constructor(randomNames=generateRandomNames(), counter=-1){
+    this.randomNames = randomNames
+    this.counter = counter
   }
 
   newName(){
@@ -32,7 +32,7 @@ function nameCombiner(){
 function getRandomInt(min, max) {
   min = Math.ceil(min)
   max = Math.floor(max)
-  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min)) + min //The maximum is exclusive and the minimum is inclusive
 }
 
 function shuffleNames(arrayOfNames){
@@ -55,4 +55,4 @@ function generateRandomNames(){
 
 
 
-export { RandomNameGenerator }
+export { RandomNameGenerator, getRandomInt }

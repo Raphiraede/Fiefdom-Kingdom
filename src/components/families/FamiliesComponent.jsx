@@ -3,23 +3,22 @@ import { NavBar } from '../shared_components/NavBar.jsx'
 import { connect } from 'react-redux'
 import { FamilyComponent } from './FamilyComponent.jsx'
 
-class FamiliesComponent extends React.Component{
-
-  render(){
-    return (
-      <div>
-        <NavBar />
-        <FamilyComponent family={this.props.BurnHammerFamily} />
-        <FamilyComponent family={this.props.GreenHeartFamily} />
-        <FamilyComponent family={this.props.GoldFingerFamily} />
-      </div>
-    )
-  }
+function FamiliesComponent(props){
+  return (
+    <div>
+      <NavBar />
+      {props.families.map(royalFamily => {
+        return <FamilyComponent family={royalFamily} />
+      })}
+    </div>
+  )
 }
 
 function mapStateToProps(state){
   return {
-    ...state.families
+    families: [
+      ...state.families
+    ]
   }
 }
 

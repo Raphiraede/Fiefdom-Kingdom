@@ -1,26 +1,32 @@
-import { RoyalFamily } from '../models/RoyalFamily'
-import { RandomNameGenerator } from './nameGenerator.js'
+import { 
+  BurnHammerFamily, 
+  GoldFingerFamily, 
+  GreenHeartFamily, 
+} from '../models'
+
+import { RandomNameGenerator } from './RandomNameGenerator.js'
 
 function createNewGameState(){
   const randomNameGenerator = new RandomNameGenerator()
 
-  const BurnHammerFamily = new RoyalFamily({familyName: 'BurnHammer'})
-  const GreenHeartFamily = new RoyalFamily({familyName: 'GreenHeart'})
-  const GoldFingerFamily = new RoyalFamily({familyName: 'GoldFinger'})
+  const burnHammerFamily = new BurnHammerFamily()
+  const greenHeartFamily = new GreenHeartFamily()
+  const goldFingerFamily = new GoldFingerFamily()
 
-  BurnHammerFamily.populateNobles(randomNameGenerator)
-  GreenHeartFamily.populateNobles(randomNameGenerator)
-  GoldFingerFamily.populateNobles(randomNameGenerator)
+  burnHammerFamily.populateNobles(randomNameGenerator)
+  greenHeartFamily.populateNobles(randomNameGenerator)
+  goldFingerFamily.populateNobles(randomNameGenerator)
 
-  const families = {
-    BurnHammerFamily,
-    GreenHeartFamily,
-    GoldFingerFamily,
-  }
+  const families = [
+    burnHammerFamily,
+    greenHeartFamily,
+    goldFingerFamily,
+  ]
 
   const newGameState = {
+    turnNumber: 1,
     randomNameGenerator,
-    families
+    families,
   }
 
   return newGameState
