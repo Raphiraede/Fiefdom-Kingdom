@@ -5,7 +5,6 @@ function Button(props){
   const {
     text,
     onClick,
-    backgroundImage,
   } = props
 
   return(

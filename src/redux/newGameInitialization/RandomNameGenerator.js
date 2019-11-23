@@ -1,4 +1,4 @@
-
+import { getRandomInt } from '../getRandomInt'
 
 const firstNames = ['Joe', 'Bob', 'Harry', 'Hagrid', 'Farquad', 'Flint', 'Shrek', 'Fiona', 'Fieri', 'Raphael', 'Madison', 'Gabriel', 'Damien', 'Bradley', 'Peter', 'Henry', 'George', 'Ham', 'Bond', 'James', 'John', 'Caesar', 'Octavian', 'Antony', 'Mark']
 
@@ -29,17 +29,11 @@ function nameCombiner(){
   return nameList
 }
 
-function getRandomInt(min, max) {
-  min = Math.ceil(min)
-  max = Math.floor(max)
-  return Math.floor(Math.random() * (max - min)) + min //The maximum is exclusive and the minimum is inclusive
-}
-
 function shuffleNames(arrayOfNames){
   let shuffleArray = arrayOfNames
   for (let i = 0; i <= 10000; i++){
-    const x = getRandomInt(0, shuffleArray.length)
-    const y = getRandomInt(0, shuffleArray.length)
+    const x = getRandomInt(0, shuffleArray.length - 1)
+    const y = getRandomInt(0, shuffleArray.length - 1)
     let temp = shuffleArray[x]
     shuffleArray[x] = shuffleArray[y]
     shuffleArray[y] = temp

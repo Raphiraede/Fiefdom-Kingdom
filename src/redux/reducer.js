@@ -1,6 +1,6 @@
 
 import types from './types'
-import { createNewGameState } from './newGameState.js'
+import { createNewGameState } from './newGameInitialization/newGameState.js'
 import { handleNextTurn } from './nextTurn.js'
 
 function rootReducer(state, action){

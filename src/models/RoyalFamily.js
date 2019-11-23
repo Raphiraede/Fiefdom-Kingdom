@@ -16,10 +16,10 @@ class RoyalFamily{
       this.nobles.push(new Noble({firstName, familyName, loyalty}))
     }
   }
-
+  
   handleNextTurn(){
     this.nobles.forEach(noble => {
-      noble.ageOneYear()
+      noble.handleNextTurn()
     })
   }
 }

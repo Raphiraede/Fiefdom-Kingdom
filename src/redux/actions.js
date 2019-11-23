@@ -13,4 +13,10 @@ function nextTurn(){
   }
 }
 
-export { newGame, nextTurn }
+function mapClick(){
+  return{
+    type: types.mapClick
+  }
+}
+
+export { newGame, nextTurn, mapClick }

@@ -2,9 +2,10 @@ import {
   BurnHammerFamily, 
   GoldFingerFamily, 
   GreenHeartFamily, 
-} from '../models'
+} from '../../models'
 
-import { RandomNameGenerator } from './RandomNameGenerator.js'
+import { generateNewMap } from './generateNewMap'
+import { RandomNameGenerator } from './RandomNameGenerator'
 
 function createNewGameState(){
   const randomNameGenerator = new RandomNameGenerator()
@@ -23,10 +24,13 @@ function createNewGameState(){
     goldFingerFamily,
   ]
 
+  const map = generateNewMap(200, 200)
+
   const newGameState = {
     turnNumber: 1,
     randomNameGenerator,
     families,
+    map
   }
 
   return newGameState

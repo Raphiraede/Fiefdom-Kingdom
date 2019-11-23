@@ -5,7 +5,7 @@ import {
   Noble, 
   RoyalFamily,
 } from '../models'
-import { RandomNameGenerator } from './RandomNameGenerator'
+import { RandomNameGenerator } from './newGameInitialization/RandomNameGenerator'
 
 
 function loadState() {
