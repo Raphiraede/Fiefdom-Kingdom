@@ -4,17 +4,20 @@ import './CanvasMap.css'
 import Farm from '../../images/Farm.png'
 import Mountain from '../../images/Mountain.png'
 import Plain from '../../images/Plain.png'
-
+import Hut from '../../images/Hut.png'
 class CanvasMap extends React.Component{
   constructor(){
     super()
     this.FarmImage = new Image()
     this.MountainImage = new Image()
     this.PlainImage = new Image()
+    this.HutImage = new Image
     this.FarmImage.src = Farm
     this.MountainImage.src = Mountain
     this.PlainImage.src = Plain
+    this.HutImage.src = Hut
   }
+
   componentDidMount() {
     const tileSize = 30
     const map = this.props.map
@@ -33,6 +36,9 @@ class CanvasMap extends React.Component{
         } 
         else if(map[i][j].type==='farm') {
           context.drawImage(this.FarmImage, x, y, tileSize, tileSize)
+        }
+        else if (map[i][j].type==='hut'){
+          context.drawImage(this.HutImage, x, y, tileSize, tileSize)
         }
       }
     }

@@ -8,7 +8,7 @@ function NavBar(){
     <div className='NavBar'>
       <Link to={'/'}>
         <Button
-          text='home page'
+          text='Home Page'
         />
       </Link>
 
@@ -21,6 +21,12 @@ function NavBar(){
       <Link to={'/map'}>
         <Button 
           text='Map'
+        />
+      </Link>
+
+      <Link to={'/map'}>
+        <Button 
+          text='Nobles'
         />
       </Link>
     </div>

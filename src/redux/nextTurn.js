@@ -1,10 +1,10 @@
 
 
 function handleNextTurn(state){
-  let newState = state
+  let newState = {...state}
   newState.turnNumber++
   newState.families.forEach(family => {
-    family.handleNextTurn()
+    family.handleNextTurn(newState.randomNameGenerator)
   })
 
   return newState

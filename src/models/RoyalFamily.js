@@ -17,9 +17,9 @@ class RoyalFamily{
     }
   }
   
-  handleNextTurn(){
+  handleNextTurn(randomNameGenerator){
     this.nobles.forEach(noble => {
-      noble.handleNextTurn()
+      noble.handleNextTurn(randomNameGenerator)
     })
   }
 }

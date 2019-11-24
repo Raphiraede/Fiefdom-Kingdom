@@ -4,11 +4,19 @@ import { nextTurn } from '../../redux/actions.js'
 import { connect } from 'react-redux'
 
 function NextTurnButton(props){
+  console.log(props)
   return (
     <div>
-      <Button text='NextTurn' onClick={props.nextTurn} />
+      <Button text={`Next Turn`} onClick={props.nextTurn} />
+      <span>Turn {props.turnNumber}</span>
     </div>
   )
+}
+
+function mapStateToProps(state){
+  return{
+    turnNumber: state.turnNumber
+  }
 }
 
 function mapDispatchToProps(dispatch){
@@ -17,5 +25,5 @@ function mapDispatchToProps(dispatch){
   }
 }
 
-const connectedComponent = connect(undefined, mapDispatchToProps)(NextTurnButton)
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(NextTurnButton)
 export { connectedComponent as NextTurnButton }
