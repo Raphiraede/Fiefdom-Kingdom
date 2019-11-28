@@ -5,7 +5,7 @@ import { CanvasMap } from './CanvasMap'
 
 function Map(props){
   return(
-    <div>
+    <div className='MapView'>
       <NavBar />
       <Draggable>
         <div>

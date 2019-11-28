@@ -1,13 +1,13 @@
-import { BurnHammerFamily } from './BurnHammerFamily.js'
-import { GoldFingerFamily } from './GoldFingerFamily.js'
-import { GreenHeartFamily } from './GreenHeartFamily.js'
-import { Noble } from './Noble.js'
-import { RoyalFamily } from './RoyalFamily.js'
+import { BurnHammerFamily } from './families/BurnHammerFamily'
+import { GoldFingerFamily } from './families/GoldFingerFamily'
+import { GreenHeartFamily } from './families/GreenHeartFamily'
+import { Noble } from './families/Noble'
+import { RoyalFamily } from './families/RoyalFamily'
 
 export { 
-  BurnHammerFamily, 
-  GoldFingerFamily, 
-  GreenHeartFamily, 
+  BurnHammerFamily,
+  GoldFingerFamily,
+  GreenHeartFamily,
   Noble, 
   RoyalFamily,
 }

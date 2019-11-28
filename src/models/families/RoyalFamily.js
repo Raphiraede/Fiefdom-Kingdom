@@ -12,8 +12,7 @@ class RoyalFamily{
     while(this.nobles.length < 10){
       const firstName = randomNameGenerator.newName()
       const familyName = this.familyName
-      const loyalty = 10
-      this.nobles.push(new Noble({firstName, familyName, loyalty}))
+      this.nobles.push(new Noble({firstName, familyName}))
     }
   }
   

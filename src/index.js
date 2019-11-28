@@ -5,7 +5,7 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { rootReducer } from './redux/reducer.js'
 import { saveState, loadState } from './redux/saveAndLoadState.js'
-
+import './index.css'
 
 
 const persistedState = loadState()

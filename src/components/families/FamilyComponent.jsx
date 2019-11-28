@@ -1,5 +1,4 @@
 import React from 'react'
-import './FamilyComponent.css'
 import { NobleComponent } from './NobleComponent.jsx'
 
 function FamilyComponent(props){

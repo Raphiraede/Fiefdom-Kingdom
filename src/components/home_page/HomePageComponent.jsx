@@ -4,13 +4,15 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Button } from '../shared_components/Button.jsx'
 import { newGame } from '../../redux/actions.js'
+import './HomePageComponent.css'
+
 
 class HomePageComponent extends React.Component{
-
+  
   render(){
     return(
       <div>
-        <h1 className='Title'>Fiefdom Kingdom!</h1>
+        <h1 className='Title'>Fiefdom Kingdom</h1>
         <Link to={'/families'}>
           <Button 
             text={'New Game!'}
@@ -32,6 +34,6 @@ HomePageComponent.propTypes = {
   newGame: PropTypes.func
 }
 
-const connectedComponent = connect(undefined, mapDispatchToProps)(HomePageComponent)
+const HomePageContainer = connect(undefined, mapDispatchToProps)(HomePageComponent)
 
-export { connectedComponent as HomePageComponent }
+export { HomePageContainer as HomePageComponent }

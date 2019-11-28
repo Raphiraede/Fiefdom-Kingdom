@@ -4,7 +4,6 @@ import { nextTurn } from '../../redux/actions.js'
 import { connect } from 'react-redux'
 
 function NextTurnButton(props){
-  console.log(props)
   return (
     <div>
       <Button text={`Next Turn`} onClick={props.nextTurn} />

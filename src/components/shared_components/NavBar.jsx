@@ -23,12 +23,6 @@ function NavBar(){
           text='Map'
         />
       </Link>
-
-      <Link to={'/map'}>
-        <Button 
-          text='Nobles'
-        />
-      </Link>
     </div>
   )
 

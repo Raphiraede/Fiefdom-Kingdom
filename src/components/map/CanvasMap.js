@@ -11,7 +11,7 @@ class CanvasMap extends React.Component{
     this.FarmImage = new Image()
     this.MountainImage = new Image()
     this.PlainImage = new Image()
-    this.HutImage = new Image
+    this.HutImage = new Image()
     this.FarmImage.src = Farm
     this.MountainImage.src = Mountain
     this.PlainImage.src = Plain
@@ -68,5 +68,5 @@ function mapStateToProps(state){
   }
 }
 
-const connectedComponent = connect(mapStateToProps)(CanvasMap)
-export { connectedComponent as CanvasMap }
+const CanvasMapContainer = connect(mapStateToProps)(CanvasMap)
+export { CanvasMapContainer as CanvasMap }
