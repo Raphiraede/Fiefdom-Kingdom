@@ -7,11 +7,13 @@ function Map(props){
   return(
     <div className='MapView'>
       <NavBar />
-      <Draggable>
-        <div>
-          <CanvasMap />
-        </div>
-      </Draggable>
+      <div className='map-wrapper'>
+        <Draggable>
+          <div>
+            <CanvasMap />
+          </div>
+        </Draggable>
+      </div>
     </div>
   )
 }

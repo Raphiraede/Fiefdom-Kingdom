@@ -24,13 +24,13 @@ function createNewGameState(){
     goldFingerFamily,
   ]
 
-  const map = generateNewMap(200, 200)
+  const gameMap = generateNewMap(200, 200)
 
   const newGameState = {
     turnNumber: 1,
     randomNameGenerator,
     families,
-    map
+    gameMap
   }
 
   return newGameState

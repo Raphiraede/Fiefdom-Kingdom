@@ -6,8 +6,8 @@ import Mountain from '../../images/Mountain.png'
 import Plain from '../../images/Plain.png'
 import Hut from '../../images/Hut.png'
 class CanvasMap extends React.Component{
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.FarmImage = new Image()
     this.MountainImage = new Image()
     this.PlainImage = new Image()
@@ -19,8 +19,9 @@ class CanvasMap extends React.Component{
   }
 
   componentDidMount() {
+
     const tileSize = 30
-    const map = this.props.map
+    const map = this.props.gameMap
     let canvas = this.refs.canvas
     const context = canvas.getContext('2d')
 
@@ -43,7 +44,6 @@ class CanvasMap extends React.Component{
       }
     }
 
-
     function handleClick(e){
       //This will return the coordinate of the click in relation to the element, regaurdless of where the element is on the page
       const rect = e.target.getBoundingClientRect()
@@ -55,16 +55,14 @@ class CanvasMap extends React.Component{
 
   render(){
     return (
-        <div>
           <canvas ref='canvas' width={1000} height={1000} />
-        </div>
     )
   }
 }
 
 function mapStateToProps(state){
   return {
-    map: [...state.map]
+    map: [...state.gameMap]
   }
 }
 

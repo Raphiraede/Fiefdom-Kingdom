@@ -5,6 +5,8 @@
   z-index: 10;
 }
 
-/*This disables the scrollwheel so that the canvas element feels more like a map that can be dragged*/
-
-body{overflow: hidden;}
+.map-wrapper{
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
