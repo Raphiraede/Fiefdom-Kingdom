@@ -4,7 +4,7 @@ import {
   GreenHeartFamily, 
   Noble, 
   RoyalFamily,
-} from '../models'
+} from '../models/families'
 import { RandomNameGenerator } from './newGameInitialization/RandomNameGenerator'
 
 

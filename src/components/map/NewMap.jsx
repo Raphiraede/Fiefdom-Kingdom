@@ -1,24 +1,29 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import './CanvasMap.css'
-import { mapWidth, mapHeight, tileWidth, tileHeight } from '../../models/map/mapConstants'
-import Farm from '../../images/Farm.png'
-import Mountain from '../../images/Mountain.png'
-import Plain from '../../images/Plain.png'
-import Hut from '../../images/Hut.png'
+import { mapWidth, mapHeight, tileWidth, tileHeight } from '../../models/tiles/mapConstants'
+import Farm from '../../images/fieldWithWheat.png'
+import Rock from '../../images/bigRock.png'
+import Plain from '../../images/plain1.png'
+import House from '../../images/house1.png'
+import Trees from '../../images/denseTrees.png'
+import { NavBar } from '../shared_components/NavBar'
 
 class NewMap extends React.Component{
   constructor(props){
     super(props)
     this.FarmImage = new Image()
-    this.MountainImage = new Image()
+    this.RockImage = new Image()
     this.PlainImage = new Image()
-    this.HutImage = new Image()
+    this.HouseImage = new Image()
+    this.Trees = new Image()
     this.FarmImage.src = Farm
-    this.MountainImage.src = Mountain
+    this.RockImage.src = Rock
     this.PlainImage.src = Plain
-    this.HutImage.src = Hut
+    this.HouseImage.src = House
+    this.Trees.src = Trees
   }
+  
   componentDidMount() {
     const canvas = this.refs.canvas
     const ctx = canvas.getContext('2d')
@@ -34,33 +39,43 @@ class NewMap extends React.Component{
       framesLastSecond = frameCount
     }
 
-    for(let x = 0; x < mapHeight; x++){
-      for(let y = 0; y < mapWidth; y++){
+    for(let x = 0; x < mapWidth; x++){
+      for(let y = 0; y < mapHeight; y++){
+
+        //Always draw a plain first, as a backdrop
+        ctx.drawImage(this.PlainImage, x*tileWidth, y*tileHeight, tileWidth, tileHeight)
         switch(this.props.gameMap[x][y].type){
-          case 'plain': 
-            ctx.drawImage(this.PlainImage, x*tileWidth, y*tileHeight, tileWidth, tileHeight)
+          case 'plain': //Not necessary to draw anything here, since plain is drawn on every time anyway
+            //ctx.drawImage(this.PlainImage, x*tileWidth, y*tileHeight, tileWidth, tileHeight)
           break
 
-          case 'mountain':
-              ctx.drawImage(this.MountainImage, x*tileWidth, y*tileHeight, tileWidth, tileHeight)
+          case 'rock':
+            ctx.drawImage(this.RockImage, x*tileWidth, y*tileHeight, tileWidth, tileHeight)
           break
 
           case 'farm':
-              ctx.drawImage(this.FarmImage, x*tileWidth, y*tileHeight, tileWidth, tileHeight)
-
+            ctx.drawImage(this.FarmImage, x*tileWidth, y*tileHeight, tileWidth, tileHeight)
           break
 
-          case 'hut':
-              ctx.drawImage(this.HutImage, x*tileWidth, y*tileHeight, tileWidth, tileHeight)
+          case 'house':
+            ctx.drawImage(this.HouseImage, x*tileWidth, y*tileHeight, tileWidth, tileHeight)
           break
+
+          case 'trees':
+            ctx.drawImage(this.Trees, x*tileWidth, y*tileHeight, tileWidth, tileHeight)
+          default:
         }
       }
     }
+    requestAnimationFrame(() => {this.drawGame(ctx)})
   }
 
   render(){
     return (
-      <canvas ref='canvas' width={mapWidth * tileWidth} height={mapHeight*tileHeight} />
+      <div>
+        <NavBar />
+        <canvas ref='canvas' width={mapWidth * tileWidth} height={mapHeight*tileHeight} />
+      </div>
     )
   }
 }

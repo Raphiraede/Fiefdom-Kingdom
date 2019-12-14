@@ -2,7 +2,7 @@ import {
   BurnHammerFamily, 
   GoldFingerFamily, 
   GreenHeartFamily, 
-} from '../../models'
+} from '../../models/families'
 
 import { generateNewMap } from './generateNewMap'
 import { RandomNameGenerator } from './RandomNameGenerator'
@@ -24,7 +24,7 @@ function createNewGameState(){
     goldFingerFamily,
   ]
 
-  const gameMap = generateNewMap(200, 200)
+  const gameMap = generateNewMap()
 
   const newGameState = {
     turnNumber: 1,
