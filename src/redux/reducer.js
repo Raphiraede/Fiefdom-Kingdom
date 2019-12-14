@@ -14,9 +14,11 @@ function rootReducer(state, action){
       const nextTurnState = handleNextTurn(state)
       return nextTurnState
     
-    case types.MAP_CLICK:
-      console.log('map click')
-      return state
+    case types.MAP_DRAG:
+      const newState = {...state}
+      newState.mapOffset.width = action.payload.x
+      newState.mapOffset.height = action.payload.y
+      return newState
       
     default:
       return state

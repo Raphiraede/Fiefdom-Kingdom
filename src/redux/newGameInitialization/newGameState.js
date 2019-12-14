@@ -30,7 +30,11 @@ function createNewGameState(){
     turnNumber: 1,
     randomNameGenerator,
     families,
-    gameMap
+    gameMap,
+    mapOffset: {
+      width: 0,
+      height: 0,
+    }
   }
 
   return newGameState

@@ -13,10 +13,11 @@ function nextTurn(){
   }
 }
 
-function mapClick(){
+function mapDrag(payload){
   return{
-    type: types.mapClick
+    type: types.MAP_DRAG,
+    payload: payload
   }
 }
 
-export { newGame, nextTurn, mapClick }
+export { newGame, nextTurn, mapDrag }
