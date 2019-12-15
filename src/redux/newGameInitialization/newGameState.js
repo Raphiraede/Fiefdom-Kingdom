@@ -6,6 +6,7 @@ import {
 
 import { generateNewMap } from './generateNewMap'
 import { RandomNameGenerator } from './RandomNameGenerator'
+import { Army } from '../../models/Army'
 
 function createNewGameState(){
   const randomNameGenerator = new RandomNameGenerator()
@@ -26,14 +27,20 @@ function createNewGameState(){
 
   const gameMap = generateNewMap()
 
+  const testArmy = new Army({
+    size: 10,
+    coordinates:{x: 10, y: 10}, 
+    destination:{x: 25, y: 15},
+  })
+
   const newGameState = {
     turnNumber: 1,
     randomNameGenerator,
     families,
     gameMap,
     mapOffset: {
-      width: 0,
-      height: 0,
+      x: 0,
+      y: 0,
     }
   }
 

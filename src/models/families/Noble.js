@@ -11,6 +11,7 @@ class Noble {
     age=getRandomInt(15, 45),
     deathAge=getRandomInt(45, 90),
     id=uuidv1(),
+    fief=undefined,
   }){
     this.firstName = firstName
     this.familyName = familyName
@@ -20,6 +21,7 @@ class Noble {
     this.age = age
     this.deathAge = deathAge
     this.id = id
+    this.fief=fief
   }
   
   handleNextTurn(randomNameGenerator){

@@ -16,10 +16,10 @@ function rootReducer(state, action){
     
     case types.MAP_DRAG:
       const newState = {...state}
-      newState.mapOffset.width = action.payload.x
-      newState.mapOffset.height = action.payload.y
+      newState.mapOffset.x = action.payload.x
+      newState.mapOffset.y = action.payload.y
       return newState
-      
+    
     default:
       return state
   }

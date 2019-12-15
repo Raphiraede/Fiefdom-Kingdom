@@ -1,0 +1,6 @@
+
+class Kingdom{
+  constructor({land}){
+    
+  }
+}
