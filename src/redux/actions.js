@@ -1,4 +1,5 @@
 import types from "./types";
+import { func } from "prop-types";
 
 function newGame(payload){
   return {
@@ -20,4 +21,16 @@ function mapDrag(payload){
   }
 }
 
-export { newGame, nextTurn, mapDrag }
+function zoomMapIn(){
+  return {
+    type: types.ZOOM_MAP_IN
+  }
+}
+
+function zoomMapOut(){
+  return {
+    type: types.ZOOM_MAP_OUT
+  }
+}
+
+export { newGame, nextTurn, mapDrag, zoomMapIn, zoomMapOut }

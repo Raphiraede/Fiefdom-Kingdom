@@ -7,6 +7,7 @@ import {
 import { generateNewMap } from './generateNewMap'
 import { RandomNameGenerator } from './RandomNameGenerator'
 import { Army } from '../../models/Army'
+import { tileHeight } from '../../models/tiles/mapConstants'
 
 function createNewGameState(){
   const randomNameGenerator = new RandomNameGenerator()
@@ -41,7 +42,10 @@ function createNewGameState(){
     mapOffset: {
       x: 0,
       y: 0,
-    }
+    },
+    testArmy,
+    tileWidth: 32,
+    tileHeight: 32,
   }
 
   return newGameState

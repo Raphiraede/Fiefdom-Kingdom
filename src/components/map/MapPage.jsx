@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import './CanvasMap.css'
-import { mapWidth, mapHeight, viewportWidth, viewportHeight, tileWidth, tileHeight } from '../../models/tiles/mapConstants'
+import { mapWidth, mapHeight, viewportWidth, viewportHeight } from '../../models/tiles/mapConstants'
 import Field from '../../images/tiles/fieldWithWheat.png'
 import Rock from '../../images/tiles/bigRock.png'
 import Plain from '../../images/tiles/plain1.png'
@@ -10,9 +10,11 @@ import Trees from '../../images/tiles/denseTrees.png'
 import GoldOre from '../../images/tiles/goldOre.png'
 import ChurchBot from '../../images/tiles/ChurchBot.png'
 import ChurchTop from '../../images/tiles/ChurchTop.png'
+import BlueSpearman from '../../images/units/blue-spearman-bigger.png'
 import { NavBar } from '../shared_components/NavBar'
-import { mapDrag } from '../../redux/actions'
+import { mapDrag, zoomMapIn, zoomMapOut } from '../../redux/actions'
 import { TileInfo } from './TileInfo'
+import { NextTurnButton } from '../shared_components/NextTurnButton'
 
 class MapPage extends React.Component{
   constructor(props){
@@ -25,6 +27,7 @@ class MapPage extends React.Component{
     this.GoldOre = new Image()
     this.ChurchBot = new Image()
     this.ChurchTop = new Image()
+    this.BlueSpearman = new Image()
 
     this.FieldImage.src = Field
     this.RockImage.src = Rock
@@ -34,10 +37,11 @@ class MapPage extends React.Component{
     this.GoldOre.src = GoldOre
     this.ChurchBot.src = ChurchBot
     this.ChurchTop.src = ChurchTop
+    this.BlueSpearman.src = BlueSpearman
 
     //mapOffset is in the redux store so that it persists when the user navigates away and navigates back
     this.state = {
-      tileInfoIsVisible: true,
+      tileInfoIsVisible: true, //Currently this is always true, might change later
       mouseOffset: {},
       mouseX: 0,
       mouseY: 0,
@@ -65,8 +69,11 @@ class MapPage extends React.Component{
 
     //tracks mouseX and mouseY to help calculate which tile to highlite
     canvas.addEventListener('mousemove', this.trackMouseMovement)
-
     canvas.addEventListener('mousedown', (e) => this.onMouseDown(e, canvas))
+    canvas.addEventListener('wheel', (e) => {
+      if(e.deltaY > 0) this.props.zoomMapOut()
+      else if (e.deltaY < 0) this.props.zoomMapIn()
+    })
     requestAnimationFrame(() => this.drawGame(ctx))
   }
 
@@ -84,11 +91,14 @@ class MapPage extends React.Component{
       currentSecond = sec
       framesLastSecond = frameCount
     }
+
+    const xOffset = this.props.mapOffset.x
+    const yOffset = this.props.mapOffset.y
+    const tileWidth = this.props.tileWidth
+    const tileHeight = this.props.tileHeight
     
     for(let x = 0; x < mapWidth; x++){
       for(let y = 0; y < mapHeight; y++){
-        const xOffset = this.props.mapOffset.x
-        const yOffset = this.props.mapOffset.y
         //Always draw a plain image first on every tile, as a backdrop
         ctx.drawImage(this.PlainImage, x*tileWidth + xOffset, y*tileHeight + yOffset, tileWidth, tileHeight)
         switch(this.props.gameMap[x][y].type){
@@ -122,31 +132,19 @@ class MapPage extends React.Component{
           break
 
           default:
-
         }
       }
     }
+
+    const armyX = this.props.testArmy.coordinates.x
+    const armyY = this.props.testArmy.coordinates.y
+    ctx.drawImage(this.BlueSpearman, armyX*tileWidth + xOffset, armyY*tileHeight + yOffset, tileWidth, tileHeight)
+
     this.drawHoveredTileOutline(ctx)
     this.handleTileInfoCoordinates()
     if(window.location.pathname==='/newMap'){
       requestAnimationFrame(() => {this.drawGame(ctx)})
     }
-  }
-
-  render(){
-    return (
-      <div>
-        <NavBar />
-        <canvas ref='canvas' width={viewportWidth} height={viewportHeight} />
-        {this.state.tileInfoIsVisible ? 
-          <TileInfo 
-            tileData={this.props.gameMap[this.state.tileX][this.state.tileY]}
-          />
-          : null
-        
-      }
-      </div>
-    )
   }
 
   //This makes the tileInfo window hover next to the cursor
@@ -164,12 +162,12 @@ class MapPage extends React.Component{
   drawHoveredTileOutline(ctx){
     const x = this.state.tileX
     const y = this.state.tileY
-    ctx.strokeRect(x*tileWidth + this.props.mapOffset.x, y*tileHeight + this.props.mapOffset.y, tileWidth, tileHeight)
+    ctx.strokeRect(x*this.props.tileWidth + this.props.mapOffset.x, y*this.props.tileHeight + this.props.mapOffset.y, this.props.tileWidth, this.props.tileHeight)
   }
 
   findHoveredTileCoords(){
-    const tileX = Math.floor((this.state.mouseX - this.props.mapOffset.x)/tileWidth)
-    const tileY = Math.floor((this.state.mouseY - this.props.mapOffset.y)/tileHeight)
+    const tileX = Math.floor((this.state.mouseX - this.props.mapOffset.x)/this.props.tileWidth)
+    const tileY = Math.floor((this.state.mouseY - this.props.mapOffset.y)/this.props.tileHeight)
     return {
       tileX,
       tileY
@@ -199,18 +197,40 @@ class MapPage extends React.Component{
     canvas.removeEventListener('mousemove', this.onMouseMove)
     canvas.removeEventListener('mouseup', () => this.onMouseUp())
   }
+
+  render(){
+    return (
+      <div>
+        <NavBar />
+        <canvas ref='canvas' width={viewportWidth} height={viewportHeight} />
+        {this.state.tileInfoIsVisible && this.props.gameMap[this.state.tileX] && this.props.gameMap[this.state.tileX][this.state.tileY]? 
+          <TileInfo 
+            tileData={this.props.gameMap[this.state.tileX][this.state.tileY]}
+          />
+          : null
+        }
+
+        <NextTurnButton />
+      </div>
+    )
+  }
 }
 
 function mapStateToProps(state){
   return {
     gameMap: [...state.gameMap],
-    mapOffset: {...state.mapOffset}
+    mapOffset: {...state.mapOffset},
+    tileWidth: state.tileWidth,
+    tileHeight: state.tileHeight,
+    testArmy: {...state.testArmy}
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    mapDrag: (payload) => dispatch(mapDrag(payload))
+    mapDrag: (payload) => dispatch(mapDrag(payload)),
+    zoomMapIn: () => dispatch(zoomMapIn()),
+    zoomMapOut: () => dispatch(zoomMapOut())
   }
 }
 

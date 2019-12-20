@@ -4,4 +4,9 @@ const NEW_GAME = 'NEW_GAME'
 const NEXT_TURN = 'NEXT_TURN'
 
 const MAP_DRAG = 'MAP_DRAG'
-export default { NEW_GAME, NEXT_TURN, MAP_DRAG }
+
+const ZOOM_MAP_IN = 'ZOOM_IN'
+
+const ZOOM_MAP_OUT = 'ZOOM_MAP_OUT'
+
+export default { NEW_GAME, NEXT_TURN, MAP_DRAG, ZOOM_MAP_IN, ZOOM_MAP_OUT }

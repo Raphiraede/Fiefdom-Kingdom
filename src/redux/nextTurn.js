@@ -6,7 +6,7 @@ function handleNextTurn(state){
   newState.families.forEach(family => {
     family.handleNextTurn(newState.randomNameGenerator)
   })
-
+  newState.testArmy.moveTowardDestination()
   return newState
 }
 
