@@ -23,18 +23,16 @@ function rootReducer(state, action){
     case types.ZOOM_MAP_IN:
       newState = {...state}
 
-      if(state.tileHeight < 128 && state.tileWidth < 128){
-        newState.tileWidth += 4
-        newState.tileHeight += 4
+      if(state.tileSize < 128 && state.tileSize < 128){
+        newState.tileSize += 4
       }
       return newState
 
     case types.ZOOM_MAP_OUT:
       newState = {...state}
 
-      if(state.tileHeight > 8 && state.tileWidth > 8){
-        newState.tileWidth -= 4
-        newState.tileHeight -= 4
+      if(state.tileSize > 8 && state.tileSize> 8){
+        newState.tileSize -= 4
       }
       return newState
 
