@@ -2,8 +2,8 @@ import { Noble } from './Noble'
 import uuidv1 from 'uuid/v1'
 
 class RoyalFamily{
-  constructor({nobles=[], headOfFamily='', id=uuidv1()}) {
-    this.nobles = nobles
+  constructor({idsOfNobles=[], headOfFamily='', id=uuidv1()}) {
+    this.idsOfNobles = idsOfNobles
     this.headOfFamily = headOfFamily
     this.id = id
   }

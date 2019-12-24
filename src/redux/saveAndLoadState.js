@@ -2,10 +2,10 @@ import {
   BurnHammerFamily, 
   GoldFingerFamily, 
   GreenHeartFamily, 
-  Noble, 
-  RoyalFamily,
+  Noble,
 } from '../models/families'
 import { RandomNameGenerator } from './newGameInitialization/RandomNameGenerator'
+import { FamiliesComponent } from '../components/families/FamiliesComponent'
 
 
 function loadState() {
@@ -21,6 +21,8 @@ function loadState() {
     return revivedState
   }
   catch(err){
+    console.log('load state failed')
+    console.log(err)
     return undefined
   }
 }
@@ -40,20 +42,22 @@ function reviveState(parsedState){
   let {
     randomNameGenerator,
     families,
+    nobles,
   } = parsedState
 
-  //First reviving the nobles within each royal family
-  families.forEach(royalFamily => {
-    royalFamily.nobles = royalFamily.nobles.map(noble => {
-      return new Noble(noble)
-    })
-  })
+  const nobleIds = Object.keys(nobles)
+  for(let i = 0; i<nobleIds.length; i++){
+    nobles[nobleIds[i]] = new Noble (nobles[nobleIds[i]])
+  }
 
-  families = families.map(royalFamily => {
-    if (royalFamily.familyName === 'BurnHammer') return new BurnHammerFamily(royalFamily)
-    if (royalFamily.familyName === 'GreenHeart') return new GreenHeartFamily(royalFamily)
-    if (royalFamily.familyName === 'GoldFinger') return new GoldFingerFamily(royalFamily)
-  })
+  const familyIds = Object.keys(families)
+  for(let i = 0; i<familyIds.length; i++){
+    let royalFamily = families[familyIds[i]]
+    if (royalFamily.familyName === 'BurnHammer') royalFamily =  new BurnHammerFamily(royalFamily)
+    if (royalFamily.familyName === 'GreenHeart') royalFamily =  new GreenHeartFamily(royalFamily)
+    if (royalFamily.familyName === 'GoldFinger') royalFamily =  new GoldFingerFamily(royalFamily)
+  }
+
   const revivedState={
     ...parsedState,
     randomNameGenerator: new RandomNameGenerator(randomNameGenerator),

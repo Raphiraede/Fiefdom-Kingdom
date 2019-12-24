@@ -94,41 +94,40 @@ class MapPage extends React.Component{
 
     const xOffset = this.props.mapOffset.x
     const yOffset = this.props.mapOffset.y
-    const tileWidth = this.props.tileWidth
-    const tileHeight = this.props.tileHeight
+    const tileSize = this.props.tileSize
     
     for(let x = 0; x < mapWidth; x++){
       for(let y = 0; y < mapHeight; y++){
         //Always draw a plain image first on every tile, as a backdrop
-        ctx.drawImage(this.PlainImage, x*tileWidth + xOffset, y*tileHeight + yOffset, tileWidth, tileHeight)
+        ctx.drawImage(this.PlainImage, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
         switch(this.props.gameMap[x][y].type){
           case 'plain': //Not necessary to draw anything here, since plain is drawn on every time anyway
-            //ctx.drawImage(this.PlainImage, x*tileWidth, y*tileHeight, tileWidth, tileHeight)
+            //ctx.drawImage(this.PlainImage, x*tileSize, y*tileSize, tileSize, tileSize)
           break
 
           case 'rock':
-            ctx.drawImage(this.RockImage, x*tileWidth + xOffset, y*tileHeight + yOffset, tileWidth, tileHeight)
+            ctx.drawImage(this.RockImage, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
           break
 
           case 'field':
-            ctx.drawImage(this.FieldImage, x*tileWidth + xOffset, y*tileHeight + yOffset, tileWidth, tileHeight)
+            ctx.drawImage(this.FieldImage, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
           break
 
           case 'house':
-            ctx.drawImage(this.HouseImage, x*tileWidth + xOffset, y*tileHeight + yOffset, tileWidth, tileHeight)
+            ctx.drawImage(this.HouseImage, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
           break
 
           case 'trees':
-            ctx.drawImage(this.Trees, x*tileWidth + xOffset, y*tileHeight + yOffset, tileWidth, tileHeight)
+            ctx.drawImage(this.Trees, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
           break
 
           case 'goldOre':
-            ctx.drawImage(this.GoldOre, x*tileWidth + xOffset, y*tileHeight + yOffset, tileWidth, tileHeight)
+            ctx.drawImage(this.GoldOre, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
           break
 
           case 'church':
-            ctx.drawImage(this.ChurchBot, x*tileWidth + xOffset, y*tileHeight + yOffset, tileWidth, tileHeight)
-            ctx.drawImage(this.ChurchTop, x*tileWidth + xOffset, y*tileHeight + yOffset - tileHeight, tileWidth, tileHeight)
+            ctx.drawImage(this.ChurchBot, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
+            ctx.drawImage(this.ChurchTop, x*tileSize + xOffset, y*tileSize + yOffset - tileSize, tileSize, tileSize)
           break
 
           default:
@@ -136,10 +135,12 @@ class MapPage extends React.Component{
       }
     }
 
-    const armyX = this.props.testArmy.coordinates.x
-    const armyY = this.props.testArmy.coordinates.y
-    ctx.drawImage(this.BlueSpearman, armyX*tileWidth + xOffset, armyY*tileHeight + yOffset, tileWidth, tileHeight)
-
+    //This was used for test army, probably should remove this block later
+    /*
+      const armyX = this.props.testArmy.coordinates.x
+      const armyY = this.props.testArmy.coordinates.y
+      ctx.drawImage(this.BlueSpearman, armyX*tileSize + xOffset, armyY*tileSize + yOffset, tileSize, tileSize)
+    */
     this.drawHoveredTileOutline(ctx)
     this.handleTileInfoCoordinates()
     if(window.location.pathname==='/newMap'){
@@ -162,12 +163,12 @@ class MapPage extends React.Component{
   drawHoveredTileOutline(ctx){
     const x = this.state.tileX
     const y = this.state.tileY
-    ctx.strokeRect(x*this.props.tileWidth + this.props.mapOffset.x, y*this.props.tileHeight + this.props.mapOffset.y, this.props.tileWidth, this.props.tileHeight)
+    ctx.strokeRect(x*this.props.tileSize + this.props.mapOffset.x, y*this.props.tileSize + this.props.mapOffset.y, this.props.tileSize, this.props.tileSize)
   }
 
   findHoveredTileCoords(){
-    const tileX = Math.floor((this.state.mouseX - this.props.mapOffset.x)/this.props.tileWidth)
-    const tileY = Math.floor((this.state.mouseY - this.props.mapOffset.y)/this.props.tileHeight)
+    const tileX = Math.floor((this.state.mouseX - this.props.mapOffset.x)/this.props.tileSize)
+    const tileY = Math.floor((this.state.mouseY - this.props.mapOffset.y)/this.props.tileSize)
     return {
       tileX,
       tileY
@@ -220,8 +221,7 @@ function mapStateToProps(state){
   return {
     gameMap: [...state.gameMap],
     mapOffset: {...state.mapOffset},
-    tileWidth: state.tileWidth,
-    tileHeight: state.tileHeight,
+    tileSize: state.tileSize,
     testArmy: {...state.testArmy}
   }
 }
