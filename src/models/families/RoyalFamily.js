@@ -16,10 +16,8 @@ class RoyalFamily{
     }
   }
   
-  handleNextTurn(randomNameGenerator){
-    this.nobles.forEach(noble => {
-      noble.handleNextTurn(randomNameGenerator)
-    })
+  //currently nobles handleNextTurn is called in nextTurn.js, but it might be useful for that to take place here
+  handleNextTurn(){
   }
 }
 
