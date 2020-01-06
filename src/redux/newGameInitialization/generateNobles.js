@@ -7,7 +7,7 @@ function generateNobles({randomNameGenerator, nobles, royalFamily, familySize}){
     const firstName = randomNameGenerator.newName()
     const noble = new Noble({firstName, familyName: royalFamily.familyName})
     nobles[noble.id] = noble
-    royalFamily.idsOfNobles.push(noble.id)
+    royalFamily.nobleIds.push(noble.id)
   }
 }
 

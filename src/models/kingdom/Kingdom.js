@@ -1,8 +1,8 @@
 import uuidv1 from 'uuid/v1'
 class Kingdom{
-  constructor({name='default name', idsOfFamilies=[], id=uuidv1()}){
+  constructor({name='default name', familyIds=[], id=uuidv1()}){
     this.name = name
-    this.idsOfFamilies = idsOfFamilies
+    this.familyIds = familyIds
     this.id = id
   }
 }

@@ -8,7 +8,7 @@ function FamilyComponent(props){
     <div className='family'>
       <h1 className='family-header'>The {family.familyName} Family</h1>
       {
-        family.idsOfNobles.map(nobleId => {
+        family.nobleIds.map(nobleId => {
           return <NobleComponent {...nobles[nobleId]} />
         })
       }

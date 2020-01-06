@@ -8,7 +8,7 @@ const state = {
   main_kingdom: {
     id: 'id',
     name: 'The League Of Dank',
-    idsOfFamilies: ['ID_OF_FAMILY'],
+    familyIds: ['ID_OF_FAMILY'],
   },
 
   ai_kingdoms: [
@@ -30,7 +30,7 @@ const state = {
       id: 'ID_OF_FAMILY',
       familyName: 'familyName',
       headOfFamily: 'headOfFamily',
-      idsOfNobles: ['idsOfNobles'],
+      nobleIds: ['nobleIds'],
       attributes: 'idk'
     },
 
@@ -38,7 +38,7 @@ const state = {
       id: 'ID_OF_ANOTHER_FAMILY',
       familyName: 'familyName',
       headOfFamily: 'headOfFamily',
-      idsOfNobles: ['idsOfNobles'],
+      nobleIds: ['nobleIds'],
       attributes: 'idk'
     }
   },

@@ -1,8 +1,8 @@
 import { RoyalFamily } from './RoyalFamily.js'
 
 class GreenHeartFamily extends RoyalFamily{
-  constructor({idsOfNobles, headOfFamily, id}={}){
-    super({idsOfNobles, headOfFamily, id})
+  constructor({nobleIds, headOfFamily, id}={}){
+    super({nobleIds, headOfFamily, id})
     this.familyName='GreenHeart'
     this.attributes={
       Text: "Green Heart: The Greenheart family are nonviolent and pious."

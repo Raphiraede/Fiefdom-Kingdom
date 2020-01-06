@@ -1,8 +1,8 @@
 import { RoyalFamily } from './RoyalFamily.js'
 
 class BurnHammerFamily extends RoyalFamily{
-  constructor({idsOfNobles, headOfFamily, id}={}){
-    super({idsOfNobles, headOfFamily, id})
+  constructor({nobleIds, headOfFamily, id}={}){
+    super({nobleIds, headOfFamily, id})
     this.familyName='BurnHammer'
     this.attributes={
       BurningHammer: {

@@ -7,8 +7,8 @@ import {
 import { Kingdom } from '../../models/kingdom/Kingdom'
 import { generateNewMap } from './generateNewMap'
 import { RandomNameGenerator } from './RandomNameGenerator'
-import { Army } from '../../models/Army'
 import { generateNobles } from './generateNobles'
+import { createIndexes } from '../indexes/createIndexes'
 
 function createNewGameState(){
   const randomNameGenerator = new RandomNameGenerator()
@@ -19,9 +19,9 @@ function createNewGameState(){
   const greenHeartFamily = new GreenHeartFamily()
   const goldFingerFamily = new GoldFingerFamily()
 
-  mainKingdom.idsOfFamilies.push(burnHammerFamily.id)
-  mainKingdom.idsOfFamilies.push(greenHeartFamily.id)
-  mainKingdom.idsOfFamilies.push(goldFingerFamily.id)
+  mainKingdom.familyIds.push(burnHammerFamily.id)
+  mainKingdom.familyIds.push(greenHeartFamily.id)
+  mainKingdom.familyIds.push(goldFingerFamily.id)
 
   const families = {}
   families[burnHammerFamily.id] = burnHammerFamily
@@ -49,6 +49,8 @@ function createNewGameState(){
     },
     tileSize: 32,
   }
+
+  newGameState.indexes = createIndexes(newGameState)
 
   return newGameState
 }

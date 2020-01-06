@@ -10,7 +10,7 @@ function FamiliesComponent(props){
     <div className='families-page'>
       <NavBar />
       <div className='families'>
-        {props.idsOfFamilies.map(id => {
+        {props.familyIds.map(id => {
           return <FamilyComponent family={props.families[id]} nobles={props.nobles} />
         })}
       </div>
@@ -21,8 +21,8 @@ function FamiliesComponent(props){
 
 function mapStateToProps(state){
   return {
-    idsOfFamilies: [
-      ...state.mainKingdom.idsOfFamilies
+    familyIds: [
+      ...state.mainKingdom.familyIds
     ],
 
     families: {
