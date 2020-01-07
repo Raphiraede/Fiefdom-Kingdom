@@ -13,7 +13,7 @@ function App() {
       <div>
         <Route exact path='/' component={HomePageComponent} />
         <Route path='/families' component={FamiliesComponent} />
-        <Route path='/newMap' component={MapPage} />
+        <Route path='/map' component={MapPage} />
       </div>
     </BrowserRouter>
   )

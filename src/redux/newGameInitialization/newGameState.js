@@ -9,6 +9,7 @@ import { generateNewMap } from './generateNewMap'
 import { RandomNameGenerator } from './RandomNameGenerator'
 import { generateNobles } from './generateNobles'
 import { createIndexes } from '../indexes/createIndexes'
+import { initializeKingdomTerritory } from './initializeKingdomTerritory.js'
 
 function createNewGameState(){
   const randomNameGenerator = new RandomNameGenerator()
@@ -27,7 +28,6 @@ function createNewGameState(){
   families[burnHammerFamily.id] = burnHammerFamily
   families[greenHeartFamily.id] = greenHeartFamily
   families[goldFingerFamily.id] = goldFingerFamily
-
   
   const nobles = {}
   generateNobles({randomNameGenerator, nobles, royalFamily: burnHammerFamily, familySize: 10})
@@ -35,6 +35,8 @@ function createNewGameState(){
   generateNobles({randomNameGenerator, nobles, royalFamily: goldFingerFamily, familySize: 10})
 
   const gameMap = generateNewMap()
+
+  initializeKingdomTerritory({gameMap, mainKingdom: mainKingdom})
 
   const newGameState = {
     turnNumber: 1,

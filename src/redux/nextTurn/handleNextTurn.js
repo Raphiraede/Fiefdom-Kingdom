@@ -19,6 +19,8 @@ function handleNextTurn(state){
     const noble = nobles[id]
     noble.handleNextTurn(state.randomNameGenerator)
   })
+
+  newState.indexes = createIndexes(newState)
   return newState
 }
 

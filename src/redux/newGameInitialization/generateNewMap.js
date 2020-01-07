@@ -49,6 +49,7 @@ function generateNewMap(){
       }
     }
   }
+
   return map
 }
 
@@ -86,7 +87,7 @@ function fillMarker(x, y, map, radius, marker){
 
           case 'VILLAGE_CENTER':
             const houseRandomizer = getRandomInt(0, 2)
-            if(houseRandomizer === 0 && map[i][j].type != 'church') map[i][j] = new House(undefined, i, j)
+            if(houseRandomizer === 0 && map[i][j].type !== 'church') map[i][j] = new House(undefined, i, j)
             break
 
           case 'FOREST':
@@ -96,7 +97,6 @@ function fillMarker(x, y, map, radius, marker){
           
           default:
             break
-
         }
       }
     }

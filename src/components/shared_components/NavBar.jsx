@@ -18,9 +18,9 @@ function NavBar(){
         />
       </Link>
 
-      <Link to = {'/newMap'}>
+      <Link to = {'/map'}>
         <Button
-          text='New Map'
+          text='Map'
         />
       </Link>
 

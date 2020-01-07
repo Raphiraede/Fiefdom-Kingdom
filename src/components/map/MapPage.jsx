@@ -42,11 +42,12 @@ class MapPage extends React.Component{
     //mapOffset is in the redux store so that it persists when the user navigates away and navigates back
     this.state = {
       tileInfoIsVisible: true, //Currently this is always true, might change later
-      mouseOffset: {},
+      mouseOffset: {}, //MouseOffset is the mouseX and mouseY based on the actual game map, not the canvas(since the gamemap can be offset as well)
       mouseX: 0,
       mouseY: 0,
-      tileX: 0,
-      tileY: 0,
+      //tileMatrixX and tileMatrixY is the coordinate of the current hovered tile in the map matrix, not their pixel coords.
+      tileMatrixX: 0, 
+      tileMatrixY: 0,
     }
   }
 
@@ -54,12 +55,12 @@ class MapPage extends React.Component{
     const rect = e.target.getBoundingClientRect()
     const mouseX = e.pageX - rect.left
     const mouseY = e.pageY - rect.top
-    const { tileX, tileY } = this.findHoveredTileCoords()
+    const { tileMatrixX, tileMatrixY } = this.findHoveredTileCoords()
     this.setState({
       mouseX,
       mouseY,
-      tileX,
-      tileY
+      tileMatrixX,
+      tileMatrixY
     })
   }
 
@@ -84,12 +85,16 @@ class MapPage extends React.Component{
 
   drawGame(ctx, currentSecond = 0, framesLastSecond = 0, frameCount = 0) {
     if(ctx===null) return
+
+    ctx.fillStyle = 'black'
     ctx.fillRect(0, 0, viewportWidth, viewportHeight) //creates a black background
 
+    frameCount += 1
     let sec = Math.floor(Date.now()/1000)
     if(sec !== currentSecond){
       currentSecond = sec
       framesLastSecond = frameCount
+      frameCount = 0
     }
 
     const xOffset = this.props.mapOffset.x
@@ -98,36 +103,50 @@ class MapPage extends React.Component{
     
     for(let x = 0; x < mapWidth; x++){
       for(let y = 0; y < mapHeight; y++){
+
+        //tileTopLeftPixelX and tileTopLeftPixelY represent the coordinates of the pixel in the canvas that the top left of the tile is on.
+        //These are not to be confused with tileMatrixX and tileMatrixY
+        const tileTopLeftPixelX = x*tileSize + xOffset
+        const tileTopLeftPixelY = y*tileSize + yOffset
+
         //Always draw a plain image first on every tile, as a backdrop
-        ctx.drawImage(this.PlainImage, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
+        ctx.drawImage(this.PlainImage, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
         switch(this.props.gameMap[x][y].type){
           case 'plain': //Not necessary to draw anything here, since plain is drawn on every time anyway
-            //ctx.drawImage(this.PlainImage, x*tileSize, y*tileSize, tileSize, tileSize)
           break
 
           case 'rock':
-            ctx.drawImage(this.RockImage, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
+            ctx.drawImage(this.RockImage, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
           break
 
           case 'field':
-            ctx.drawImage(this.FieldImage, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
+            ctx.drawImage(this.FieldImage, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
           break
 
           case 'house':
-            ctx.drawImage(this.HouseImage, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
+            ctx.drawImage(this.HouseImage, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
           break
 
           case 'trees':
-            ctx.drawImage(this.Trees, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
+            ctx.drawImage(this.Trees, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
           break
 
           case 'goldOre':
-            ctx.drawImage(this.GoldOre, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
+            ctx.drawImage(this.GoldOre, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
           break
 
           case 'church':
-            ctx.drawImage(this.ChurchBot, x*tileSize + xOffset, y*tileSize + yOffset, tileSize, tileSize)
-            ctx.drawImage(this.ChurchTop, x*tileSize + xOffset, y*tileSize + yOffset - tileSize, tileSize, tileSize)
+            ctx.drawImage(this.ChurchBot, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize) //bottom of church
+            ctx.drawImage(this.ChurchTop, tileTopLeftPixelX, tileTopLeftPixelY - tileSize, tileSize, tileSize) // top of church
+          break
+
+          default:
+        }
+
+        switch(this.props.gameMap[x][y].kingdomOwner){
+          case this.props.mainKingdom.id:
+            const kingdom = this.props.mainKingdom
+            this.drawKingdomBorder({x, y, kingdom, ctx, tileTopLeftPixelX, tileTopLeftPixelY})
           break
 
           default:
@@ -143,8 +162,78 @@ class MapPage extends React.Component{
     */
     this.drawHoveredTileOutline(ctx)
     this.handleTileInfoCoordinates()
-    if(window.location.pathname==='/newMap'){
-      requestAnimationFrame(() => {this.drawGame(ctx)})
+    ctx.font = '40px serif'
+    ctx.fillStyle = 'red'
+    ctx.fillText("fps:" + framesLastSecond, 50, 150)
+    if(window.location.pathname==='/map'){ // this is to stop the animation loop when the user navigates away from the page
+      requestAnimationFrame(() => {this.drawGame(ctx, currentSecond, framesLastSecond, frameCount)})
+    }
+  }
+
+  drawKingdomBorder({x, y, kingdom, ctx, tileTopLeftPixelX, tileTopLeftPixelY}){
+
+    const tileSize = this.props.tileSize
+    const tileBottomRightPixelX = tileTopLeftPixelX + tileSize
+    const tileBottomRightPixelY = tileTopLeftPixelY + tileSize
+
+    const borderLineColor = 'rgb(0, 0, 255)'
+    const slightlyTransparentBorderLineColor = 'rgb(0, 0, 255, 0.3)'
+    const totallyTransparent = 'rgb(0, 0, 0, 0)'
+
+    const gradientStart = 0
+    const gradientEnd = 0.3
+
+    const leftRightGradient = ctx.createLinearGradient(tileTopLeftPixelX, tileTopLeftPixelY, tileBottomRightPixelX, tileTopLeftPixelY)
+    leftRightGradient.addColorStop(gradientStart, slightlyTransparentBorderLineColor)
+    leftRightGradient.addColorStop(gradientEnd, totallyTransparent)
+
+    const rightLeftGradient = ctx.createLinearGradient(tileBottomRightPixelX, tileTopLeftPixelY, tileTopLeftPixelX, tileTopLeftPixelY)
+    rightLeftGradient.addColorStop(gradientStart, slightlyTransparentBorderLineColor)
+    rightLeftGradient.addColorStop(gradientEnd, totallyTransparent)
+
+    const topDownGradient = ctx.createLinearGradient(tileTopLeftPixelX, tileTopLeftPixelY, tileTopLeftPixelX, tileBottomRightPixelY)
+    topDownGradient.addColorStop(gradientStart, slightlyTransparentBorderLineColor)
+    topDownGradient.addColorStop(gradientEnd, totallyTransparent)
+
+    const bottomUpGradient = ctx.createLinearGradient(tileTopLeftPixelX, tileBottomRightPixelY, tileTopLeftPixelX, tileTopLeftPixelY)
+    bottomUpGradient.addColorStop(gradientStart, slightlyTransparentBorderLineColor)
+    bottomUpGradient.addColorStop(gradientEnd, totallyTransparent)
+
+
+    if (x===0 || this.props.gameMap[x-1][y].kingdomOwner !== kingdom.id){
+      //first draw the hard border line
+      ctx.fillStyle = borderLineColor
+      ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, 2, tileSize)//although i'm using fillRect, its actually drawing a line
+
+      //then the soft gradient, in order to prevent any confusion as to which side of the border your kingdom lies on
+      ctx.fillStyle = leftRightGradient
+      ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
+    }
+
+    if (y===0 || this.props.gameMap[x][y-1].kingdomOwner !== kingdom.id){
+      ctx.fillStyle = borderLineColor
+      ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, tileSize, 2)
+
+      ctx.fillStyle = topDownGradient
+      ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
+    }
+
+    if(x===this.props.gameMap.length - 1 || this.props.gameMap[x + 1][y].kingdomOwner !== kingdom.id){
+      ctx.fillStyle = borderLineColor
+      //subtracting 2 from x coord so that the border draws inside the tile, and doesn't overlap into the next tile over
+      ctx.fillRect(tileBottomRightPixelX - 2, tileTopLeftPixelY, 2, tileSize)
+
+      ctx.fillStyle = rightLeftGradient
+      ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
+    }
+
+    if(y===this.props.gameMap[0].length - 1 || this.props.gameMap[x][y+1].kingdomOwner !== kingdom.id){
+      ctx.fillStyle = borderLineColor
+      //subtracting 2 from x coord so that the border draws inside the tile, and doesn't overlap into the next tile over
+      ctx.fillRect(tileTopLeftPixelX, tileBottomRightPixelY - 2, tileSize, 2)
+
+      ctx.fillStyle = bottomUpGradient
+      ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
     }
   }
 
@@ -161,17 +250,17 @@ class MapPage extends React.Component{
 
   //draws a black box around the tile currently being hovered over
   drawHoveredTileOutline(ctx){
-    const x = this.state.tileX
-    const y = this.state.tileY
+    const x = this.state.tileMatrixX
+    const y = this.state.tileMatrixY
     ctx.strokeRect(x*this.props.tileSize + this.props.mapOffset.x, y*this.props.tileSize + this.props.mapOffset.y, this.props.tileSize, this.props.tileSize)
   }
 
   findHoveredTileCoords(){
-    const tileX = Math.floor((this.state.mouseX - this.props.mapOffset.x)/this.props.tileSize)
-    const tileY = Math.floor((this.state.mouseY - this.props.mapOffset.y)/this.props.tileSize)
+    const tileMatrixX = Math.floor((this.state.mouseX - this.props.mapOffset.x)/this.props.tileSize)
+    const tileMatrixY = Math.floor((this.state.mouseY - this.props.mapOffset.y)/this.props.tileSize)
     return {
-      tileX,
-      tileY
+      tileMatrixX,
+      tileMatrixY
     }
   }
 
@@ -204,9 +293,9 @@ class MapPage extends React.Component{
       <div>
         <NavBar />
         <canvas ref='canvas' width={viewportWidth} height={viewportHeight} />
-        {this.state.tileInfoIsVisible && this.props.gameMap[this.state.tileX] && this.props.gameMap[this.state.tileX][this.state.tileY]? 
+        {this.state.tileInfoIsVisible && this.props.gameMap[this.state.tileMatrixX] && this.props.gameMap[this.state.tileMatrixX][this.state.tileMatrixY]? 
           <TileInfo 
-            tileData={this.props.gameMap[this.state.tileX][this.state.tileY]}
+            tileData={this.props.gameMap[this.state.tileMatrixX][this.state.tileMatrixY]}
           />
           : null
         }
@@ -219,10 +308,11 @@ class MapPage extends React.Component{
 
 function mapStateToProps(state){
   return {
+    mainKingdom: {...state.mainKingdom},
     gameMap: [...state.gameMap],
     mapOffset: {...state.mapOffset},
     tileSize: state.tileSize,
-    testArmy: {...state.testArmy}
+    testArmy: {...state.testArmy},
   }
 }
 

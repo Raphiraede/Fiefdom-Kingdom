@@ -33,6 +33,8 @@ function rootReducer(state, action){
 
       if(state.tileSize > 8 && state.tileSize> 8){
         newState.tileSize -= 4
+        newState.mapOffset.x += 50
+        newState.mapOffset.y += 50
       }
       return newState
 
