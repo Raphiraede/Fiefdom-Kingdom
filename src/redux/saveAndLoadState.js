@@ -5,7 +5,7 @@ import {
   Noble,
 } from '../models/families'
 import { RandomNameGenerator } from './newGameInitialization/RandomNameGenerator'
-import { FamiliesComponent } from '../components/families/FamiliesComponent'
+import { FamiliesComponent } from '../components/familiesPage/FamiliesComponent'
 
 
 function loadState() {

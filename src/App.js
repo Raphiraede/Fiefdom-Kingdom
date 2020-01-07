@@ -1,6 +1,6 @@
 import React from 'react'
 import { HomePageComponent } from './components/home_page/HomePageComponent'
-import { FamiliesComponent } from './components/families/FamiliesComponent'
+import { FamiliesComponent } from './components/familiesPage/FamiliesComponent'
 import { MapPage } from './components/map/MapPage'
 import {
   BrowserRouter,

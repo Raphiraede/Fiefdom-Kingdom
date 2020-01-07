@@ -26,7 +26,6 @@ function initializeKingdomTerritory({gameMap, mainKingdom}){
     while(!newTileAssigned){
       x += getRandomInt(-1, 1)
       y += getRandomInt(-1, 1)
-      console.log('x:', x, 'y:', y)
 
       if(x<0 || y<0 || x>gameMap.length-1 || y>gameMap.length-1){//This prevents x and y from going outside of the game map
         x = kingdomX
@@ -34,13 +33,14 @@ function initializeKingdomTerritory({gameMap, mainKingdom}){
       }
 
       if(!gameMap[x][y].kingdomOwner){
-        console.log('hey')
         gameMap[x][y].kingdomOwner = mainKingdom.id
         newTileAssigned = true
       }
 
-      if(jenkInfiniteLoopPrevention === 1000){
+      //this is only here on the off chance the map is too small to accommodate the generation of all the necessary kingdoms
+      if(jenkInfiniteLoopPrevention === 1000){ 
         console.log('infinite loop in initializeKingdomTerrtitory')
+        alert('sup')
         break
       }
     }

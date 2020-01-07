@@ -30,9 +30,9 @@ function createNewGameState(){
   families[goldFingerFamily.id] = goldFingerFamily
   
   const nobles = {}
-  generateNobles({randomNameGenerator, nobles, royalFamily: burnHammerFamily, familySize: 10})
-  generateNobles({randomNameGenerator, nobles, royalFamily: greenHeartFamily, familySize: 10})
-  generateNobles({randomNameGenerator, nobles, royalFamily: goldFingerFamily, familySize: 10})
+  generateNobles({randomNameGenerator, nobles, royalFamily: burnHammerFamily, familySize: 5})
+  generateNobles({randomNameGenerator, nobles, royalFamily: greenHeartFamily, familySize: 5})
+  generateNobles({randomNameGenerator, nobles, royalFamily: goldFingerFamily, familySize: 5})
 
   const gameMap = generateNewMap()
 

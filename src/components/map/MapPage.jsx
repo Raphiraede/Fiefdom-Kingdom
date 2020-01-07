@@ -15,6 +15,7 @@ import { NavBar } from '../shared_components/NavBar'
 import { mapDrag, zoomMapIn, zoomMapOut } from '../../redux/actions'
 import { TileInfo } from './TileInfo'
 import { NextTurnButton } from '../shared_components/NextTurnButton'
+import { FamiliesView } from '../sideBar/FamiliesView'
 
 class MapPage extends React.Component{
   constructor(props){
@@ -301,6 +302,7 @@ class MapPage extends React.Component{
         }
 
         <NextTurnButton />
+        <FamiliesView />
       </div>
     )
   }
