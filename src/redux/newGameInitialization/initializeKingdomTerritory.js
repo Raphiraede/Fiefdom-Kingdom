@@ -1,6 +1,6 @@
 import { getRandomInt } from '../getRandomInt'
 
-function initializeKingdomTerritory({gameMap, mainKingdom}){
+function initializeKingdomTerritory({gameMap, mainKingdom, nobles}){
   const mapWidth = gameMap.length
   const mapHeight = gameMap[0].length
 
@@ -16,11 +16,13 @@ function initializeKingdomTerritory({gameMap, mainKingdom}){
   //Then the algorithm goes to a random tile next to it, and tries to give that tile to the kingdom.
   //If the tile is already assigned to a kingdom, then another random surrounding tile is picked, and the algorithm tries to give that tile to the kingdom, etc.
   //When an available tile is found, it is assigned to the kingdom, and the process starts over again from kingdomX and kingdomY
-  for(let i = 0; i <= sizeOfStartingKingdom; i++){
+
+  outerLoop:
+  for(let i = 0; i < sizeOfStartingKingdom; i++){
     let x = kingdomX
     let y = kingdomY
 
-    let jenkInfiniteLoopPrevention = 0
+    let jankInfiniteLoopPrevention = 0
 
     let newTileAssigned = false
     while(!newTileAssigned){
@@ -34,14 +36,15 @@ function initializeKingdomTerritory({gameMap, mainKingdom}){
 
       if(!gameMap[x][y].kingdomOwner){
         gameMap[x][y].kingdomOwner = mainKingdom.id
+        gameMap[x][y].fiefOwner = nobles[0]
         newTileAssigned = true
       }
 
       //this is only here on the off chance the map is too small to accommodate the generation of all the necessary kingdoms
-      if(jenkInfiniteLoopPrevention === 1000){ 
-        console.log('infinite loop in initializeKingdomTerrtitory')
-        alert('sup')
-        break
+      if(jankInfiniteLoopPrevention === 5000){ 
+        console.log('infinite loop in initializeKingdomTerritory')
+        alert('Infinite loop while initializing kingdom territory, the map is probably too small to accommodate all the kingdoms')
+        break outerLoop
       }
     }
   }
