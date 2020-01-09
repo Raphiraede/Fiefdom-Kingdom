@@ -4,7 +4,7 @@ import { createNewGameState } from './newGameInitialization/newGameState'
 import { handleNextTurn } from './nextTurn/handleNextTurn'
 
 function rootReducer(state, action){
-  let newState = {...state}
+  let newState
   switch (action.type) {
     case types.NEW_GAME:
       const newGameState = createNewGameState()
@@ -33,10 +33,23 @@ function rootReducer(state, action){
 
       if(state.tileSize > 8 && state.tileSize> 8){
         newState.tileSize -= 4
-        newState.mapOffset.x += 50
-        newState.mapOffset.y += 50
       }
       return newState
+
+    case types.INITIATE_GIVE_FIEF_MODE:
+      newState = {...state}
+      newState.givingFief = {
+        currentlyGivingFief: true,
+        nobleId: action.payload
+      }
+      return newState
+    
+    case types.GIVE_FIEF_TO_NOBLE:
+      newState = {...state}
+      const { tileMatrixX, tileMatrixY } = action.payload
+      if(newState.gameMap[tileMatrixX][tileMatrixY].kingdomOwner === newState.mainKingdom.id){
+        newState.gameMap[tileMatrixX][tileMatrixY].fiefOwner = newState.givingFief.nobleId
+      }
 
     default:
       return state

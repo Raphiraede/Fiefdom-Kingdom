@@ -1,6 +1,6 @@
 import { getRandomInt } from '../getRandomInt'
 
-function initializeKingdomTerritory({gameMap, mainKingdom, nobles}){
+function initializeKingdomTerritory({gameMap, mainKingdom, families, nobles}){
   const mapWidth = gameMap.length
   const mapHeight = gameMap[0].length
 
@@ -10,6 +10,8 @@ function initializeKingdomTerritory({gameMap, mainKingdom, nobles}){
 
   gameMap[kingdomX][kingdomY].kingdomOwner = mainKingdom.id
   let sizeOfStartingKingdom = 30
+
+
 
 
   //When determining a new tile to give to the kingdom, this algorithm starts at kingdomX and kingdomY, aka the "center" of the new kingdom
@@ -36,7 +38,7 @@ function initializeKingdomTerritory({gameMap, mainKingdom, nobles}){
 
       if(!gameMap[x][y].kingdomOwner){
         gameMap[x][y].kingdomOwner = mainKingdom.id
-        gameMap[x][y].fiefOwner = nobles[0]
+        //gameMap[x][y].fiefOwner = families[mainKingdom.familyIds[0]].nobleIds[0]
         newTileAssigned = true
       }
 

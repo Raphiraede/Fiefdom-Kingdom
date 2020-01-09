@@ -36,7 +36,7 @@ function createNewGameState(){
 
   const gameMap = generateNewMap()
 
-  initializeKingdomTerritory({gameMap, mainKingdom, nobles})
+  initializeKingdomTerritory({gameMap, mainKingdom, families, nobles})
 
   const newGameState = {
     turnNumber: 1,
@@ -45,11 +45,15 @@ function createNewGameState(){
     families,
     nobles,
     gameMap,
+    tileSize: 32,
     mapOffset: {
       x: 0,
       y: 0,
     },
-    tileSize: 32,
+    givingFief: {
+      currentlyGivingFief: false,
+      nobleId: null,
+    }
   }
 
   newGameState.indexes = createIndexes(newGameState)

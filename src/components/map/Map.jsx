@@ -11,7 +11,7 @@ import GoldOre from '../../images/tiles/goldOre.png'
 import ChurchBot from '../../images/tiles/ChurchBot.png'
 import ChurchTop from '../../images/tiles/ChurchTop.png'
 import BlueSpearman from '../../images/units/blue-spearman-bigger.png'
-import { mapDrag, zoomMapIn, zoomMapOut } from '../../redux/actions'
+import { mapDrag, zoomMapIn, zoomMapOut, giveFiefToNoble } from '../../redux/actions'
 import { TileInfo } from './TileInfo'
 
 class Map extends React.Component{
@@ -46,6 +46,7 @@ class Map extends React.Component{
       //tileMatrixX and tileMatrixY is the coordinate of the current hovered tile in the map matrix, not their pixel coords.
       tileMatrixX: 0, 
       tileMatrixY: 0,
+      pixelsMovedAfterMouseDown: 0, //this variable will help distinguish between a drag and an ordinary click.
     }
   }
 
@@ -141,23 +142,12 @@ class Map extends React.Component{
           default:
         }
 
-        switch(this.props.gameMap[x][y].kingdomOwner){
-          case this.props.mainKingdom.id:
-            const kingdom = this.props.mainKingdom
-            this.drawKingdomBorder({x, y, kingdom, ctx, tileTopLeftPixelX, tileTopLeftPixelY})
-          break
-
-          default:
-        }
+        const kingdom = this.props.mainKingdom
+        if(this.props.gameMap[x][y].fiefOwner) this.drawFief({x, y, ctx, tileTopLeftPixelX, tileTopLeftPixelY})
+        if(this.props.gameMap[x][y].kingdomOwner) this.drawKingdomBorder({x, y, kingdom, ctx, tileTopLeftPixelX, tileTopLeftPixelY})
       }
     }
 
-    //This was used for test army, probably should remove this block later
-    /*
-      const armyX = this.props.testArmy.coordinates.x
-      const armyY = this.props.testArmy.coordinates.y
-      ctx.drawImage(this.BlueSpearman, armyX*tileSize + xOffset, armyY*tileSize + yOffset, tileSize, tileSize)
-    */
     this.drawHoveredTileOutline(ctx)
     this.handleTileInfoCoordinates()
     ctx.font = '40px serif'
@@ -235,6 +225,14 @@ class Map extends React.Component{
     }
   }
 
+  drawFief({x, y, ctx, tileTopLeftPixelX, tileTopLeftPixelY}){
+    const tileSize = this.props.tileSize
+    ctx.fillStyle = 'rgb(255, 0, 0, 0.5)'
+    if(this.props.gameMap[x][y].fiefOwner){
+      ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
+    }
+  }
+
   //This makes the tileInfo window hover next to the cursor
   //More css rules defined in TileInfo.css
   handleTileInfoCoordinates(){
@@ -263,27 +261,52 @@ class Map extends React.Component{
   }
 
   onMouseDown = (e, canvas) => {
+    
     this.setState({
       mouseOffset: {
         x: e.clientX - this.props.mapOffset.x,
         y: e.clientY - this.props.mapOffset.y
-      }
+      },
     })
     canvas.addEventListener('mousemove', this.onMouseMove)
-    canvas.addEventListener('mouseup', () => this.onMouseUp(canvas))
+    canvas.addEventListener('mouseup', this.onMouseUp)
   }
 
   onMouseMove = (e) => {
+    
     const payload = {
       x: e.clientX - this.state.mouseOffset.x,
-      y: e.clientY - this.state.mouseOffset.y
+      y: e.clientY - this.state.mouseOffset.y,
     }
+
+    const absoluteMouseMovement = Math.abs(e.movementX) + Math.abs(e.movementY)
+    this.setState({
+      pixelsMovedAfterMouseDown: this.state.pixelsMovedAfterMouseDown + absoluteMouseMovement
+    })
     this.props.mapDrag(payload)
   }
 
-  onMouseUp(canvas){
+  onMouseUp = () => {
+    const canvas = this.refs.canvas
+    
+    if(this.state.pixelsMovedAfterMouseDown < 10){//This case is a click
+      if(this.props.givingFief.currentlyGivingFief === true){
+        console.log('hey')
+        const payload = {
+          tileMatrixX: this.state.tileMatrixX,
+          tileMatrixY: this.state.tileMatrixY,
+        }
+        this.props.giveFiefToNoble(payload)
+      } 
+    }
+    else{//this case is a drag.
+
+    }
+    this.setState({
+      pixelsMovedAfterMouseDown: 0
+    })
     canvas.removeEventListener('mousemove', this.onMouseMove)
-    canvas.removeEventListener('mouseup', () => this.onMouseUp())
+    canvas.removeEventListener('mouseup', this.onMouseUp)
   }
 
   render(){
@@ -293,6 +316,10 @@ class Map extends React.Component{
         {this.state.tileInfoIsVisible && this.props.gameMap[this.state.tileMatrixX] && this.props.gameMap[this.state.tileMatrixX][this.state.tileMatrixY]? 
           <TileInfo 
             tileData={this.props.gameMap[this.state.tileMatrixX][this.state.tileMatrixY]}
+            mainKingdom={this.props.mainKingdom}
+            families={this.props.families}
+            nobles={this.props.nobles}
+            noblesToFamiliesIndex={this.props.noblesToFamiliesIndex}
           />
           : null
         }
@@ -304,9 +331,13 @@ class Map extends React.Component{
 function mapStateToProps(state){
   return {
     mainKingdom: {...state.mainKingdom},
+    families: {...state.families},
+    nobles: {...state.nobles},
+    noblesToFamiliesIndex: {...state.indexes.noblesToFamilies},
     gameMap: [...state.gameMap],
     mapOffset: {...state.mapOffset},
     tileSize: state.tileSize,
+    givingFief: {...state.givingFief},
   }
 }
 
@@ -314,7 +345,8 @@ function mapDispatchToProps(dispatch) {
   return {
     mapDrag: (payload) => dispatch(mapDrag(payload)),
     zoomMapIn: () => dispatch(zoomMapIn()),
-    zoomMapOut: () => dispatch(zoomMapOut())
+    zoomMapOut: () => dispatch(zoomMapOut()),
+    giveFiefToNoble: (payload) => dispatch(giveFiefToNoble(payload))
   }
 }
 

@@ -32,4 +32,18 @@ function zoomMapOut(){
   }
 }
 
-export { newGame, nextTurn, mapDrag, zoomMapIn, zoomMapOut }
+function initiateGiveFiefMode(payload){
+  return {
+    type: types.INITIATE_GIVE_FIEF_MODE,
+    payload: payload //should be the ID of the noble being awarded the fief
+  }
+}
+
+function giveFiefToNoble(payload){
+  return {
+    type: types.GIVE_FIEF_TO_NOBLE,
+    payload: payload
+  }
+}
+
+export { newGame, nextTurn, mapDrag, zoomMapIn, zoomMapOut, initiateGiveFiefMode, giveFiefToNoble }
