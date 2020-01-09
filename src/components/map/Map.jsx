@@ -143,7 +143,10 @@ class Map extends React.Component{
         }
 
         const kingdom = this.props.mainKingdom
-        if(this.props.gameMap[x][y].fiefOwner) this.drawFief({x, y, ctx, tileTopLeftPixelX, tileTopLeftPixelY})
+        if(this.props.gameMap[x][y].fiefOwner){
+          const color = this.props.nobles[this.props.gameMap[x][y].fiefOwner].color
+          this.drawFief({x, y, ctx, tileTopLeftPixelX, tileTopLeftPixelY, color})
+        }
         if(this.props.gameMap[x][y].kingdomOwner) this.drawKingdomBorder({x, y, kingdom, ctx, tileTopLeftPixelX, tileTopLeftPixelY})
       }
     }
@@ -225,9 +228,9 @@ class Map extends React.Component{
     }
   }
 
-  drawFief({x, y, ctx, tileTopLeftPixelX, tileTopLeftPixelY}){
+  drawFief({x, y, ctx, tileTopLeftPixelX, tileTopLeftPixelY, color}){
     const tileSize = this.props.tileSize
-    ctx.fillStyle = 'rgb(255, 0, 0, 0.5)'
+    ctx.fillStyle = color
     if(this.props.gameMap[x][y].fiefOwner){
       ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
     }
@@ -330,9 +333,7 @@ class Map extends React.Component{
 function mapStateToProps(state){
   return {
     mainKingdom: {...state.mainKingdom},
-    families: {...state.families},
     nobles: {...state.nobles},
-    noblesToFamiliesIndex: {...state.indexes.noblesToFamilies},
     gameMap: [...state.gameMap],
     mapOffset: {...state.mapOffset},
     tileSize: state.tileSize,

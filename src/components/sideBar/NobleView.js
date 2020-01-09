@@ -19,8 +19,6 @@ function NobleView(props){
   )
 }
 
-
-
 function mapStateToProps(state){
   return{
     givingFief: {...state.givingFief}

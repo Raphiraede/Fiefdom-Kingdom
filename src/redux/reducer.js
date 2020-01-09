@@ -47,9 +47,9 @@ function rootReducer(state, action){
     case types.GIVE_FIEF_TO_NOBLE:
       newState = {...state}
       const { tileMatrixX, tileMatrixY } = action.payload
-      if(newState.gameMap[tileMatrixX][tileMatrixY].kingdomOwner === newState.mainKingdom.id){
-        newState.gameMap[tileMatrixX][tileMatrixY].fiefOwner = newState.givingFief.nobleId
-      }
+      if(newState.gameMap[tileMatrixX] && 
+        newState.gameMap[tileMatrixX][tileMatrixY] && 
+        newState.gameMap[tileMatrixX][tileMatrixY].kingdomOwner === newState.mainKingdom.id) newState.gameMap[tileMatrixX][tileMatrixY].fiefOwner = newState.givingFief.nobleId
       return newState
 
     case types.UNINITIATE_GIVE_FIEF_MODE:
