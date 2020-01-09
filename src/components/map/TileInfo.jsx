@@ -12,9 +12,7 @@ function TileInfo(props){
 
   const {
     mainKingdom,
-    families,
     nobles,
-    noblesToFamiliesIndex
   } = props
   return (
     <div className='tile-info'>

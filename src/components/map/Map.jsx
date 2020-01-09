@@ -291,7 +291,6 @@ class Map extends React.Component{
     
     if(this.state.pixelsMovedAfterMouseDown < 10){//This case is a click
       if(this.props.givingFief.currentlyGivingFief === true){
-        console.log('hey')
         const payload = {
           tileMatrixX: this.state.tileMatrixX,
           tileMatrixY: this.state.tileMatrixY,

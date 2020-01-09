@@ -46,4 +46,10 @@ function giveFiefToNoble(payload){
   }
 }
 
-export { newGame, nextTurn, mapDrag, zoomMapIn, zoomMapOut, initiateGiveFiefMode, giveFiefToNoble }
+function uninitiateGiveFiefMode(){
+  return {
+    type: types.UNINITIATE_GIVE_FIEF_MODE
+  }
+}
+
+export { newGame, nextTurn, mapDrag, zoomMapIn, zoomMapOut, initiateGiveFiefMode, giveFiefToNoble, uninitiateGiveFiefMode }

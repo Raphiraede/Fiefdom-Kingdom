@@ -50,6 +50,16 @@ function rootReducer(state, action){
       if(newState.gameMap[tileMatrixX][tileMatrixY].kingdomOwner === newState.mainKingdom.id){
         newState.gameMap[tileMatrixX][tileMatrixY].fiefOwner = newState.givingFief.nobleId
       }
+      return newState
+
+    case types.UNINITIATE_GIVE_FIEF_MODE:
+      console.log('hey man')
+      newState = {...state}
+      newState.givingFief = {
+        currentlyGivingFief: false,
+        nobleId: null
+      }
+      return newState
 
     default:
       return state

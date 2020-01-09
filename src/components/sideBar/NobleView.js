@@ -1,11 +1,8 @@
 import React from 'react'
-import { initiateGiveFiefMode } from '../../redux/actions'
+import { initiateGiveFiefMode, uninitiateGiveFiefMode } from '../../redux/actions'
 import { connect } from 'react-redux'
 
 function NobleView(props){
-  function handleClick(){
-    props.initiateGiveFiefMode(props.noble.id)
-  }
 
   return (
     <div>
@@ -14,9 +11,9 @@ function NobleView(props){
       <span className='stat'>power: {props.noble.power}</span> <br/>
       <span className='stat'>taxLevel: {props.noble.taxLevel}</span> <br/>
       <span className='stat'>age: {props.noble.age}</span> <br/>
-      <button onClick={handleClick}>Give Fief</button>
+      <button onClick={() => props.initiateGiveFiefMode(props.noble.id)}>Give Fief</button>
       {
-        props.givingFief.nobleId === props.noble.id ? <button>Commit</button> : null
+        props.givingFief.nobleId === props.noble.id ? <button onClick={props.uninitiateGiveFiefMode}>Commit</button> : null
       }
     </div>
   )
@@ -32,7 +29,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return{
-    initiateGiveFiefMode: (payload) => dispatch(initiateGiveFiefMode(payload))
+    initiateGiveFiefMode: (payload) => dispatch(initiateGiveFiefMode(payload)),
+    uninitiateGiveFiefMode: () => dispatch(uninitiateGiveFiefMode())
   }
 }
 
