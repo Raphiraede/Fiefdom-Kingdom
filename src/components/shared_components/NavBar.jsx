@@ -12,12 +12,6 @@ function NavBar(){
         />
       </Link>
 
-      <Link to={'/families'}>
-        <Button
-          text='Families'
-        />
-      </Link>
-
       <Link to = {'/map'}>
         <Button
           text='Map'

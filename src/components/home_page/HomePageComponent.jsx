@@ -13,7 +13,7 @@ class HomePageComponent extends React.Component{
     return(
       <div>
         <h1 className='Title'>Fiefdom Kingdom</h1>
-        <Link to={'/families'}>
+        <Link to={'/map'}>
           <Button 
             text={'New Game!'}
             onClick={this.props.newGame}
