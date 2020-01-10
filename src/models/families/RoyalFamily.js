@@ -9,8 +9,6 @@ class RoyalFamily{
   
   //currently the nobles handleNextTurn is called in nextTurn.js, but it might be useful for that to take place here
   handleNextTurn(){
-    console.log('nextTurn')
-    const hey = 3 + 3
   }
 }
 
