@@ -11,7 +11,7 @@ function loadState() {
 
   //wrapped in try-catch in case user disables localstorage permissions
   try{
-    const serializedState=localStorage.getItem('state')
+    const serializedState=localStorage.getItem('fiefdom kingdom state')
     if(serializedState===null){
       return undefined
     }
@@ -29,7 +29,7 @@ function loadState() {
 function saveState(state){
   try {
     const serializedState = JSON.stringify(state)
-    localStorage.setItem('state', serializedState)
+    localStorage.setItem('fiefdom kingdom state', serializedState)
   } catch(err) {
 
   }
@@ -52,11 +52,19 @@ function reviveState(parsedState){
   const familyIds = Object.keys(families)
   for(let i = 0; i<familyIds.length; i++){
     let royalFamily = families[familyIds[i]]
-    if (royalFamily.familyName === 'BurnHammer') royalFamily =  new BurnHammerFamily(royalFamily)
-    if (royalFamily.familyName === 'GreenHeart') royalFamily =  new GreenHeartFamily(royalFamily)
-    if (royalFamily.familyName === 'GoldFinger') royalFamily =  new GoldFingerFamily(royalFamily)
+    if (royalFamily.familyName === 'BurnHammer'){
+      royalFamily =  new BurnHammerFamily(royalFamily)
+      console.log(royalFamily)
+    }
+    if (royalFamily.familyName === 'GreenHeart'){
+      royalFamily =  new GreenHeartFamily(royalFamily)
+    } 
+    if (royalFamily.familyName === 'GoldFinger'){
+      royalFamily =  new GoldFingerFamily(royalFamily)
+    }
+    families[familyIds[i]] = royalFamily
   }
-  
+
   const revivedState={
     ...parsedState,
     randomNameGenerator: new RandomNameGenerator(randomNameGenerator),
