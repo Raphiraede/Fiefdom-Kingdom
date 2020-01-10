@@ -53,7 +53,6 @@ function rootReducer(state, action){
       return newState
 
     case types.UNINITIATE_GIVE_FIEF_MODE:
-      console.log('hey man')
       newState = {...state}
       newState.givingFief = {
         currentlyGivingFief: false,

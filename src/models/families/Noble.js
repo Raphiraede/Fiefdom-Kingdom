@@ -23,7 +23,7 @@ class Noble {
     this.id = id
     this.color = color
   }
-  
+
   handleNextTurn(randomNameGenerator){
     this.ageOneYear()
     if(this.age >= this.deathAge) this.die(randomNameGenerator)

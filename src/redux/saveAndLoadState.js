@@ -56,7 +56,7 @@ function reviveState(parsedState){
     if (royalFamily.familyName === 'GreenHeart') royalFamily =  new GreenHeartFamily(royalFamily)
     if (royalFamily.familyName === 'GoldFinger') royalFamily =  new GoldFingerFamily(royalFamily)
   }
-
+  
   const revivedState={
     ...parsedState,
     randomNameGenerator: new RandomNameGenerator(randomNameGenerator),
