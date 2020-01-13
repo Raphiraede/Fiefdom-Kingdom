@@ -1,4 +1,4 @@
-import { getRandomInt } from '../getRandomInt'
+import { getRandomInt } from '../../../getRandomInt'
 
 const firstNames = ['Joe', 'Bob', 'Harry', 'Hagrid', 'Farquad', 'Flint', 'Shrek', 'Fiona', 'Fieri', 'Raphael', 'Madison', 'Gabriel', 'Damien', 'Bradley', 'Peter', 'Henry', 'George', 'Ham', 'Bond', 'James', 'John', 'Caesar', 'Octavian', 'Antony', 'Mark']
 

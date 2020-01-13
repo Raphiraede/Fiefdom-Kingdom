@@ -19,6 +19,13 @@ function handleNextTurn(state){
     const noble = nobles[id]
     noble.handleNextTurn(state.randomNameGenerator)
   })
+
+  const armies = newState.armies
+  const armyIds = Object.keys(armies)
+  armyIds.forEach(id => {
+    const army = armies[id]
+    army.handleNextTurn()
+  })
   
   calculateTaxesAndUpdateGoldAmount(state.mainKingdom, state.nobles, state.gameMap)
 

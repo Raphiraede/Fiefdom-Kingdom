@@ -1,20 +1,29 @@
 import React from 'react'
-import { initiateGiveFiefMode, uninitiateGiveFiefMode } from '../../redux/actions'
+import { initiateGiveFiefMode, uninitiateGiveFiefMode, raiseArmy } from '../../redux/actions'
 import { connect } from 'react-redux'
 
 function NobleView(props){
+  const {
+    firstName,
+    loyalty,
+    power,
+    taxLevel,
+    age,
+    id,
+  } = props.noble
 
   return (
     <div>
-      <h3 className='NobleViewHeader'>{props.noble.firstName}</h3>
-      <span className='stat'>loyalty: {props.noble.loyalty}</span> <br/>
-      <span className='stat'>power: {props.noble.power}</span> <br/>
-      <span className='stat'>taxLevel: {props.noble.taxLevel}</span> <br/>
-      <span className='stat'>age: {props.noble.age}</span> <br/>
-      <button onClick={() => props.initiateGiveFiefMode(props.noble.id)}>Give Fief</button>
+      <h3 className='NobleViewHeader'>{firstName}</h3>
+      <span className='stat'>loyalty: {loyalty}</span> <br/>
+      <span className='stat'>power: {power}</span> <br/>
+      <span className='stat'>taxLevel: {taxLevel}</span> <br/>
+      <span className='stat'>age: {age}</span> <br/>
+      <button onClick={() => props.initiateGiveFiefMode(id)}>Give Fief</button>
       {
-        props.givingFief.nobleId === props.noble.id ? <button onClick={props.uninitiateGiveFiefMode}>Commit</button> : null
+        props.givingFief.nobleId === id ? <button onClick={props.uninitiateGiveFiefMode}>Commit</button> : null
       }
+      <button onClick={() => props.raiseArmy(id)}>Raise Army</button>
     </div>
   )
 }
@@ -28,7 +37,8 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return{
     initiateGiveFiefMode: (payload) => dispatch(initiateGiveFiefMode(payload)),
-    uninitiateGiveFiefMode: () => dispatch(uninitiateGiveFiefMode())
+    uninitiateGiveFiefMode: () => dispatch(uninitiateGiveFiefMode()),
+    raiseArmy: (id) => dispatch(raiseArmy(id)),
   }
 }
 

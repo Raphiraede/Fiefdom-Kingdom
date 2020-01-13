@@ -5,7 +5,11 @@
   z-index: 10;
 }
 
-.map-wrapper{
+body{
+  margin: 0px
+}
+
+.MapWrapper{
   height: 100%;
   width: 100%;
   overflow: hidden;

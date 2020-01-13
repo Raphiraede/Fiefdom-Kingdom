@@ -1,4 +1,4 @@
-import { getRandomInt } from '../getRandomInt'
+import { getRandomInt } from '../../../getRandomInt'
 
 function initializeKingdomTerritory({gameMap, mainKingdom, families, nobles}){
   const mapWidth = gameMap.length

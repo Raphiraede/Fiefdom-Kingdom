@@ -4,7 +4,7 @@ import {
   GreenHeartFamily, 
   Noble,
 } from '../models/families'
-import { RandomNameGenerator } from './newGameInitialization/RandomNameGenerator'
+import { RandomNameGenerator } from './reducer/reducerHelpers/newGameInitialization/RandomNameGenerator'
 
 
 function loadState() {
@@ -54,7 +54,6 @@ function reviveState(parsedState){
     let royalFamily = families[familyIds[i]]
     if (royalFamily.familyName === 'BurnHammer'){
       royalFamily =  new BurnHammerFamily(royalFamily)
-      console.log(royalFamily)
     }
     if (royalFamily.familyName === 'GreenHeart'){
       royalFamily =  new GreenHeartFamily(royalFamily)

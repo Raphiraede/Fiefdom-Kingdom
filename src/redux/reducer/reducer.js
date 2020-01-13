@@ -1,7 +1,8 @@
 
-import types from './types'
-import { createNewGameState } from './newGameInitialization/newGameState'
-import { handleNextTurn } from './nextTurn/handleNextTurn'
+import types from '../types'
+import { createNewGameState } from './reducerHelpers/newGameInitialization/newGameState'
+import { handleNextTurn } from './reducerHelpers/nextTurn/handleNextTurn'
+import { Army } from '../../models/army/Army'
 
 function rootReducer(state, action){
   let newState
@@ -58,6 +59,13 @@ function rootReducer(state, action){
         currentlyGivingFief: false,
         nobleId: null
       }
+      return newState
+
+    case types.RAISE_ARMY:
+      newState = {...state}
+      const nobleId = action.payload
+      const newArmy = new Army({kingdomId: newState.mainKingdom.id, nobleId, destination: {x: 50, y: 10}})
+      newState.armies[newArmy.id] = newArmy
       return newState
 
     default:

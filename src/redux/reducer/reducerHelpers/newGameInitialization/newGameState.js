@@ -2,14 +2,14 @@ import {
   BurnHammerFamily, 
   GoldFingerFamily, 
   GreenHeartFamily,
-} from '../../models/families'
+} from '../../../../models/families'
 
-import { Kingdom } from '../../models/kingdom/Kingdom'
+import { Kingdom } from '../../../../models/kingdom/Kingdom'
 import { generateNewMap } from './generateNewMap'
 import { RandomNameGenerator } from './RandomNameGenerator'
 import { generateNobles } from './generateNobles'
 import { createIndexes } from '../indexes/createIndexes'
-import { initializeKingdomTerritory } from './initializeKingdomTerritory.js'
+import { initializeKingdomTerritory } from './initializeKingdomTerritory'
 
 function createNewGameState(){
   const randomNameGenerator = new RandomNameGenerator()
@@ -53,6 +53,9 @@ function createNewGameState(){
     givingFief: {
       currentlyGivingFief: false,
       nobleId: null,
+    },
+    armies: {
+      
     }
   }
 

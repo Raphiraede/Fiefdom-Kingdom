@@ -2,12 +2,12 @@ import React from 'react'
 import { Button } from './Button'
 import { nextTurn } from '../../redux/actions.js'
 import { connect } from 'react-redux'
+import './NextTurnButton.css'
 
 function NextTurnButton(props){
   return (
-    <div>
+    <div className='NextTurnButton'>
       <Button text={`Next Turn`} onClick={props.nextTurn} />
-      <span>Turn {props.turnNumber}</span>
     </div>
   )
 }

@@ -15,8 +15,8 @@ import { mapDrag, zoomMapIn, zoomMapOut, giveFiefToNoble } from '../../redux/act
 import { TileInfo } from './TileInfo'
 
 class Map extends React.Component{
-  constructor(props){
-    super(props)
+  constructor(){
+    super()
     this.FieldImage = new Image()
     this.RockImage = new Image()
     this.PlainImage = new Image()
@@ -86,7 +86,7 @@ class Map extends React.Component{
     if(ctx===null) return
 
     ctx.fillStyle = 'black'
-    ctx.fillRect(0, 0, viewportWidth, viewportHeight) //creates a black background
+    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight) //creates a black background
 
     frameCount += 1
     let sec = Math.floor(Date.now()/1000)
@@ -151,6 +151,7 @@ class Map extends React.Component{
       }
     }
 
+    this.drawArmies(ctx)
     this.drawHoveredTileOutline(ctx)
     this.handleTileInfoCoordinates()
     ctx.font = '40px serif'
@@ -264,6 +265,16 @@ class Map extends React.Component{
     }
   }
 
+  drawArmies(ctx){
+    const armies = this.props.armies
+    const armyIds = Object.keys(armies)
+    armyIds.forEach(id => {
+      const tileTopLeftPixelX = armies[id].coordinates.x * this.props.tileSize + this.props.mapOffset.x
+      const tileTopLeftPixelY = armies[id].coordinates.y * this.props.tileSize + this.props.mapOffset.y
+      ctx.drawImage(this.BlueSpearman, tileTopLeftPixelX, tileTopLeftPixelY, this.props.tileSize, this.props.tileSize)
+    })
+  }
+
   onMouseDown = (e, canvas) => {
     
     this.setState({
@@ -313,9 +324,12 @@ class Map extends React.Component{
   }
 
   render(){
+    console.log(window)
     return (
       <div>
-        <canvas ref='canvas' width={viewportWidth} height={viewportHeight} />
+        <div className='MapWrapper'>
+          <canvas ref='canvas' width={viewportWidth} height={viewportHeight} />
+        </div>
         {this.state.tileInfoIsVisible && this.props.gameMap[this.state.tileMatrixX] && this.props.gameMap[this.state.tileMatrixX][this.state.tileMatrixY]? 
           <TileInfo 
             tileData={this.props.gameMap[this.state.tileMatrixX][this.state.tileMatrixY]}
@@ -339,6 +353,7 @@ function mapStateToProps(state){
     mapOffset: {...state.mapOffset},
     tileSize: state.tileSize,
     givingFief: {...state.givingFief},
+    armies: {...state.armies},
   }
 }
 

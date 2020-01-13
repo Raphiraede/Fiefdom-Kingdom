@@ -1,5 +1,6 @@
 import uuidv1 from 'uuid/v1'
 import { getRandomInt } from '../../redux/getRandomInt'
+import { Army } from '../army/Army'
 
 class Noble {
   constructor({
@@ -10,6 +11,7 @@ class Noble {
     taxLevel=getRandomInt(0, 100),
     age=getRandomInt(15, 45),
     deathAge=getRandomInt(45, 90),
+    armies=[],
     id=uuidv1(),
     color='black',
   }){
@@ -20,6 +22,7 @@ class Noble {
     this.taxLevel = taxLevel
     this.age = age
     this.deathAge = deathAge
+    this.armies = armies
     this.id = id
     this.color = color
   }
@@ -62,7 +65,6 @@ class Noble {
     if(this.deathAge < this.age + 5) this.deathAge = this.age + 5 //You should get at least 5 years with a noble before he dies of old age
   }
 
-  
 }
 
 export { Noble }

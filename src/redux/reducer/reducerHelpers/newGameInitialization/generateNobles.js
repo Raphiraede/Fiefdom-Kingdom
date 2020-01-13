@@ -1,5 +1,5 @@
-import { Noble } from '../../models/families'
-import { getRandomInt } from '../getRandomInt'
+import { Noble } from '../../../../models/families'
+import { getRandomInt } from '../../../getRandomInt'
 
 
 function generateNobles({randomNameGenerator, nobles, royalFamily, familySize}){

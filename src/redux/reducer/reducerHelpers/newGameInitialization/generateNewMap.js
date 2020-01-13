@@ -1,6 +1,6 @@
-import { getRandomInt } from '../getRandomInt'
-import { mapHeight, mapWidth} from '../../models/tiles/mapConstants'
-import { House, Plain, Rock, Trees, Field, GoldOre, Church } from '../../models/tiles'
+import { getRandomInt } from '../../../getRandomInt'
+import { mapHeight, mapWidth} from '../../../../models/tiles/mapConstants'
+import { House, Plain, Rock, Trees, Field, GoldOre, Church } from '../../../../models/tiles'
 
 function generateNewMap(){
   let map = [];

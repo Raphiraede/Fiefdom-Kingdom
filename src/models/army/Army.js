@@ -1,8 +1,18 @@
+import uuidv1 from 'uuid/v1'
+
 class Army{
-  constructor({size, coordinates, destination}){
+  constructor({kingdomId, nobleId, size=100, coordinates={x:0,y:0}, destination={x:0,y:0}, id=uuidv1()}){
+    this.kingdomId = kingdomId
+    this.nobleId = nobleId
     this.size = size
     this.coordinates = coordinates
     this.destination = destination
+    this.id = id
+  }
+
+
+  handleNextTurn(){
+    this.moveTowardDestination()
   }
 
   moveTowardDestination(){

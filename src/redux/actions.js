@@ -52,4 +52,22 @@ function uninitiateGiveFiefMode(){
   }
 }
 
-export { newGame, nextTurn, mapDrag, zoomMapIn, zoomMapOut, initiateGiveFiefMode, giveFiefToNoble, uninitiateGiveFiefMode }
+function raiseArmy(payload){
+  console.log(payload)
+  return {
+    type: types.RAISE_ARMY,
+    payload: payload
+  }
+}
+
+export { newGame, 
+  nextTurn,
+  mapDrag,
+  zoomMapIn,
+  zoomMapOut, 
+  initiateGiveFiefMode, 
+  giveFiefToNoble, 
+  uninitiateGiveFiefMode,
+  raiseArmy
+}
+  
