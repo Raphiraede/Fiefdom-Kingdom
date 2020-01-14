@@ -11,7 +11,7 @@ import GoldOre from '../../images/tiles/goldOre.png'
 import ChurchBot from '../../images/tiles/ChurchBot.png'
 import ChurchTop from '../../images/tiles/ChurchTop.png'
 import BlueSpearman from '../../images/units/blue-spearman-bigger.png'
-import { mapDrag, zoomMapIn, zoomMapOut, giveFiefToNoble, select } from '../../redux/actions'
+import { mapDrag, zoomMapIn, zoomMapOut, giveFiefToNoble, select, updateArmyDestination } from '../../redux/actions'
 import { TileInfo } from './TileInfo'
 
 class Map extends React.Component{
@@ -68,7 +68,6 @@ class Map extends React.Component{
     const ctx = canvas.getContext('2d')
 
     canvas.oncontextmenu = (e) => { // this disables opening the context menu with right click, since right click is used for other thing on the minimap
-      e.stopPropagation()
       return false
     }
 
@@ -292,7 +291,8 @@ class Map extends React.Component{
       canvas.addEventListener('mouseup', this.onMouseUp)
     }
     else if(e.which===3){// right click
-
+      const coords = { x: this.state.tileMatrixX, y: this.state.tileMatrixY}
+      this.props.updateArmyDestination(coords)
     }
   }
 
@@ -376,7 +376,8 @@ function mapDispatchToProps(dispatch) {
     zoomMapIn: () => dispatch(zoomMapIn()),
     zoomMapOut: () => dispatch(zoomMapOut()),
     giveFiefToNoble: (payload) => dispatch(giveFiefToNoble(payload)),
-    select: (payload) => dispatch(select(payload))
+    select: (payload) => dispatch(select(payload)),
+    updateArmyDestination: (payload) => dispatch(updateArmyDestination(payload))
   }
 }
 

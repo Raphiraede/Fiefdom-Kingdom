@@ -5,6 +5,7 @@ import {
   Noble,
 } from '../models/families'
 import { RandomNameGenerator } from './reducer/reducerHelpers/newGameInitialization/RandomNameGenerator'
+import { Army } from '../models/army/Army'
 
 
 function loadState() {
@@ -42,6 +43,7 @@ function reviveState(parsedState){
     randomNameGenerator,
     families,
     nobles,
+    armies,
   } = parsedState
 
   const nobleIds = Object.keys(nobles)
@@ -62,6 +64,12 @@ function reviveState(parsedState){
       royalFamily =  new GoldFingerFamily(royalFamily)
     }
     families[familyIds[i]] = royalFamily
+  }
+
+  const armyIds = Object.keys(armies)
+  for(let i = 0; i<armyIds.length; i++){
+    const id = armyIds[i]
+    armies[id] = new Army(armies[id])
   }
 
   const revivedState={

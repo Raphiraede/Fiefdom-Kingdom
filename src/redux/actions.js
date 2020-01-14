@@ -67,6 +67,13 @@ function select(payload){
   }
 }
 
+function updateArmyDestination(payload){
+  return {
+    type: types.UPDATE_ARMY_DESTINATION,
+    payload: payload
+  }
+}
+
 export { newGame, 
   nextTurn,
   mapDrag,
@@ -76,5 +83,6 @@ export { newGame,
   giveFiefToNoble, 
   uninitiateGiveFiefMode,
   raiseArmy,
-  select
+  select,
+  updateArmyDestination
 }

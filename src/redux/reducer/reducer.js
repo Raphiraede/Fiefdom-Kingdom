@@ -79,6 +79,16 @@ function rootReducer(state, action){
       newState.selected = handleSelection({coords, armies: newState.armies })
     return newState
 
+    case types.UPDATE_ARMY_DESTINATION:
+      newState = {...state}
+      const destinationCoords = action.payload
+      if(newState.selected.type === 'army'){
+        const id = newState.selected.id
+        const army = newState.armies[id]
+        army.destination = destinationCoords
+      }
+      return newState
+
     default:
       return state
   }
