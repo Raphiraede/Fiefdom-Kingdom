@@ -3,6 +3,8 @@ import types from '../types'
 import { createNewGameState } from './reducerHelpers/newGameInitialization/newGameState'
 import { handleNextTurn } from './reducerHelpers/nextTurn/handleNextTurn'
 import { Army } from '../../models/army/Army'
+import { determineArmySpawnCoords } from './reducerHelpers/determineArmySpawnCoords/determineArmySpawnCoords'
+import { handleSelection } from './reducerHelpers/handleSelection/handleSelection'
 
 function rootReducer(state, action){
   let newState
@@ -64,9 +66,18 @@ function rootReducer(state, action){
     case types.RAISE_ARMY:
       newState = {...state}
       const nobleId = action.payload
-      const newArmy = new Army({kingdomId: newState.mainKingdom.id, nobleId, destination: {x: 50, y: 10}})
-      newState.armies[newArmy.id] = newArmy
+      const coordinates = determineArmySpawnCoords({nobleId, gameMap: newState.gameMap, armies: newState.armies})//returns undefined if no suitable place to spawn
+      if(coordinates){
+        const newArmy = new Army({ kingdomId: newState.mainKingdom.id, coordinates, nobleId })
+        newState.armies[newArmy.id] = newArmy
+      }
       return newState
+    
+    case types.SELECT:
+      newState = {...state}
+      const coords = action.payload
+      newState.selected = handleSelection({coords, armies: newState.armies })
+    return newState
 
     default:
       return state

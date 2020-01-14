@@ -56,7 +56,8 @@ function createNewGameState(){
     },
     armies: {
       
-    }
+    },
+    selected: null
   }
 
   newGameState.indexes = createIndexes(newGameState)

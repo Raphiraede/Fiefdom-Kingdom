@@ -11,7 +11,7 @@ import GoldOre from '../../images/tiles/goldOre.png'
 import ChurchBot from '../../images/tiles/ChurchBot.png'
 import ChurchTop from '../../images/tiles/ChurchTop.png'
 import BlueSpearman from '../../images/units/blue-spearman-bigger.png'
-import { mapDrag, zoomMapIn, zoomMapOut, giveFiefToNoble } from '../../redux/actions'
+import { mapDrag, zoomMapIn, zoomMapOut, giveFiefToNoble, select } from '../../redux/actions'
 import { TileInfo } from './TileInfo'
 
 class Map extends React.Component{
@@ -66,6 +66,11 @@ class Map extends React.Component{
   componentDidMount() {
     const canvas = this.refs.canvas
     const ctx = canvas.getContext('2d')
+
+    canvas.oncontextmenu = (e) => { // this disables opening the context menu with right click, since right click is used for other thing on the minimap
+      e.stopPropagation()
+      return false
+    }
 
     //tracks mouseX and mouseY to help calculate which tile to highlite
     canvas.addEventListener('mousemove', this.trackMouseMovement)
@@ -276,15 +281,19 @@ class Map extends React.Component{
   }
 
   onMouseDown = (e, canvas) => {
-    
     this.setState({
       mouseOffset: {
         x: e.clientX - this.props.mapOffset.x,
         y: e.clientY - this.props.mapOffset.y
       },
     })
-    canvas.addEventListener('mousemove', this.onMouseMove)
-    canvas.addEventListener('mouseup', this.onMouseUp)
+    if(e.which === 1){ // left click
+      canvas.addEventListener('mousemove', this.onMouseMove)
+      canvas.addEventListener('mouseup', this.onMouseUp)
+    }
+    else if(e.which===3){// right click
+
+    }
   }
 
   onMouseMove = (e) => {
@@ -311,11 +320,16 @@ class Map extends React.Component{
           tileMatrixY: this.state.tileMatrixY,
         }
         this.props.giveFiefToNoble(payload)
-      } 
+      }
+      else if (!this.props.selected){
+        const coords = { x: this.state.tileMatrixX, y: this.state.tileMatrixY}
+        this.props.select(coords)
+      }
     }
     else{//this case is a drag.
 
     }
+
     this.setState({
       pixelsMovedAfterMouseDown: 0
     })
@@ -324,7 +338,6 @@ class Map extends React.Component{
   }
 
   render(){
-    console.log(window)
     return (
       <div>
         <div className='MapWrapper'>
@@ -362,7 +375,8 @@ function mapDispatchToProps(dispatch) {
     mapDrag: (payload) => dispatch(mapDrag(payload)),
     zoomMapIn: () => dispatch(zoomMapIn()),
     zoomMapOut: () => dispatch(zoomMapOut()),
-    giveFiefToNoble: (payload) => dispatch(giveFiefToNoble(payload))
+    giveFiefToNoble: (payload) => dispatch(giveFiefToNoble(payload)),
+    select: (payload) => dispatch(select(payload))
   }
 }
 

@@ -1,4 +1,5 @@
 import types from "./types";
+import { func } from "prop-types";
 
 function newGame(payload){
   return {
@@ -53,9 +54,15 @@ function uninitiateGiveFiefMode(){
 }
 
 function raiseArmy(payload){
-  console.log(payload)
   return {
     type: types.RAISE_ARMY,
+    payload: payload
+  }
+}
+
+function select(payload){
+  return {
+    type: types.SELECT,
     payload: payload
   }
 }
@@ -68,6 +75,6 @@ export { newGame,
   initiateGiveFiefMode, 
   giveFiefToNoble, 
   uninitiateGiveFiefMode,
-  raiseArmy
+  raiseArmy,
+  select
 }
-  
