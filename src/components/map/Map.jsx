@@ -155,7 +155,7 @@ class Map extends React.Component{
       }
     }
 
-    this.drawArmies(ctx)
+    this.drawArmiesAndArmyPaths(ctx)
     this.drawHoveredTileOutline(ctx)
     this.handleTileInfoCoordinates()
     ctx.font = '40px serif'
@@ -255,6 +255,7 @@ class Map extends React.Component{
 
   //draws a black box around the tile currently being hovered over
   drawHoveredTileOutline(ctx){
+    ctx.strokeStyle = 'black'
     const x = this.state.tileMatrixX
     const y = this.state.tileMatrixY
     ctx.strokeRect(x*this.props.tileSize + this.props.mapOffset.x, y*this.props.tileSize + this.props.mapOffset.y, this.props.tileSize, this.props.tileSize)
@@ -269,14 +270,94 @@ class Map extends React.Component{
     }
   }
 
-  drawArmies(ctx){
+  drawArmiesAndArmyPaths(ctx){
     const armies = this.props.armies
-    const armyIds = Object.keys(armies)
-    armyIds.forEach(id => {
-      const tileTopLeftPixelX = armies[id].coordinates.x * this.props.tileSize + this.props.mapOffset.x
-      const tileTopLeftPixelY = armies[id].coordinates.y * this.props.tileSize + this.props.mapOffset.y
-      ctx.drawImage(this.BlueSpearman, tileTopLeftPixelX, tileTopLeftPixelY, this.props.tileSize, this.props.tileSize)
-    })
+    const tileSize = this.props.tileSize
+    const mapOffsetX = this.props.mapOffset.x
+    const mapOffsetY = this.props.mapOffset.y
+
+    for (const id in armies){ //This draws the armies
+      const army = armies[id]
+      const tileTopLeftPixelX = army.coordinates.x * tileSize + mapOffsetX
+      const tileTopLeftPixelY = army.coordinates.y * tileSize + mapOffsetY
+      ctx.drawImage(this.BlueSpearman, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
+    }
+
+    for (const id in armies){ //This draws their paths
+      const army = armies[id]
+      const coordinates = {...army.coordinates}
+      const destination = army.destination
+      const lineTracer = coordinates //This keeps track of the current tile that the path is being drawn through
+
+      ctx.beginPath()
+      ctx.strokeStyle='blue'
+      while (lineTracer.x !== destination.x || lineTracer.y !== destination.y){
+        const tileCenterX = tileSize * lineTracer.x + mapOffsetX + (tileSize/2)
+        const tileCenterY = tileSize * lineTracer.y + mapOffsetY + (tileSize/2)
+        
+        //Diagonal line going down and right
+        if(lineTracer.x < destination.x && lineTracer.y < destination.y){
+          ctx.moveTo(tileCenterX, tileCenterY)
+          ctx.lineTo(tileCenterX + tileSize, tileCenterY + tileSize)
+          lineTracer.x += 1
+          lineTracer.y += 1
+        }
+
+        //Diagonal line going up and left
+        else if(lineTracer.x > destination.x && lineTracer.y > destination.y){
+          ctx.moveTo(tileCenterX, tileCenterY)
+          ctx.lineTo(tileCenterX - tileSize, tileCenterY - tileSize)
+          lineTracer.x -= 1
+          lineTracer.y -= 1
+        }
+
+        //Diagonal line going down and left
+        else if(lineTracer.x > destination.x && lineTracer.y < destination.y){
+          ctx.moveTo(tileCenterX, tileCenterY)
+          ctx.lineTo(tileCenterX - tileSize, tileCenterY + tileSize)
+          lineTracer.x -= 1
+          lineTracer.y += 1
+        }
+
+        //Diagnoal line going up and right
+        else if (lineTracer.x < destination.x && lineTracer.y > destination.y){
+          ctx.moveTo(tileCenterX, tileCenterY)
+          ctx.lineTo(tileCenterX + tileSize, tileCenterY - tileSize)
+          lineTracer.x += 1
+          lineTracer.y -= 1
+        }
+
+        //Horizontal line left to right
+        else if (lineTracer.x < destination.x && lineTracer.y === destination.y){
+          ctx.moveTo(tileCenterX, tileCenterY)
+          ctx.lineTo(tileCenterX + tileSize, tileCenterY)
+          lineTracer.x += 1
+        }
+
+        //Horizontal line right to left
+        else if (lineTracer.x > destination.x && lineTracer.y === destination.y){
+          ctx.moveTo(tileCenterX, tileCenterY)
+          ctx.lineTo(tileCenterX - tileSize, tileCenterY)
+          lineTracer.x -= 1
+        }
+
+        //vertical line top to bottom
+        else if (lineTracer.x === destination.x && lineTracer.y < destination.y){
+          ctx.moveTo(tileCenterX, tileCenterY)
+          ctx.lineTo(tileCenterX, tileCenterY + tileSize)
+          lineTracer.y += 1
+        }
+
+        //vertical line bottom to top
+        else if (lineTracer.x === destination.x && lineTracer.y > destination.y){
+          ctx.moveTo(tileCenterX, tileCenterY)
+          ctx.lineTo(tileCenterX, tileCenterY - tileSize)
+          lineTracer.y -= 1
+        }
+      }
+      ctx.stroke()
+      ctx.beginPath()
+    }
   }
 
   onMouseDown = (e, canvas) => {
@@ -321,11 +402,12 @@ class Map extends React.Component{
         }
         this.props.giveFiefToNoble(payload)
       }
-      else if (!this.props.selected){
+      else{
         const coords = { x: this.state.tileMatrixX, y: this.state.tileMatrixY}
         this.props.select(coords)
       }
     }
+
     else{//this case is a drag.
 
     }
@@ -350,6 +432,8 @@ class Map extends React.Component{
             families={this.props.families}
             nobles={this.props.nobles}
             noblesToFamiliesIndex={this.props.noblesToFamiliesIndex}
+            armies={this.props.armies}
+            selected={this.props.selected}
           />
           : null
         }
@@ -367,6 +451,7 @@ function mapStateToProps(state){
     tileSize: state.tileSize,
     givingFief: {...state.givingFief},
     armies: {...state.armies},
+    selected: {...state.selected}
   }
 }
 

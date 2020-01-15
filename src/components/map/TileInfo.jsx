@@ -7,13 +7,21 @@ function TileInfo(props){
     type,
     population,
     kingdomOwner,
-    fiefOwner
+    fiefOwner,
   } = props.tileData
 
   const {
     mainKingdom,
     nobles,
+    armies,
   } = props
+  let hoveredArmy
+  for (const id in armies){
+    const army = armies[id]
+    if (army.coordinates.x === x && army.coordinates.y === y) hoveredArmy = army
+  }
+  console.log(hoveredArmy)
+
   return (
     <div className='tile-info'>
       <span>X: {x}</span> <br />
@@ -27,9 +35,15 @@ function TileInfo(props){
       }</span> <br />
       {
         fiefOwner ?
-        <span>Duke: {nobles[fiefOwner].firstName} of the {nobles[fiefOwner].familyName} family </span>:
+        (<span>Duke: {nobles[fiefOwner].firstName} of the {nobles[fiefOwner].familyName} family <br /></span> ):
         null
       }
+      {
+        hoveredArmy ?
+        <span>Army Size: {hoveredArmy.calculateTotalSize()}</span>:
+        null
+      }
+      <span></span>
     </div>
   )
 }

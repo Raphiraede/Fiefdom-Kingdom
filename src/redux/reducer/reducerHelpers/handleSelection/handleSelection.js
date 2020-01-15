@@ -13,7 +13,7 @@ function handleSelection({coords, armies}){
       }
     }
   }
-  return undefined
+  return null
 }
 
 export { handleSelection }

@@ -5,6 +5,7 @@ import { handleNextTurn } from './reducerHelpers/nextTurn/handleNextTurn'
 import { Army } from '../../models/army/Army'
 import { determineArmySpawnCoords } from './reducerHelpers/determineArmySpawnCoords/determineArmySpawnCoords'
 import { handleSelection } from './reducerHelpers/handleSelection/handleSelection'
+import { createArmyDemographicsObject } from './reducerHelpers/createArmyDemographicsObject/createArmyDemographicsObject'
 
 function rootReducer(state, action){
   let newState
@@ -14,7 +15,8 @@ function rootReducer(state, action){
       return newGameState
 
     case types.NEXT_TURN:
-      const nextTurnState = handleNextTurn(state)
+      newState = {...state}
+      const nextTurnState = handleNextTurn(newState)
       return nextTurnState
     
     case types.MAP_DRAG:
@@ -68,7 +70,8 @@ function rootReducer(state, action){
       const nobleId = action.payload
       const coordinates = determineArmySpawnCoords({nobleId, gameMap: newState.gameMap, armies: newState.armies})//returns undefined if no suitable place to spawn
       if(coordinates){
-        const newArmy = new Army({ kingdomId: newState.mainKingdom.id, coordinates, nobleId })
+        const armyDemographicsObject = createArmyDemographicsObject({nobleId, gameMap: newState.gameMap, percentage: 10})
+        const newArmy = new Army({ kingdomId: newState.mainKingdom.id, coordinates, demographics: armyDemographicsObject, nobleId })
         newState.armies[newArmy.id] = newArmy
       }
       return newState
@@ -82,7 +85,7 @@ function rootReducer(state, action){
     case types.UPDATE_ARMY_DESTINATION:
       newState = {...state}
       const destinationCoords = action.payload
-      if(newState.selected.type === 'army'){
+      if(newState.selected && newState.selected.type === 'army'){
         const id = newState.selected.id
         const army = newState.armies[id]
         army.destination = destinationCoords
