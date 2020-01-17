@@ -1,5 +1,5 @@
 import { createNoblesToFamiliesIndex } from './createNoblesToFamiliesIndex'
-import { createFamiliesToKingdomsIndex } from './creatFamiliesToKingdomIndex'
+import { createFamiliesToKingdomsIndex } from './createFamiliesToKingdomIndex'
 import { createArmiesToNoblesIndex } from './createArmiesToNoblesIndex'
 
 function createIndexes(state){

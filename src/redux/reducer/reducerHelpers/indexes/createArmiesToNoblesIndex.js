@@ -8,6 +8,7 @@ function createArmiesToNoblesIndex({nobles}){
       armiesToNoblesIndex[armyId] = noble.id
     }
   }
+  return armiesToNoblesIndex
 }
 
 export { createArmiesToNoblesIndex }

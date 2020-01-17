@@ -6,6 +6,7 @@ function disbandArmyAndReturnSoldiersToTiles(state){
   if(selected && selected.type==='army'){
     const army = state.armies[selected.id]
     returnSoldiersToTiles(army.demographics, state.gameMap)
+    delete state.indexes.armiesToNobles[army.id]
     delete state.armies[selected.id]
   }
 }

@@ -63,11 +63,6 @@ function createNewGameState(){
       
     },
     selected: null,
-    indexes: {
-      familiesToKingdoms:{},
-      noblesToFamilies:{},
-      armiesToNobles:{}
-    }
   }
 
   newGameState.indexes = createIndexes(newGameState)

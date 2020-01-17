@@ -59,16 +59,7 @@ function payWages({army, kingdom}){
 
 function conquerTerritory({army, state}){
 
-  let nobleWhichArmyIsLoyalTo
-  for (const nobleId in state.nobles){
-    const noble = state.nobles[nobleId]
-    for(const index in noble.armies){
-      const armyId = noble.armies[index]
-      if(armyId===army.id){
-        nobleWhichArmyIsLoyalTo = noble.id
-      }
-    }
-  }
+  const nobleWhichArmyIsLoyalTo = state.indexes.armiesToNobles[army.id]
   const familyWhichNobleBelongsTo = state.indexes.noblesToFamilies[nobleWhichArmyIsLoyalTo]
   const kingdomWhichFamilyBelongsTo = state.indexes.familiesToKingdoms[familyWhichNobleBelongsTo]
   const coords = army.coordinates

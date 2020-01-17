@@ -90,6 +90,7 @@ function rootReducer(state, action){
         if(newArmy.calculateTotalSize() > 0){
           newState.armies[newArmy.id] = newArmy
           newState.nobles[nobleId].armies.push (newArmy.id)
+          newState.indexes.armiesToNobles[newArmy.id] = nobleId
         }
       }
       return newState
