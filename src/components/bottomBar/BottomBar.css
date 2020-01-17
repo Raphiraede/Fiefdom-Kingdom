@@ -1,7 +1,46 @@
 .BottomBar{
   position: absolute;
   background-color:rgb(56, 56, 56);
-  width: calc(100% - 15px);
+  width: calc(100% - 208px);
   height: 150px;
   bottom: 1%;
+  float: left;
+  border-color: black;
+}
+
+.leftSection{
+  height: 100%;
+  width: 33.3%;
+  float: left;
+}
+
+.middleSection{
+  height: 100%;
+  width: 33.3%;
+  text-align: center;
+  float: left;
+}
+
+.TileInfo{
+  position: relative;
+  background-color: blue;
+  text-align: center;
+  width: 100%;
+  height: calc(100% - 20px);
+}
+
+.NextTurnButton{
+  height: 20px;
+  width: 100%;
+}
+
+.ArmyCommandsWrapper{
+  width: 33.4%;
+  height: 100%;
+  float: left;
+}
+
+.ArmyCommandsButton{
+  height: 50%;
+  width: 50%;
 }

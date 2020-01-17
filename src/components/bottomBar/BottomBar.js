@@ -2,25 +2,26 @@ import React from 'react'
 import './BottomBar.css'
 import { nextTurn } from '../../redux/actions.js'
 import { connect } from 'react-redux'
-import { TileInfo } from '../map/TileInfo'
+import { TileInfo } from './TileInfo'
+import { ArmyCommands } from './ArmyCommands'
 
 function BottomBar(props){
   return (
     <div className='BottomBar'>
-      {/* <TileInfo 
-        tileData={this.props.gameMap[this.state.tileMatrixX][this.state.tileMatrixY]}
-        mainKingdom={this.props.mainKingdom}
-        families={this.props.families}
-        nobles={this.props.nobles}
-        noblesToFamiliesIndex={this.props.noblesToFamiliesIndex}
-        armies={this.props.armies}
-        selected={this.props.selected}
-      /> */}
-      <div className='NextTurnButtonWrapper'>
+      <div className='leftSection'>
+        <TileInfo />
         <button className='NextTurnButton' onClick={props.nextTurn}>
           Next Turn
         </button>
       </div>
+
+      <div className='middleSection'>
+        <h1>
+          Fiefdom Kingdom
+        </h1>
+      </div>
+      
+        <ArmyCommands />
     </div>
   )
 }

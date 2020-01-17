@@ -6,6 +6,7 @@ import { Army } from '../../models/army/Army'
 import { determineArmySpawnCoords } from './reducerHelpers/determineArmySpawnCoords/determineArmySpawnCoords'
 import { handleSelection } from './reducerHelpers/handleSelection/handleSelection'
 import { createArmyDemographicsObject } from './reducerHelpers/createArmyDemographicsObject/createArmyDemographicsObject'
+import { disbandArmyAndReturnSoldiersToTiles } from './reducerHelpers/disbandArmyAndReturnSoldiersToTiles/disbandArmyAndReturnSoldiersToTiles'
 
 function rootReducer(state, action){
   let newState
@@ -16,7 +17,12 @@ function rootReducer(state, action){
 
     case types.UPDATE_HOVERED_TILE_COORDINATES:
       newState = {...state}
-      newState.hoveredTileCoordinates = action.payload
+      const newCoords = action.payload
+      const {x, y} = newCoords
+      const gameMap = newState.gameMap
+      if(x >= 0 && x < gameMap.length && y >= 0 && y < gameMap[0].length){
+        newState.hoveredTileCoords = newCoords
+      }
       return newState
 
     case types.NEXT_TURN:
@@ -56,11 +62,12 @@ function rootReducer(state, action){
     
     case types.GIVE_FIEF_TO_NOBLE:
       newState = {...state}
-      const { x, y } = newState.hoveredTileCoordinates
-      if(newState.gameMap[x] && 
-        newState.gameMap[x][y] && 
-        newState.gameMap[x][y].kingdomOwner === newState.mainKingdom.id) {
-          newState.gameMap[x][y].fiefOwner = newState.givingFief.nobleId
+      const hoveredX = newState.hoveredTileCoords.x
+      const hoveredY = newState.hoveredTileCoords.y
+      if(newState.gameMap[hoveredX] && 
+        newState.gameMap[hoveredX][hoveredY] && 
+        newState.gameMap[hoveredX][hoveredY].kingdomOwner === newState.mainKingdom.id) {
+          newState.gameMap[hoveredX][hoveredY].fiefOwner = newState.givingFief.nobleId
         }
 
       return newState
@@ -89,13 +96,13 @@ function rootReducer(state, action){
     
     case types.SELECT:
       newState = {...state}
-      const coords = newState.hoveredTileCoordinates
+      const coords = newState.hoveredTileCoords
       newState.selected = handleSelection({coords, armies: newState.armies })
       return newState
 
     case types.UPDATE_ARMY_DESTINATION:
       newState = {...state}
-      const destinationCoords = {...newState.hoveredTileCoordinates}
+      const destinationCoords = {...newState.hoveredTileCoords}
       if(newState.selected && newState.selected.type === 'army'){
         const id = newState.selected.id
         const army = newState.armies[id]
@@ -105,6 +112,7 @@ function rootReducer(state, action){
 
     case types.DISBAND_ARMY:
       newState = {...state}
+      disbandArmyAndReturnSoldiersToTiles(newState)
       return newState
 
     default:

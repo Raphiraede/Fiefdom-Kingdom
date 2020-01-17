@@ -51,7 +51,7 @@ function createNewGameState(){
       y: 0,
     },
     //This represent the coordinates of the tile relative to the gameMap matrix, NOT the pixel coordinates
-    hoveredTileCoordinates: {
+    hoveredTileCoords: {
       x: 0,
       y: 0,
     },

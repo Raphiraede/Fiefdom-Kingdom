@@ -12,7 +12,7 @@ import ChurchBot from '../../images/tiles/ChurchBot.png'
 import ChurchTop from '../../images/tiles/ChurchTop.png'
 import BlueSpearman from '../../images/units/blue-spearman-bigger.png'
 import { 
-  updateHoveredTileCoordinates,
+  updateHoveredTileCoords,
   mapDrag, 
   zoomMapIn, 
   zoomMapOut, 
@@ -51,7 +51,7 @@ class Map extends React.Component{
       mouseY: 0,
       //This is simply keeping track of the coordinates so that they can update the state store only when the hovered tile changes
       //This is so that the state store isn't being updated every animation frame, which would be a nightmare for performance
-      hoveredTileCoordinatesTracker: {
+      hoveredTileCoordsTracker: {
         x: 0,
         y: 0
       },
@@ -63,20 +63,20 @@ class Map extends React.Component{
     const rect = e.target.getBoundingClientRect()
     const mouseX = e.pageX - rect.left
     const mouseY = e.pageY - rect.top
-    const hoveredTileCoordinates = this.findHoveredTileCoords()
+    const hoveredTileCoords = this.findHoveredTileCoords()
 
-    //This check is done so that the state store is only updated when the hoveredTileCoordinates change
+    //This check is done so that the state store is only updated when the hoveredTileCoords change
     //This prevents the state from having to update every animation frame, which would dramatically decrease performance
-    if(hoveredTileCoordinates.x === this.state.hoveredTileCoordinatesTracker.x &&
-       hoveredTileCoordinates.y === this.state.hoveredTileCoordinatesTracker.y
+    if(hoveredTileCoords.x === this.state.hoveredTileCoordsTracker.x &&
+       hoveredTileCoords.y === this.state.hoveredTileCoordsTracker.y
       ){
-      this.props.updateHoveredTileCoordinates(hoveredTileCoordinates)
+      this.props.updateHoveredTileCoords(hoveredTileCoords)
     }
 
     this.setState({
       mouseX,
       mouseY,
-      hoveredTileCoordinatesTracker: hoveredTileCoordinates
+      hoveredTileCoordsTracker: hoveredTileCoords
     })
   }
 
@@ -261,16 +261,16 @@ class Map extends React.Component{
   //draws a black box around the tile currently being hovered over
   drawHoveredTileOutline(ctx){
     ctx.strokeStyle = 'black'
-    const x = this.props.hoveredTileCoordinates.x
-    const y = this.props.hoveredTileCoordinates.y
+    const x = this.props.hoveredTileCoords.x
+    const y = this.props.hoveredTileCoords.y
     ctx.strokeRect(x*this.props.tileSize + this.props.mapOffset.x, y*this.props.tileSize + this.props.mapOffset.y, this.props.tileSize, this.props.tileSize)
   }
 
   findHoveredTileCoords(){
     const x = Math.floor((this.state.mouseX - this.props.mapOffset.x)/this.props.tileSize)
     const y = Math.floor((this.state.mouseY - this.props.mapOffset.y)/this.props.tileSize)
-    const hoveredTileCoordinates = {x, y}
-    return hoveredTileCoordinates
+    const hoveredTileCoords = {x, y}
+    return hoveredTileCoords
   }
 
   drawArmiesAndArmyPaths(ctx){
@@ -401,7 +401,6 @@ class Map extends React.Component{
         this.props.giveFiefToNoble()
       }
       else{
-        const coords = { x: this.state.tileMatrixX, y: this.state.tileMatrixY}
         this.props.select()
       }
     }
@@ -437,7 +436,7 @@ function mapStateToProps(state){
     tileSize: state.tileSize,
     givingFief: {...state.givingFief},
     armies: {...state.armies},
-    hoveredTileCoordinates: {...state.hoveredTileCoordinates}
+    hoveredTileCoords: {...state.hoveredTileCoords}
   }
 }
 
@@ -449,7 +448,7 @@ function mapDispatchToProps(dispatch) {
     giveFiefToNoble: () => dispatch(giveFiefToNoble()),
     select: () => dispatch(select()),
     updateArmyDestination: () => dispatch(updateArmyDestination()),
-    updateHoveredTileCoordinates: (payload) => dispatch(updateHoveredTileCoordinates(payload))
+    updateHoveredTileCoords: (payload) => dispatch(updateHoveredTileCoords(payload))
   }
 }
 

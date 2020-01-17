@@ -7,7 +7,7 @@ function newGame(payload){
   }
 }
 
-function updateHoveredTileCoordinates(payload){
+function updateHoveredTileCoords(payload){
   return {
     type: types.UPDATE_HOVERED_TILE_COORDINATES,
     payload: payload
@@ -85,7 +85,7 @@ function disbandArmy(){
 
 export { newGame, 
   nextTurn,
-  updateHoveredTileCoordinates,
+  updateHoveredTileCoords,
   mapDrag,
   zoomMapIn,
   zoomMapOut, 
