@@ -27,7 +27,6 @@ function BottomBar(props){
 }
 
 
-
 function mapStateToProps(state){
   return{
     turnNumber: state.turnNumber,

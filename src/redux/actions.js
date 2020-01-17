@@ -85,6 +85,13 @@ function disbandArmy(){
   }
 }
 
+function toggleArmyMode(payload){
+  return{
+    type: types.TOGGLE_ARMY_MODE,
+    payload: payload
+  }
+}
+
 export { newGame, 
   nextTurn,
   updateHoveredTileCoords,
@@ -98,4 +105,5 @@ export { newGame,
   select,
   updateArmyDestination,
   disbandArmy,
+  toggleArmyMode
 }

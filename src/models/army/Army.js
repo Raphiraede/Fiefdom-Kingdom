@@ -1,24 +1,30 @@
 import uuidv1 from 'uuid/v1'
 
 class Army{
-  constructor({coordinates={x:0,y:0}, destination=coordinates, demographics, turnsOnSameTile=0, wageOwed=0, id=uuidv1()}){
+  constructor({coordinates={x:0,y:0}, destination=coordinates, demographics, turnsOnSameTile=0, mode='move', id=uuidv1()}){
     this.coordinates = coordinates
     this.destination = destination
     this.demographics = demographics
     this.turnsOnSameTile = turnsOnSameTile
-    this.wageOwed = wageOwed
+    this.mode = mode
     this.id = id
   }
 
 
-  handleNextTurn(armies){
-    this.moveTowardDestination(armies)
-    this.calculateWageOwed()
+  handleNextTurn({state, armies}){
+    const kingdomId = this.calculateKingdomIdThatArmyIsLoyalTo(state)
+    if(this.mode === 'move') this.moveTowardDestination(state.armies)
+    else if(this.mode === 'conquer') this.handleConquerMode(state, kingdomId)
+    if(this.turnsOnSameTile >= 2) this.conquerTerritory(state, kingdomId)
+    this.payWages(state, kingdomId)
     this.turnsOnSameTile++
   }
 
-  calculateWageOwed(){
-    this.wageOwed += this.calculateTotalSize() * 10
+  payWages(state, kingdomId){
+    const wageOwed = this.calculateTotalSize() * 10
+    if(state.mainKingdom.id === kingdomId){
+      state.mainKingdom.gold -= wageOwed
+    }
   }
 
   calculateTotalSize(){
@@ -44,6 +50,11 @@ class Army{
     }
   }
 
+  handleConquerMode(state, kingdomId){
+    const kingdomOwnerOfTile = state.gameMap[this.coordinates.x][this.coordinates.y].kingdomOwner
+    if(kingdomId === kingdomOwnerOfTile) this.moveTowardDestination()
+  }
+
   //currently the only thing which can block a path is another army
   checkIfPathIsClear(targetSquare, armies){
     let pathIsClear = true
@@ -55,6 +66,19 @@ class Army{
     }
     return pathIsClear
   }
+
+  conquerTerritory(state, kingdomId){
+    state.gameMap[this.coordinates.x][this.coordinates.y].kingdomOwner = kingdomId
+  }
+
+  calculateKingdomIdThatArmyIsLoyalTo(state){
+    const nobleWhichArmyIsLoyalTo = state.indexes.armiesToNobles[this.id]
+    const familyWhichNobleBelongsTo = state.indexes.noblesToFamilies[nobleWhichArmyIsLoyalTo]
+    const kingdomWhichFamilyBelongsTo = state.indexes.familiesToKingdoms[familyWhichNobleBelongsTo]
+    return kingdomWhichFamilyBelongsTo
+  }
 }
+
+
 
 export { Army }

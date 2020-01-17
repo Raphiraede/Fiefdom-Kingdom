@@ -142,6 +142,13 @@ function rootReducer(state, action){
       disbandArmyAndReturnSoldiersToTiles(newState)
       return newState
 
+    case types.TOGGLE_ARMY_MODE:
+      newState = {...state}
+      const armyId = newState.selected.id
+      const army = newState.armies[armyId]
+      army.mode=action.payload
+      return newState
+
     default:
       return state
   }
