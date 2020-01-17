@@ -1,11 +1,12 @@
 import uuidv1 from 'uuid/v1'
 
 class Army{
-  constructor({coordinates={x:0,y:0}, destination=coordinates, demographics, id=uuidv1()}){
+  constructor({coordinates={x:0,y:0}, destination=coordinates, demographics, turnsOnSameTile=0, wageOwed=0, id=uuidv1()}){
     this.coordinates = coordinates
     this.destination = destination
     this.demographics = demographics
-    this.wageOwed = 0
+    this.turnsOnSameTile = turnsOnSameTile
+    this.wageOwed = wageOwed
     this.id = id
   }
 
@@ -13,6 +14,7 @@ class Army{
   handleNextTurn(armies){
     this.moveTowardDestination(armies)
     this.calculateWageOwed()
+    this.turnsOnSameTile++
   }
 
   calculateWageOwed(){
@@ -38,6 +40,7 @@ class Army{
     const pathIsClear = this.checkIfPathIsClear(targetSquare, armies)
     if(pathIsClear){
       this.coordinates = targetSquare
+      this.turnsOnSameTile = 0
     }
   }
 

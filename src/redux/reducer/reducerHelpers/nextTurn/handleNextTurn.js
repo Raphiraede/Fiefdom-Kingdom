@@ -28,6 +28,7 @@ function handleNextTurn(state){
     const army = armies[id]
     army.handleNextTurn(armies)
     payWages({army, kingdom: state.mainKingdom})
+    if(army.turnsOnSameTile >= 2) conquerTerritory({army, state})
   })
 
 
@@ -56,5 +57,23 @@ function payWages({army, kingdom}){
   army.wageOwed = 0
 }
 
+function conquerTerritory({army, state}){
+
+  let nobleWhichArmyIsLoyalTo
+  for (const nobleId in state.nobles){
+    const noble = state.nobles[nobleId]
+    for(const index in noble.armies){
+      const armyId = noble.armies[index]
+      if(armyId===army.id){
+        nobleWhichArmyIsLoyalTo = noble.id
+      }
+    }
+  }
+  const familyWhichNobleBelongsTo = state.indexes.noblesToFamilies[nobleWhichArmyIsLoyalTo]
+  const kingdomWhichFamilyBelongsTo = state.indexes.familiesToKingdoms[familyWhichNobleBelongsTo]
+  const coords = army.coordinates
+  state.gameMap[coords.x][coords.y].kingdomOwner = kingdomWhichFamilyBelongsTo
+
+}
 
 export { handleNextTurn }
