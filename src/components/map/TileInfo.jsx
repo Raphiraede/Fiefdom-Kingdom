@@ -20,10 +20,9 @@ function TileInfo(props){
     const army = armies[id]
     if (army.coordinates.x === x && army.coordinates.y === y) hoveredArmy = army
   }
-  console.log(hoveredArmy)
-
+  
   return (
-    <div className='tile-info'>
+    <div className='TileInfo'>
       <span>X: {x}</span> <br />
       <span>Y: {y}</span> <br />
       <span>Type: {type}</span> <br />

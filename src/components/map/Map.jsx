@@ -11,8 +11,15 @@ import GoldOre from '../../images/tiles/goldOre.png'
 import ChurchBot from '../../images/tiles/ChurchBot.png'
 import ChurchTop from '../../images/tiles/ChurchTop.png'
 import BlueSpearman from '../../images/units/blue-spearman-bigger.png'
-import { mapDrag, zoomMapIn, zoomMapOut, giveFiefToNoble, select, updateArmyDestination } from '../../redux/actions'
-import { TileInfo } from './TileInfo'
+import { 
+  updateHoveredTileCoordinates,
+  mapDrag, 
+  zoomMapIn, 
+  zoomMapOut, 
+  giveFiefToNoble, 
+  select, 
+  updateArmyDestination
+} from '../../redux/actions'
 
 class Map extends React.Component{
   constructor(){
@@ -39,13 +46,15 @@ class Map extends React.Component{
 
     //mapOffset is in the redux store so that it persists when the user navigates away and navigates back
     this.state = {
-      tileInfoIsVisible: true, //Currently this is always true, might change later
-      mouseOffset: {}, //MouseOffset is the mouseX and mouseY based on the actual game map, not the canvas(since the gamemap can be offset as well)
+      mouseOffset: {}, //MouseOffset is the mouseX and mouseY based on the actual game map, not the canvas(since the gamemap can dragged and cause it to be offset)
       mouseX: 0,
       mouseY: 0,
-      //tileMatrixX and tileMatrixY is the coordinate of the current hovered tile in the map matrix, not their pixel coords.
-      tileMatrixX: 0, 
-      tileMatrixY: 0,
+      //This is simply keeping track of the coordinates so that they can update the state store only when the hovered tile changes
+      //This is so that the state store isn't being updated every animation frame, which would be a nightmare for performance
+      hoveredTileCoordinatesTracker: {
+        x: 0,
+        y: 0
+      },
       pixelsMovedAfterMouseDown: 0, //this variable will help distinguish between a drag and an ordinary click.
     }
   }
@@ -54,12 +63,20 @@ class Map extends React.Component{
     const rect = e.target.getBoundingClientRect()
     const mouseX = e.pageX - rect.left
     const mouseY = e.pageY - rect.top
-    const { tileMatrixX, tileMatrixY } = this.findHoveredTileCoords()
+    const hoveredTileCoordinates = this.findHoveredTileCoords()
+
+    //This check is done so that the state store is only updated when the hoveredTileCoordinates change
+    //This prevents the state from having to update every animation frame, which would dramatically decrease performance
+    if(hoveredTileCoordinates.x === this.state.hoveredTileCoordinatesTracker.x &&
+       hoveredTileCoordinates.y === this.state.hoveredTileCoordinatesTracker.y
+      ){
+      this.props.updateHoveredTileCoordinates(hoveredTileCoordinates)
+    }
+
     this.setState({
       mouseX,
       mouseY,
-      tileMatrixX,
-      tileMatrixY
+      hoveredTileCoordinatesTracker: hoveredTileCoordinates
     })
   }
 
@@ -157,7 +174,6 @@ class Map extends React.Component{
 
     this.drawArmiesAndArmyPaths(ctx)
     this.drawHoveredTileOutline(ctx)
-    this.handleTileInfoCoordinates()
     ctx.font = '40px serif'
     ctx.fillStyle = 'red'
     ctx.fillText('fps:' + framesLastSecond, 25, 75)
@@ -242,32 +258,19 @@ class Map extends React.Component{
     }
   }
 
-  //This makes the tileInfo window hover next to the cursor
-  //More css rules defined in TileInfo.css
-  handleTileInfoCoordinates(){
-    const tileInfo = document.querySelector('.tile-info')
-
-    if(tileInfo){
-      tileInfo.style.top = `${this.state.mouseY + 50}px`
-      tileInfo.style.left = `${this.state.mouseX + 25}px`
-    }
-  }
-
   //draws a black box around the tile currently being hovered over
   drawHoveredTileOutline(ctx){
     ctx.strokeStyle = 'black'
-    const x = this.state.tileMatrixX
-    const y = this.state.tileMatrixY
+    const x = this.props.hoveredTileCoordinates.x
+    const y = this.props.hoveredTileCoordinates.y
     ctx.strokeRect(x*this.props.tileSize + this.props.mapOffset.x, y*this.props.tileSize + this.props.mapOffset.y, this.props.tileSize, this.props.tileSize)
   }
 
   findHoveredTileCoords(){
-    const tileMatrixX = Math.floor((this.state.mouseX - this.props.mapOffset.x)/this.props.tileSize)
-    const tileMatrixY = Math.floor((this.state.mouseY - this.props.mapOffset.y)/this.props.tileSize)
-    return {
-      tileMatrixX,
-      tileMatrixY
-    }
+    const x = Math.floor((this.state.mouseX - this.props.mapOffset.x)/this.props.tileSize)
+    const y = Math.floor((this.state.mouseY - this.props.mapOffset.y)/this.props.tileSize)
+    const hoveredTileCoordinates = {x, y}
+    return hoveredTileCoordinates
   }
 
   drawArmiesAndArmyPaths(ctx){
@@ -372,8 +375,7 @@ class Map extends React.Component{
       canvas.addEventListener('mouseup', this.onMouseUp)
     }
     else if(e.which===3){// right click
-      const coords = { x: this.state.tileMatrixX, y: this.state.tileMatrixY}
-      this.props.updateArmyDestination(coords)
+      this.props.updateArmyDestination()
     }
   }
 
@@ -396,15 +398,11 @@ class Map extends React.Component{
     
     if(this.state.pixelsMovedAfterMouseDown < 10){//This case is a click
       if(this.props.givingFief.currentlyGivingFief === true){
-        const payload = {
-          tileMatrixX: this.state.tileMatrixX,
-          tileMatrixY: this.state.tileMatrixY,
-        }
-        this.props.giveFiefToNoble(payload)
+        this.props.giveFiefToNoble()
       }
       else{
         const coords = { x: this.state.tileMatrixX, y: this.state.tileMatrixY}
-        this.props.select(coords)
+        this.props.select()
       }
     }
 
@@ -425,18 +423,6 @@ class Map extends React.Component{
         <div className='MapWrapper'>
           <canvas ref='canvas' width={viewportWidth} height={viewportHeight} />
         </div>
-        {this.state.tileInfoIsVisible && this.props.gameMap[this.state.tileMatrixX] && this.props.gameMap[this.state.tileMatrixX][this.state.tileMatrixY]? 
-          <TileInfo 
-            tileData={this.props.gameMap[this.state.tileMatrixX][this.state.tileMatrixY]}
-            mainKingdom={this.props.mainKingdom}
-            families={this.props.families}
-            nobles={this.props.nobles}
-            noblesToFamiliesIndex={this.props.noblesToFamiliesIndex}
-            armies={this.props.armies}
-            selected={this.props.selected}
-          />
-          : null
-        }
       </div>
     )
   }
@@ -451,7 +437,7 @@ function mapStateToProps(state){
     tileSize: state.tileSize,
     givingFief: {...state.givingFief},
     armies: {...state.armies},
-    selected: {...state.selected}
+    hoveredTileCoordinates: {...state.hoveredTileCoordinates}
   }
 }
 
@@ -460,9 +446,10 @@ function mapDispatchToProps(dispatch) {
     mapDrag: (payload) => dispatch(mapDrag(payload)),
     zoomMapIn: () => dispatch(zoomMapIn()),
     zoomMapOut: () => dispatch(zoomMapOut()),
-    giveFiefToNoble: (payload) => dispatch(giveFiefToNoble(payload)),
-    select: (payload) => dispatch(select(payload)),
-    updateArmyDestination: (payload) => dispatch(updateArmyDestination(payload))
+    giveFiefToNoble: () => dispatch(giveFiefToNoble()),
+    select: () => dispatch(select()),
+    updateArmyDestination: () => dispatch(updateArmyDestination()),
+    updateHoveredTileCoordinates: (payload) => dispatch(updateHoveredTileCoordinates(payload))
   }
 }
 

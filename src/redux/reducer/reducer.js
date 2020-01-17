@@ -14,6 +14,11 @@ function rootReducer(state, action){
       const newGameState = createNewGameState()
       return newGameState
 
+    case types.UPDATE_HOVERED_TILE_COORDINATES:
+      newState = {...state}
+      newState.hoveredTileCoordinates = action.payload
+      return newState
+
     case types.NEXT_TURN:
       newState = {...state}
       const nextTurnState = handleNextTurn(newState)
@@ -51,10 +56,13 @@ function rootReducer(state, action){
     
     case types.GIVE_FIEF_TO_NOBLE:
       newState = {...state}
-      const { tileMatrixX, tileMatrixY } = action.payload
-      if(newState.gameMap[tileMatrixX] && 
-        newState.gameMap[tileMatrixX][tileMatrixY] && 
-        newState.gameMap[tileMatrixX][tileMatrixY].kingdomOwner === newState.mainKingdom.id) newState.gameMap[tileMatrixX][tileMatrixY].fiefOwner = newState.givingFief.nobleId
+      const { x, y } = newState.hoveredTileCoordinates
+      if(newState.gameMap[x] && 
+        newState.gameMap[x][y] && 
+        newState.gameMap[x][y].kingdomOwner === newState.mainKingdom.id) {
+          newState.gameMap[x][y].fiefOwner = newState.givingFief.nobleId
+        }
+
       return newState
 
     case types.UNINITIATE_GIVE_FIEF_MODE:
@@ -70,26 +78,33 @@ function rootReducer(state, action){
       const nobleId = action.payload
       const coordinates = determineArmySpawnCoords({nobleId, gameMap: newState.gameMap, armies: newState.armies})//returns undefined if no suitable place to spawn
       if(coordinates){
-        const armyDemographicsObject = createArmyDemographicsObject({nobleId, gameMap: newState.gameMap, percentage: 10})
+        const armyDemographicsObject = createArmyDemographicsObject({ nobleId, gameMap: newState.gameMap, percentage: 10})
         const newArmy = new Army({ kingdomId: newState.mainKingdom.id, coordinates, demographics: armyDemographicsObject, nobleId })
-        newState.armies[newArmy.id] = newArmy
+        if(newArmy.calculateTotalSize() > 0){
+          newState.armies[newArmy.id] = newArmy
+          newState.nobles[nobleId].armies.push (newArmy.id)
+        }
       }
       return newState
     
     case types.SELECT:
       newState = {...state}
-      const coords = action.payload
+      const coords = newState.hoveredTileCoordinates
       newState.selected = handleSelection({coords, armies: newState.armies })
-    return newState
+      return newState
 
     case types.UPDATE_ARMY_DESTINATION:
       newState = {...state}
-      const destinationCoords = action.payload
+      const destinationCoords = {...newState.hoveredTileCoordinates}
       if(newState.selected && newState.selected.type === 'army'){
         const id = newState.selected.id
         const army = newState.armies[id]
         army.destination = destinationCoords
       }
+      return newState
+
+    case types.DISBAND_ARMY:
+      newState = {...state}
       return newState
 
     default:

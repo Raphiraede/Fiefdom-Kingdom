@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from './Button'
+import { Button } from '../shared_components/Button'
 import { nextTurn } from '../../redux/actions.js'
 import { connect } from 'react-redux'
 import './NextTurnButton.css'

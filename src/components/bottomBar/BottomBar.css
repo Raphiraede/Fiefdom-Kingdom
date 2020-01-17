@@ -1,0 +1,7 @@
+.BottomBar{
+  position: absolute;
+  background-color:rgb(56, 56, 56);
+  width: calc(100% - 15px);
+  height: 150px;
+  bottom: 1%;
+}

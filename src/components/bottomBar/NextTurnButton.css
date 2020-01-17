@@ -1,4 +1,6 @@
 .NextTurnButton{
   position: absolute;
   bottom: 0%;
+  right: 0px;
+  height: 100%;
 }

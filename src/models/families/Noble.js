@@ -1,6 +1,5 @@
 import uuidv1 from 'uuid/v1'
 import { getRandomInt } from '../../redux/getRandomInt'
-import { Army } from '../army/Army'
 
 class Noble {
   constructor({

@@ -1,18 +1,22 @@
 import uuidv1 from 'uuid/v1'
 
 class Army{
-  constructor({kingdomId, nobleId, coordinates={x:0,y:0}, destination=coordinates, demographics, id=uuidv1()}){
-    this.kingdomId = kingdomId
-    this.nobleId = nobleId
+  constructor({coordinates={x:0,y:0}, destination=coordinates, demographics, id=uuidv1()}){
     this.coordinates = coordinates
     this.destination = destination
     this.demographics = demographics
+    this.wageOwed = 0
     this.id = id
   }
 
 
   handleNextTurn(armies){
     this.moveTowardDestination(armies)
+    this.calculateWageOwed()
+  }
+
+  calculateWageOwed(){
+    this.wageOwed += this.calculateTotalSize() * 10
   }
 
   calculateTotalSize(){

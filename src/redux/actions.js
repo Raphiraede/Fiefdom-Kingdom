@@ -1,10 +1,16 @@
 import types from "./types";
-import { func } from "prop-types";
 
 function newGame(payload){
   return {
     type: types.NEW_GAME,
     payload: payload,
+  }
+}
+
+function updateHoveredTileCoordinates(payload){
+  return {
+    type: types.UPDATE_HOVERED_TILE_COORDINATES,
+    payload: payload
   }
 }
 
@@ -40,10 +46,9 @@ function initiateGiveFiefMode(payload){
   }
 }
 
-function giveFiefToNoble(payload){
+function giveFiefToNoble(){
   return {
     type: types.GIVE_FIEF_TO_NOBLE,
-    payload: payload
   }
 }
 
@@ -60,22 +65,27 @@ function raiseArmy(payload){
   }
 }
 
-function select(payload){
+function select(){
   return {
     type: types.SELECT,
-    payload: payload
   }
 }
 
-function updateArmyDestination(payload){
+function updateArmyDestination(){
   return {
     type: types.UPDATE_ARMY_DESTINATION,
-    payload: payload
+  }
+}
+
+function disbandArmy(){
+  return{
+    type: types.DISBAND_ARMY,
   }
 }
 
 export { newGame, 
   nextTurn,
+  updateHoveredTileCoordinates,
   mapDrag,
   zoomMapIn,
   zoomMapOut, 
@@ -84,5 +94,6 @@ export { newGame,
   uninitiateGiveFiefMode,
   raiseArmy,
   select,
-  updateArmyDestination
+  updateArmyDestination,
+  disbandArmy
 }

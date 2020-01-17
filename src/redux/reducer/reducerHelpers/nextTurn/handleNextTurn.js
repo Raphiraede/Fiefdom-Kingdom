@@ -5,6 +5,8 @@ function handleNextTurn(state){
   let newState = {...state}
   newState.turnNumber++
 
+  calculateTaxesAndUpdateGoldAmount(state.mainKingdom, state.nobles, state.gameMap)
+
   const families = newState.families
   const familyIds = Object.keys(families)
   familyIds.forEach(id => {
@@ -25,9 +27,11 @@ function handleNextTurn(state){
   armyIds.forEach(id => {
     const army = armies[id]
     army.handleNextTurn(armies)
+    payWages({army, kingdom: state.mainKingdom})
   })
-  
-  calculateTaxesAndUpdateGoldAmount(state.mainKingdom, state.nobles, state.gameMap)
+
+
+
   newState.indexes = createIndexes(newState)
   return newState
 }
@@ -45,6 +49,11 @@ function calculateTaxesAndUpdateGoldAmount(mainKingdom, nobles, gameMap){
       }
     }
   }
+}
+
+function payWages({army, kingdom}){
+  kingdom.gold -= army.wageOwed
+  army.wageOwed = 0
 }
 
 
