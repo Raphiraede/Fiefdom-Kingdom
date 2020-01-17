@@ -1,28 +1,26 @@
 import { getRandomInt } from '../../../getRandomInt'
+import { Castle } from '../../../../models/tiles/Castle'
 
-function initializeKingdomTerritory({gameMap, mainKingdom, families, nobles}){
+function initializeKingdomTerritory({gameMap, mainKingdom}){
   const mapWidth = gameMap.length
   const mapHeight = gameMap[0].length
 
-  //kingdomX and kingdomY is the random starting point, and the kingdom should randomly grow outwards from there.
-  const kingdomX = getRandomInt(0, mapWidth-1)
-  const kingdomY = getRandomInt(0, mapHeight-1)
+  //castleX and castleY is the random starting point, and the kingdom will randomly grow outwards from there.
+  const castleX = getRandomInt(0, mapWidth-1)
+  const castleY = getRandomInt(0, mapHeight-1)
 
-  gameMap[kingdomX][kingdomY].kingdomOwner = mainKingdom.id
+  gameMap[castleX][castleY] = new Castle({marker: mainKingdom.id, x: castleX, y: castleY})
+  gameMap[castleX][castleY].kingdomOwner = mainKingdom.id
   let sizeOfStartingKingdom = 30
 
-
-
-
-  //When determining a new tile to give to the kingdom, this algorithm starts at kingdomX and kingdomY, aka the "center" of the new kingdom
+  //When determining a new tile to give to the kingdom, this algorithm starts at castleX and castleY, aka the "center" of the new kingdom
   //Then the algorithm goes to a random tile next to it, and tries to give that tile to the kingdom.
   //If the tile is already assigned to a kingdom, then another random surrounding tile is picked, and the algorithm tries to give that tile to the kingdom, etc.
-  //When an available tile is found, it is assigned to the kingdom, and the process starts over again from kingdomX and kingdomY
-
+  //When an available tile is found, it is assigned to the kingdom, and the process starts over again from castleX and castleY
   outerLoop:
   for(let i = 0; i < sizeOfStartingKingdom; i++){
-    let x = kingdomX
-    let y = kingdomY
+    let x = castleX
+    let y = castleY
 
     let jankInfiniteLoopPrevention = 0
 
@@ -32,13 +30,12 @@ function initializeKingdomTerritory({gameMap, mainKingdom, families, nobles}){
       y += getRandomInt(-1, 1)
 
       if(x<0 || y<0 || x>gameMap.length-1 || y>gameMap.length-1){//This prevents x and y from going outside of the game map
-        x = kingdomX
-        y = kingdomY
+        x = castleX
+        y = castleY
       }
 
       if(!gameMap[x][y].kingdomOwner){
         gameMap[x][y].kingdomOwner = mainKingdom.id
-        //gameMap[x][y].fiefOwner = families[mainKingdom.familyIds[0]].nobleIds[0]
         newTileAssigned = true
       }
 

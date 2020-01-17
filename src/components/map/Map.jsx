@@ -11,6 +11,8 @@ import GoldOre from '../../images/tiles/goldOre.png'
 import ChurchBot from '../../images/tiles/ChurchBot.png'
 import ChurchTop from '../../images/tiles/ChurchTop.png'
 import BlueSpearman from '../../images/units/blue-spearman-bigger.png'
+import CastleBot from '../../images/tiles/CastleBot.png'
+import CastleTop from '../../images/tiles/CastleTop.png'
 import { 
   updateHoveredTileCoords,
   mapDrag, 
@@ -18,7 +20,8 @@ import {
   zoomMapOut, 
   giveFiefToNoble, 
   select, 
-  updateArmyDestination
+  updateArmyDestination,
+  adjustMapOffset
 } from '../../redux/actions'
 
 class Map extends React.Component{
@@ -33,6 +36,8 @@ class Map extends React.Component{
     this.ChurchBot = new Image()
     this.ChurchTop = new Image()
     this.BlueSpearman = new Image()
+    this.CastleBot = new Image()
+    this.CastleTop = new Image()
 
     this.FieldImage.src = Field
     this.RockImage.src = Rock
@@ -43,17 +48,31 @@ class Map extends React.Component{
     this.ChurchBot.src = ChurchBot
     this.ChurchTop.src = ChurchTop
     this.BlueSpearman.src = BlueSpearman
+    this.CastleBot.src = CastleBot
+    this.CastleTop.src = CastleTop
 
     //mapOffset is in the redux store so that it persists when the user navigates away and navigates back
     this.state = {
-      mouseOffset: {}, //MouseOffset is the mouseX and mouseY based on the actual game map, not the canvas(since the gamemap can dragged and cause it to be offset)
+      
+      //MouseOffset is the mouseX and mouseY based on the actual game map, not the canvas(since the gamemap can dragged and cause it to be offset)
+      mouseOffset: {
+        x: 0,
+        y: 0,
+      },
+
+      //This is the same as mouseOffset, except that it is calculated only when the user clicks to assist in the calculation of the mouse drag
+      mouseOffsetAtBeginningOfMapDrag: {
+        x: 0,
+        y: 0,
+      },
+
       mouseX: 0,
       mouseY: 0,
       //This is simply keeping track of the coordinates so that they can update the state store only when the hovered tile changes
       //This is so that the state store isn't being updated every animation frame, which would be a nightmare for performance
       hoveredTileCoordsTracker: {
         x: 0,
-        y: 0
+        y: 0,
       },
       pixelsMovedAfterMouseDown: 0, //this variable will help distinguish between a drag and an ordinary click.
     }
@@ -63,10 +82,14 @@ class Map extends React.Component{
     const rect = e.target.getBoundingClientRect()
     const mouseX = e.pageX - rect.left
     const mouseY = e.pageY - rect.top
+    const mouseOffset = {
+      x: mouseX - this.props.mapOffset.x,
+      y: mouseY - this.props.mapOffset.y
+    }
     const hoveredTileCoords = this.findHoveredTileCoords()
 
     //This check is done so that the state store is only updated when the hoveredTileCoords change
-    //This prevents the state from having to update every animation frame, which would dramatically decrease performance
+    //This prevents the state from having to update every time the mouse moved, which would dramatically decrease performance
     if(hoveredTileCoords.x === this.state.hoveredTileCoordsTracker.x &&
        hoveredTileCoords.y === this.state.hoveredTileCoordsTracker.y
       ){
@@ -74,6 +97,7 @@ class Map extends React.Component{
     }
 
     this.setState({
+      mouseOffset,
       mouseX,
       mouseY,
       hoveredTileCoordsTracker: hoveredTileCoords
@@ -87,13 +111,20 @@ class Map extends React.Component{
     canvas.oncontextmenu = (e) => { // this disables opening the context menu with right click, since right click is used for other thing on the minimap
       return false
     }
-
     //tracks mouseX and mouseY to help calculate which tile to highlite
     canvas.addEventListener('mousemove', this.trackMouseMovement)
     canvas.addEventListener('mousedown', (e) => this.onMouseDown(e, canvas))
     canvas.addEventListener('wheel', (e) => {
-      if(e.deltaY > 0) this.props.zoomMapOut()
-      else if (e.deltaY < 0) this.props.zoomMapIn()
+      const mouseOffset = this.state.mouseOffset
+      console.log(mouseOffset)
+      if(e.deltaY > 0){
+        this.props.zoomMapOut(mouseOffset)
+        this.trackMouseMovement(e)
+      } 
+      else if (e.deltaY < 0){
+        this.props.zoomMapIn(mouseOffset)
+        this.trackMouseMovement(e)
+      }
     })
     requestAnimationFrame(() => this.drawGame(ctx))
   }
@@ -158,6 +189,11 @@ class Map extends React.Component{
           case 'church':
             ctx.drawImage(this.ChurchBot, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize) //bottom of church
             ctx.drawImage(this.ChurchTop, tileTopLeftPixelX, tileTopLeftPixelY - tileSize, tileSize, tileSize) // top of church
+          break
+
+          case 'castle':
+            ctx.drawImage(this.CastleBot, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize) //bottom of castle
+            ctx.drawImage(this.CastleTop, tileTopLeftPixelX, tileTopLeftPixelY - tileSize, tileSize, tileSize) // top of castle
           break
 
           default:
@@ -365,11 +401,12 @@ class Map extends React.Component{
 
   onMouseDown = (e, canvas) => {
     this.setState({
-      mouseOffset: {
+      mouseOffsetAtBeginningOfMapDrag: {
         x: e.clientX - this.props.mapOffset.x,
         y: e.clientY - this.props.mapOffset.y
-      },
+      }
     })
+
     if(e.which === 1){ // left click
       canvas.addEventListener('mousemove', this.onMouseMove)
       canvas.addEventListener('mouseup', this.onMouseUp)
@@ -380,10 +417,9 @@ class Map extends React.Component{
   }
 
   onMouseMove = (e) => {
-    
     const payload = {
-      x: e.clientX - this.state.mouseOffset.x,
-      y: e.clientY - this.state.mouseOffset.y,
+      x: e.clientX - this.state.mouseOffsetAtBeginningOfMapDrag.x,
+      y: e.clientY - this.state.mouseOffsetAtBeginningOfMapDrag.y,
     }
 
     const absoluteMouseMovement = Math.abs(e.movementX) + Math.abs(e.movementY)
@@ -443,12 +479,12 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch) {
   return {
     mapDrag: (payload) => dispatch(mapDrag(payload)),
-    zoomMapIn: () => dispatch(zoomMapIn()),
-    zoomMapOut: () => dispatch(zoomMapOut()),
+    zoomMapIn: (payload) => dispatch(zoomMapIn(payload)),
+    zoomMapOut: (payload) => dispatch(zoomMapOut(payload)),
     giveFiefToNoble: () => dispatch(giveFiefToNoble()),
     select: () => dispatch(select()),
     updateArmyDestination: () => dispatch(updateArmyDestination()),
-    updateHoveredTileCoords: (payload) => dispatch(updateHoveredTileCoords(payload))
+    updateHoveredTileCoords: (payload) => dispatch(updateHoveredTileCoords(payload)),
   }
 }
 

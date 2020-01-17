@@ -16,7 +16,7 @@ function ArmyCommands(props){
         Attack
       </button>
       <button className='ArmyCommandsButton'>
-        Ravage
+        Move
       </button>
     </div>
   )

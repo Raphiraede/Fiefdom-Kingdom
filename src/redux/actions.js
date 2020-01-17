@@ -27,15 +27,17 @@ function mapDrag(payload){
   }
 }
 
-function zoomMapIn(){
+function zoomMapIn(payload){
   return {
-    type: types.ZOOM_MAP_IN
+    type: types.ZOOM_MAP_IN,
+    payload: payload,
   }
 }
 
-function zoomMapOut(){
+function zoomMapOut(payload){
   return {
-    type: types.ZOOM_MAP_OUT
+    type: types.ZOOM_MAP_OUT,
+    payload: payload,
   }
 }
 
@@ -95,5 +97,5 @@ export { newGame,
   raiseArmy,
   select,
   updateArmyDestination,
-  disbandArmy
+  disbandArmy,
 }

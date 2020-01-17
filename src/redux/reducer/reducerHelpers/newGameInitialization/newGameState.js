@@ -36,7 +36,7 @@ function createNewGameState(){
 
   const gameMap = generateNewMap()
 
-  initializeKingdomTerritory({gameMap, mainKingdom, families, nobles})
+  initializeKingdomTerritory({gameMap, mainKingdom})
 
   const newGameState = {
     turnNumber: 1,

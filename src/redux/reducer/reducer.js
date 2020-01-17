@@ -10,6 +10,7 @@ import { disbandArmyAndReturnSoldiersToTiles } from './reducerHelpers/disbandArm
 
 function rootReducer(state, action){
   let newState
+  let mouseOffset
   switch (action.type) {
     case types.NEW_GAME:
       const newGameState = createNewGameState()
@@ -38,17 +39,42 @@ function rootReducer(state, action){
     
     case types.ZOOM_MAP_IN:
       newState = {...state}
-
+      mouseOffset = action.payload
       if(state.tileSize < 128 && state.tileSize < 128){
+        
+        const xLength = newState.gameMap.length
+        const yLength = newState.gameMap[0].length
+        const mapWidthBeforeZoom = newState.tileSize* xLength
+        const mapHeightBeforeZoom = newState.tileSize* yLength
+        const mouseXProportion = mouseOffset.x / mapWidthBeforeZoom
+        const mouseYProportion = mouseOffset.y / mapHeightBeforeZoom
         newState.tileSize += 4
+        const mapWidthAfterZoom = newState.tileSize*xLength
+        const mapHeightAfterZoom = newState.tileSize*yLength
+        const mapWidthDifference = mapWidthBeforeZoom - mapWidthAfterZoom
+        const mapHeightDifference = mapHeightBeforeZoom - mapHeightAfterZoom
+        newState.mapOffset.x += mapWidthDifference * mouseXProportion
+        newState.mapOffset.y += mapHeightDifference * mouseYProportion
       }
       return newState
 
     case types.ZOOM_MAP_OUT:
       newState = {...state}
-
+      mouseOffset = action.payload
       if(state.tileSize > 8 && state.tileSize> 8){
+        const xLength = newState.gameMap.length
+        const yLength = newState.gameMap[0].length
+        const mapWidthBeforeZoom = newState.tileSize* xLength
+        const mapHeightBeforeZoom = newState.tileSize* yLength
+        const mouseXProportion = mouseOffset.x / mapWidthBeforeZoom
+        const mouseYProportion = mouseOffset.y / mapHeightBeforeZoom
         newState.tileSize -= 4
+        const mapWidthAfterZoom = newState.tileSize*xLength
+        const mapHeightAfterZoom = newState.tileSize*yLength
+        const mapWidthDifference = mapWidthBeforeZoom - mapWidthAfterZoom
+        const mapHeightDifference = mapHeightBeforeZoom - mapHeightAfterZoom
+        newState.mapOffset.x += mapWidthDifference * mouseXProportion
+        newState.mapOffset.y += mapHeightDifference * mouseYProportion
       }
       return newState
 

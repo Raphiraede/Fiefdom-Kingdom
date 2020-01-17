@@ -45,7 +45,8 @@ function calculateTaxesAndUpdateGoldAmount(mainKingdom, nobles, gameMap){
       if (tile.kingdomOwner && tile.fiefOwner){
         const taxLevel = nobles[tile.fiefOwner].taxLevel
         const pop = tile.population
-        const totalTaxesForThisTile = Math.floor((taxLevel * pop + 100)/100)
+        let totalTaxesForThisTile = Math.floor((taxLevel * pop + 100)/100)
+        if(tile.type === 'goldOre') totalTaxesForThisTile+=100
         mainKingdom.gold += totalTaxesForThisTile
       }
     }
