@@ -11,7 +11,7 @@ class Army{
   }
 
 
-  handleNextTurn({state, armies}){
+  handleNextTurn({state}){
     const kingdomId = this.calculateKingdomIdThatArmyIsLoyalTo(state)
     if(this.mode === 'move') this.moveTowardDestination(state.armies)
     else if(this.mode === 'conquer') this.handleConquerMode(state, kingdomId)
@@ -52,7 +52,7 @@ class Army{
 
   handleConquerMode(state, kingdomId){
     const kingdomOwnerOfTile = state.gameMap[this.coordinates.x][this.coordinates.y].kingdomOwner
-    if(kingdomId === kingdomOwnerOfTile) this.moveTowardDestination()
+    if(kingdomId === kingdomOwnerOfTile) this.moveTowardDestination(state.armies)
   }
 
   //currently the only thing which can block a path is another army

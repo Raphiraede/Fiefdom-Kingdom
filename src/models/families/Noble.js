@@ -27,7 +27,7 @@ class Noble {
   }
 
   handleNextTurn(randomNameGenerator){
-    this.ageOneYear()
+    if(this.firstName !== 'enemyKingdomNoble') this.ageOneYear()
     if(this.age >= this.deathAge) this.die(randomNameGenerator)
   }
 
@@ -46,7 +46,7 @@ class Noble {
     this.power += getRandomInt(-20, 20)
     this.taxLevel += getRandomInt(-20, 20)
     this.age += getRandomInt(-50, -20)
-    this.deathAge += getRandomInt(45, 90)
+    this.deathAge = getRandomInt(45, 90)
 
     //if any of the stats went too far in a direction during randomization, this will normalize it
     if(this.loyalty > 100) this.loyalty = 100

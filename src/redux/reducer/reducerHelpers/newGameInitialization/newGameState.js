@@ -2,6 +2,8 @@ import {
   BurnHammerFamily, 
   GoldFingerFamily, 
   GreenHeartFamily,
+  RoyalFamily,
+  Noble,
 } from '../../../../models/families'
 
 import { Kingdom } from '../../../../models/kingdom/Kingdom'
@@ -12,7 +14,7 @@ import { createIndexes } from '../indexes/createIndexes'
 import { initializeKingdomTerritory } from './initializeKingdomTerritory'
 
 function createNewGameState(){
-  const randomNameGenerator = new RandomNameGenerator()
+  const randomNameGenerator = new RandomNameGenerator({})
 
   const mainKingdom = new Kingdom({name:'The Main Kingdom'})
 
@@ -34,6 +36,17 @@ function createNewGameState(){
   generateNobles({randomNameGenerator, nobles, royalFamily: greenHeartFamily, familySize: 5})
   generateNobles({randomNameGenerator, nobles, royalFamily: goldFingerFamily, familySize: 5})
 
+  const enemyKingdom = new Kingdom({name: 'The Enemy Kingdom'})
+  const enemyKingdomFamily = new RoyalFamily({})
+  const enemyKingdomNoble = new Noble({
+    firstName: 'enemyKingdomNoble',
+    familyName: enemyKingdomFamily.familyName,
+    loyalty: 100,
+    power: 100,
+    taxLevel: 75,
+  })
+  enemyKingdomFamily.nobles = enemyKingdomNoble
+
   const gameMap = generateNewMap()
 
   initializeKingdomTerritory({gameMap, mainKingdom})
@@ -42,6 +55,7 @@ function createNewGameState(){
     turnNumber: 1,
     randomNameGenerator,
     mainKingdom,
+    enemyKingdom,
     families,
     nobles,
     gameMap,

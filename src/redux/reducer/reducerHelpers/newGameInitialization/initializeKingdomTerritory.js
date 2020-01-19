@@ -9,7 +9,8 @@ function initializeKingdomTerritory({gameMap, mainKingdom}){
   const castleX = getRandomInt(0, mapWidth-1)
   const castleY = getRandomInt(0, mapHeight-1)
 
-  gameMap[castleX][castleY] = new Castle({marker: mainKingdom.id, x: castleX, y: castleY})
+  const castle = new Castle (mainKingdom.id, castleX, castleY)
+  gameMap[castleX][castleY] = castle
   gameMap[castleX][castleY].kingdomOwner = mainKingdom.id
   let sizeOfStartingKingdom = 30
 

@@ -6,7 +6,7 @@ const firstNames = ['Joe', 'Bob', 'Harry', 'Hagrid', 'Farquad', 'Flint', 'Shrek'
 const middleNames = ['The Wise', 'The Brave', 'The Hairy', 'The Coward', 'The Fat', 'The Flossy', 'The Skinny', 'The Wolfgang', 'The Short', 'The Tall', 'The Strong', 'The Swampy', 'The Sweaty', 'The Crazy', 'The Insane', 'The Quick', 'The Mean', 'The Ruthless', 'The Harmless', 'The Swag', 'The Dapper', 'The Baby', 'The Happy']
 
 class RandomNameGenerator{
-  constructor(randomNames=generateRandomNames(), counter=-1){
+  constructor({randomNames=generateRandomNames(), counter=-1}){
     this.randomNames = randomNames
     this.counter = counter
   }

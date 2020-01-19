@@ -106,7 +106,7 @@ class Map extends React.Component{
 
   componentDidMount() {
     const canvas = this.refs.canvas
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d', { alpha: false })
 
     canvas.oncontextmenu = (e) => { // this disables opening the context menu with right click, since right click is used for other thing on the minimap
       return false
@@ -116,7 +116,6 @@ class Map extends React.Component{
     canvas.addEventListener('mousedown', (e) => this.onMouseDown(e, canvas))
     canvas.addEventListener('wheel', (e) => {
       const mouseOffset = this.state.mouseOffset
-      console.log(mouseOffset)
       if(e.deltaY > 0){
         this.props.zoomMapOut(mouseOffset)
         this.trackMouseMovement(e)
@@ -134,12 +133,17 @@ class Map extends React.Component{
     canvas.removeEventListener('mousemove', this.trackMouseMovement)
   }
 
+  adjustCanvasDimensions(){
+    const canvas = this.refs.canvas
+    canvas.height = window.innerHeight
+    canvas.width = window.innerWidth
+  }
+
   drawGame(ctx, currentSecond = 0, framesLastSecond = 0, frameCount = 0) {
+    this.adjustCanvasDimensions()
     if(ctx===null) return
 
     ctx.fillStyle = 'black'
-    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight) //creates a black background
-
     frameCount += 1
     let sec = Math.floor(Date.now()/1000)
     if(sec !== currentSecond){
@@ -188,17 +192,22 @@ class Map extends React.Component{
 
           case 'church':
             ctx.drawImage(this.ChurchBot, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize) //bottom of church
-            ctx.drawImage(this.ChurchTop, tileTopLeftPixelX, tileTopLeftPixelY - tileSize, tileSize, tileSize) // top of church
           break
 
           case 'castle':
             ctx.drawImage(this.CastleBot, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize) //bottom of castle
-            ctx.drawImage(this.CastleTop, tileTopLeftPixelX, tileTopLeftPixelY - tileSize, tileSize, tileSize) // top of castle
           break
 
           default:
         }
-
+        
+        if(this.props.gameMap[x][y + 1] && this.props.gameMap[x][y+1].type === 'church'){
+          ctx.drawImage(this.ChurchTop, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize) // top of church
+        } 
+        else if (this.props.gameMap[x][y + 1] && this.props.gameMap[x][y+1].type === 'castle'){
+          ctx.drawImage(this.CastleTop, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize) // top of castle
+        }
+        
         const kingdom = this.props.mainKingdom
         if(this.props.gameMap[x][y].fiefOwner){
           const color = this.props.nobles[this.props.gameMap[x][y].fiefOwner].color
@@ -207,7 +216,6 @@ class Map extends React.Component{
         if(this.props.gameMap[x][y].kingdomOwner) this.drawKingdomBorder({x, y, kingdom, ctx, tileTopLeftPixelX, tileTopLeftPixelY})
       }
     }
-
     this.drawArmiesAndArmyPaths(ctx)
     this.drawHoveredTileOutline(ctx)
     ctx.font = '40px serif'

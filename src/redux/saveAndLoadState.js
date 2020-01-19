@@ -72,10 +72,13 @@ function reviveState(parsedState){
     armies[id] = new Army(armies[id])
   }
 
+  randomNameGenerator = new RandomNameGenerator({randomNameGenerator})
+
   const revivedState={
     ...parsedState,
-    randomNameGenerator: new RandomNameGenerator(randomNameGenerator),
-    families: families
+    randomNameGenerator,
+    nobles,
+    families
   }
 
   return revivedState

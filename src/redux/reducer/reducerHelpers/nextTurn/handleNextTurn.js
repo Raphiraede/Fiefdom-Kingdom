@@ -14,7 +14,6 @@ function handleNextTurn(state){
     family.handleNextTurn()
   })
 
-  //currently nobles handleNextTurn is called here, but it might be useful for that to take place in families handleNextTurn
   const nobles = newState.nobles
   const nobleIds = Object.keys(nobles)
   nobleIds.forEach(id => {

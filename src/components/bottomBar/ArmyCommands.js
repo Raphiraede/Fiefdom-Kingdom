@@ -10,8 +10,6 @@ class ArmyCommands extends React.Component{
     conquerButton.style.boxShadow = ''
     moveButton.style.boxShadow = ''
 
-
-
     if(this.props.selected.id){
       const selectedArmy = this.props.armies[this.props.selected.id]
       switch (selectedArmy.mode){
