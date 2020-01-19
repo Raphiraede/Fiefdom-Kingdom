@@ -21,7 +21,6 @@ import {
   giveFiefToNoble, 
   select, 
   updateArmyDestination,
-  adjustMapOffset
 } from '../../redux/actions'
 
 class Map extends React.Component{
@@ -135,14 +134,16 @@ class Map extends React.Component{
 
   adjustCanvasDimensions(){
     const canvas = this.refs.canvas
-    canvas.height = window.innerHeight
-    canvas.width = window.innerWidth
+    //I don't know why, but window.innerHeight is too long and causes the canvas to be slightly taller than the screen, causing a scroll bar to appear
+    if(canvas){
+      canvas.height = Math.floor(window.innerHeight * 0.99) 
+      canvas.width = Math.floor(window.innerWidth)
+    }
   }
 
   drawGame(ctx, currentSecond = 0, framesLastSecond = 0, frameCount = 0) {
     this.adjustCanvasDimensions()
     if(ctx===null) return
-
     ctx.fillStyle = 'black'
     frameCount += 1
     let sec = Math.floor(Date.now()/1000)
@@ -208,12 +209,13 @@ class Map extends React.Component{
           ctx.drawImage(this.CastleTop, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize) // top of castle
         }
         
-        const kingdom = this.props.mainKingdom
         if(this.props.gameMap[x][y].fiefOwner){
           const color = this.props.nobles[this.props.gameMap[x][y].fiefOwner].color
           this.drawFief({x, y, ctx, tileTopLeftPixelX, tileTopLeftPixelY, color})
         }
-        if(this.props.gameMap[x][y].kingdomOwner) this.drawKingdomBorder({x, y, kingdom, ctx, tileTopLeftPixelX, tileTopLeftPixelY})
+        const mainKingdom = this.props.mainKingdom
+        const aiKingdoms = this.props.aiKingdoms
+        if(this.props.gameMap[x][y].kingdomOwner) this.drawKingdomsBorders({x, y, mainKingdom, aiKingdoms, ctx, tileTopLeftPixelX, tileTopLeftPixelY})
       }
     }
     this.drawArmiesAndArmyPaths(ctx)
@@ -227,15 +229,30 @@ class Map extends React.Component{
     }
   }
 
-  drawKingdomBorder({x, y, kingdom, ctx, tileTopLeftPixelX, tileTopLeftPixelY}){
+  drawKingdomsBorders({x, y, mainKingdom, aiKingdoms, ctx, tileTopLeftPixelX, tileTopLeftPixelY}){
+
+    const kingdoms = [mainKingdom, ...aiKingdoms]
+    let kingdomWhichOwnsThisTile
+    kingdoms.forEach(kingdom => {
+      if(this.props.gameMap[x][y].kingdomOwner === kingdom.id) kingdomWhichOwnsThisTile = kingdom
+    })
 
     const tileSize = this.props.tileSize
     const tileBottomRightPixelX = tileTopLeftPixelX + tileSize
     const tileBottomRightPixelY = tileTopLeftPixelY + tileSize
 
-    const borderLineColor = 'rgb(0, 0, 255)'
-    const slightlyTransparentBorderLineColor = 'rgb(0, 0, 255, 0.3)'
+    let borderLineColor
+    let slightlyTransparentBorderLineColor
     const totallyTransparent = 'rgb(0, 0, 0, 0)'
+    if(kingdomWhichOwnsThisTile.id === mainKingdom.id){
+      borderLineColor = 'rgb(0, 0, 255)'
+      slightlyTransparentBorderLineColor = 'rgb(0, 0, 255, 0.3)'
+    }
+    else{
+      borderLineColor = 'rgb(255, 0, 0)'
+      slightlyTransparentBorderLineColor = 'rgb(255, 0, 0, 0.3)'
+    }
+    
 
     const gradientStart = 0
     const gradientEnd = 0.3
@@ -256,8 +273,7 @@ class Map extends React.Component{
     bottomUpGradient.addColorStop(gradientStart, slightlyTransparentBorderLineColor)
     bottomUpGradient.addColorStop(gradientEnd, totallyTransparent)
 
-
-    if (x===0 || this.props.gameMap[x-1][y].kingdomOwner !== kingdom.id){
+    if (x===0 || this.props.gameMap[x-1][y].kingdomOwner !== kingdomWhichOwnsThisTile.id){
       //first draw the hard border line
       ctx.fillStyle = borderLineColor
       ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, 2, tileSize)//although i'm using fillRect, its actually drawing a line
@@ -267,7 +283,7 @@ class Map extends React.Component{
       ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
     }
 
-    if (y===0 || this.props.gameMap[x][y-1].kingdomOwner !== kingdom.id){
+    if (y===0 || this.props.gameMap[x][y-1].kingdomOwner !== kingdomWhichOwnsThisTile.id){
       ctx.fillStyle = borderLineColor
       ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, tileSize, 2)
 
@@ -275,7 +291,7 @@ class Map extends React.Component{
       ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
     }
 
-    if(x===this.props.gameMap.length - 1 || this.props.gameMap[x + 1][y].kingdomOwner !== kingdom.id){
+    if(x===this.props.gameMap.length - 1 || this.props.gameMap[x + 1][y].kingdomOwner !== kingdomWhichOwnsThisTile.id){
       ctx.fillStyle = borderLineColor
       //subtracting 2 from x coord so that the border draws inside the tile, and doesn't overlap into the next tile over
       ctx.fillRect(tileBottomRightPixelX - 2, tileTopLeftPixelY, 2, tileSize)
@@ -284,7 +300,7 @@ class Map extends React.Component{
       ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
     }
 
-    if(y===this.props.gameMap[0].length - 1 || this.props.gameMap[x][y+1].kingdomOwner !== kingdom.id){
+    if(y===this.props.gameMap[0].length - 1 || this.props.gameMap[x][y+1].kingdomOwner !== kingdomWhichOwnsThisTile.id){
       ctx.fillStyle = borderLineColor
       //subtracting 2 from x coord so that the border draws inside the tile, and doesn't overlap into the next tile over
       ctx.fillRect(tileTopLeftPixelX, tileBottomRightPixelY - 2, tileSize, 2)
@@ -292,6 +308,7 @@ class Map extends React.Component{
       ctx.fillStyle = bottomUpGradient
       ctx.fillRect(tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
     }
+    
   }
 
   drawFief({x, y, ctx, tileTopLeftPixelX, tileTopLeftPixelY, color}){
@@ -474,6 +491,7 @@ class Map extends React.Component{
 function mapStateToProps(state){
   return {
     mainKingdom: {...state.mainKingdom},
+    aiKingdoms: [...state.aiKingdoms],
     nobles: {...state.nobles},
     gameMap: [...state.gameMap],
     mapOffset: {...state.mapOffset},

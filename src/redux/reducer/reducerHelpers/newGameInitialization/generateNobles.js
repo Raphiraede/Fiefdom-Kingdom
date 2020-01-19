@@ -17,5 +17,4 @@ function generateRandomRgb(){ //This will be the color used to mark the noble's 
   const randomRgb=`rgb(${getRandomInt(0, 255)}, ${getRandomInt(0, 255)}, ${getRandomInt(0, 255)}, 0.4)`
   return randomRgb
 }
-
 export { generateNobles }

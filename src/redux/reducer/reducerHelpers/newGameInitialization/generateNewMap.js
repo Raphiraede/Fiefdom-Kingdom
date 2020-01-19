@@ -20,7 +20,7 @@ function generateNewMap(){
       if (randomInt > 50 && randomInt < 60) map[x][y] = new Rock(undefined, x, y)
       else if (randomInt>=1 && randomInt<=3) map[x][y] = new Field(undefined, x, y)
       else if (randomInt>5 && randomInt<9) map[x][y] = new Church('VILLAGE_CENTER', x, y)
-      else if (randomInt>10 && randomInt<13) map[x][y] = new Trees('FOREST', x, y)
+      else if (randomInt>10 && randomInt<13) map[x][y] = new Trees('FOREST_CENTER', x, y)
       else if (randomInt > 500 && randomInt < 580) map[x][y] = new Trees(undefined, x, y)
       else if (randomInt > 700 && randomInt < 710) map[x][y] = new House(undefined, x, y)
       else if (randomInt > 800 && randomInt < 805) map[x][y] = new GoldOre(undefined, x, y)
@@ -33,7 +33,7 @@ function generateNewMap(){
   //Forest generated first so that villages aren't wiped out by forest generation
   for (let x = 0; x < mapWidth; x ++){
     for (let y = 0; y < mapHeight; y++){
-      if(map[x][y].marker === 'FOREST'){
+      if(map[x][y].marker === 'FOREST_CENTER'){
         const radius = getRandomInt(2, 8)
         fillMarker(x, y, map, radius, map[x][y].marker)
       }
@@ -87,12 +87,12 @@ function fillMarker(x, y, map, radius, marker){
 
           case 'VILLAGE_CENTER':
             const houseRandomizer = getRandomInt(0, 2)
-            if(houseRandomizer === 0 && map[i][j].type !== 'church') map[i][j] = new House(undefined, i, j)
+            if(houseRandomizer === 0 && map[i][j].type !== 'church') map[i][j] = new House('VILLAGE', i, j)
             break
 
-          case 'FOREST':
+          case 'FOREST_CENTER':
             const treesRandomizer = getRandomInt(0, 3)
-            if(treesRandomizer !== 0) map[i][j] = new Trees(undefined, i, j)
+            if(treesRandomizer !== 0) map[i][j] = new Trees('FOREST', i, j)
             break
           
           default:

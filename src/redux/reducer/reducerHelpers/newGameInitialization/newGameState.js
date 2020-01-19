@@ -45,17 +45,18 @@ function createNewGameState(){
     power: 100,
     taxLevel: 75,
   })
-  enemyKingdomFamily.nobles = enemyKingdomNoble
+  enemyKingdomFamily.nobleIds.push({enemyKingdomNoble})
+  const aiKingdoms = [enemyKingdom]
 
   const gameMap = generateNewMap()
 
-  initializeKingdomTerritory({gameMap, mainKingdom})
+  initializeKingdomTerritory({gameMap, mainKingdom, aiKingdoms})
 
   const newGameState = {
     turnNumber: 1,
     randomNameGenerator,
     mainKingdom,
-    enemyKingdom,
+    aiKingdoms,
     families,
     nobles,
     gameMap,
@@ -83,5 +84,7 @@ function createNewGameState(){
 
   return newGameState
 }
+
+
 
 export { createNewGameState }
