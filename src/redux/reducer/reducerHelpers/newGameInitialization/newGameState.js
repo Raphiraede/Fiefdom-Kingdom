@@ -38,14 +38,18 @@ function createNewGameState(){
 
   const enemyKingdom = new Kingdom({name: 'The Enemy Kingdom'})
   const enemyKingdomFamily = new RoyalFamily({})
+  families[enemyKingdomFamily.id] = enemyKingdomFamily
+  enemyKingdom.familyIds.push(enemyKingdomFamily.id)
   const enemyKingdomNoble = new Noble({
     firstName: 'enemyKingdomNoble',
     familyName: enemyKingdomFamily.familyName,
     loyalty: 100,
     power: 100,
     taxLevel: 75,
+    color: 'rgb(255, 0, 0, 0.4)'
   })
-  enemyKingdomFamily.nobleIds.push({enemyKingdomNoble})
+  nobles[enemyKingdomNoble.id] = enemyKingdomNoble
+  enemyKingdomFamily.nobleIds.push(enemyKingdomNoble.id)
   const aiKingdoms = [enemyKingdom]
 
   const gameMap = generateNewMap()

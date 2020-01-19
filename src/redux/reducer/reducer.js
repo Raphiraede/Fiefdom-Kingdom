@@ -33,8 +33,8 @@ function rootReducer(state, action){
     
     case types.MAP_DRAG:
       newState = {...state}
-      newState.mapOffset.x = action.payload.x
-      newState.mapOffset.y = action.payload.y
+      newState.mapOffset.x = Math.floor(action.payload.x)
+      newState.mapOffset.y = Math.floor(action.payload.y)
       return newState
     
     case types.ZOOM_MAP_IN:

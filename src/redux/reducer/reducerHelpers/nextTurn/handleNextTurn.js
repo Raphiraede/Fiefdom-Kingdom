@@ -1,5 +1,6 @@
 
 import { createIndexes } from '../indexes/createIndexes'
+import { aiKingdomTurn } from './aiKingdomTurn'
 
 function handleNextTurn(state){
   let newState = {...state}
@@ -27,10 +28,9 @@ function handleNextTurn(state){
     const army = armies[id]
     army.handleNextTurn({state, armies})
   })
-
-
-
   newState.indexes = createIndexes(newState)
+
+  aiKingdomTurn(state)
   return newState
 }
 
