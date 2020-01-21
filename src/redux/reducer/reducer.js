@@ -3,10 +3,11 @@ import types from '../types'
 import { createNewGameState } from './reducerHelpers/newGameInitialization/newGameState'
 import { handleNextTurn } from './reducerHelpers/nextTurn/handleNextTurn'
 import { Army } from '../../models/army/Army'
-import { determineArmySpawnCoords } from './reducerHelpers/determineArmySpawnCoords/determineArmySpawnCoords'
+import { determineArmySpawnCoords } from './reducerHelpers/raiseArmy/determineArmySpawnCoords/determineArmySpawnCoords'
 import { handleSelection } from './reducerHelpers/handleSelection/handleSelection'
-import { createArmyDemographicsObject } from './reducerHelpers/createArmyDemographicsObject/createArmyDemographicsObject'
+import { createArmyDemographicsObject } from './reducerHelpers/raiseArmy/createArmyDemographicsObject/createArmyDemographicsObject'
 import { disbandArmyAndReturnSoldiersToTiles } from './reducerHelpers/disbandArmyAndReturnSoldiersToTiles/disbandArmyAndReturnSoldiersToTiles'
+import { raiseArmy } from './reducerHelpers/raiseArmy/raiseArmy'
 
 function rootReducer(state, action){
   let newState
@@ -109,16 +110,7 @@ function rootReducer(state, action){
     case types.RAISE_ARMY:
       newState = {...state}
       const nobleId = action.payload
-      const coordinates = determineArmySpawnCoords({nobleId, gameMap: newState.gameMap, armies: newState.armies})//returns undefined if no suitable place to spawn
-      if(coordinates){
-        const armyDemographicsObject = createArmyDemographicsObject({ nobleId, gameMap: newState.gameMap, percentage: 10})
-        const newArmy = new Army({ kingdomId: newState.mainKingdom.id, coordinates, demographics: armyDemographicsObject, nobleId })
-        if(newArmy.calculateTotalSize() > 0){
-          newState.armies[newArmy.id] = newArmy
-          newState.nobles[nobleId].armies.push (newArmy.id)
-          newState.indexes.armiesToNobles[newArmy.id] = nobleId
-        }
-      }
+      raiseArmy({state: newState, nobleId: nobleId})
       return newState
     
     case types.SELECT:

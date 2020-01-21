@@ -1,9 +1,12 @@
 
 
-function createFamiliesToKingdomsIndex({mainKingdom}){
+function createFamiliesToKingdomsIndex({mainKingdom, aiKingdoms}){
   const familiesToKingdomsIndex = {}
-  mainKingdom.familyIds.forEach(familyId => {
-    familiesToKingdomsIndex[familyId] = mainKingdom.id
+  const kingdoms = [mainKingdom, ...aiKingdoms]
+  kingdoms.forEach(kingdom => {
+    kingdom.familyIds.forEach(familyId => {
+      familiesToKingdomsIndex[familyId] = kingdom.id
+    })
   })
   
   return familiesToKingdomsIndex

@@ -11,6 +11,7 @@ import GoldOre from '../../images/tiles/goldOre.png'
 import ChurchBot from '../../images/tiles/ChurchBot.png'
 import ChurchTop from '../../images/tiles/ChurchTop.png'
 import BlueSpearman from '../../images/units/blue-spearman-bigger.png'
+import RedSpearman from '../../images/units/red-spearman-bigger.png'
 import CastleBot from '../../images/tiles/CastleBot.png'
 import CastleTop from '../../images/tiles/CastleTop.png'
 import { 
@@ -22,6 +23,7 @@ import {
   select, 
   updateArmyDestination,
 } from '../../redux/actions'
+import { Kingdom } from '../../models/kingdom/Kingdom'
 
 class Map extends React.Component{
   constructor(){
@@ -35,6 +37,7 @@ class Map extends React.Component{
     this.ChurchBot = new Image()
     this.ChurchTop = new Image()
     this.BlueSpearman = new Image()
+    this.RedSpearman = new Image()
     this.CastleBot = new Image()
     this.CastleTop = new Image()
 
@@ -47,6 +50,7 @@ class Map extends React.Component{
     this.ChurchBot.src = ChurchBot
     this.ChurchTop.src = ChurchTop
     this.BlueSpearman.src = BlueSpearman
+    this.RedSpearman.src = RedSpearman
     this.CastleBot.src = CastleBot
     this.CastleTop.src = CastleTop
 
@@ -337,6 +341,8 @@ class Map extends React.Component{
   drawArmiesAndArmyPaths(ctx){
     const armies = this.props.armies
     const tileSize = this.props.tileSize
+    const mainKingdom = new Kingdom(this.props.mainKingdom)
+    const armiesLoyalToMainKingdom = mainKingdom.armiesLoyalToThisKingdom(this.props.families, this.props.nobles, this.props.armies)
     const mapOffsetX = this.props.mapOffset.x
     const mapOffsetY = this.props.mapOffset.y
 
@@ -344,7 +350,13 @@ class Map extends React.Component{
       const army = armies[id]
       const tileTopLeftPixelX = army.coordinates.x * tileSize + mapOffsetX
       const tileTopLeftPixelY = army.coordinates.y * tileSize + mapOffsetY
-      ctx.drawImage(this.BlueSpearman, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
+      let loyalToMainKingdom = false
+      armiesLoyalToMainKingdom.forEach(loyalArmy => {
+        if(army.id === loyalArmy.id) loyalToMainKingdom = true
+      })
+      if(loyalToMainKingdom) ctx.drawImage(this.BlueSpearman, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
+      else ctx.drawImage(this.RedSpearman, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
+      
     }
 
     for (const id in armies){ //This draws their paths
@@ -492,6 +504,7 @@ function mapStateToProps(state){
   return {
     mainKingdom: {...state.mainKingdom},
     aiKingdoms: [...state.aiKingdoms],
+    families: {...state.families},
     nobles: {...state.nobles},
     gameMap: [...state.gameMap],
     mapOffset: {...state.mapOffset},

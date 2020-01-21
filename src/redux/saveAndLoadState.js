@@ -3,9 +3,11 @@ import {
   GoldFingerFamily, 
   GreenHeartFamily, 
   Noble,
+  RoyalFamily,
 } from '../models/families'
 import { RandomNameGenerator } from './reducer/reducerHelpers/newGameInitialization/RandomNameGenerator'
 import { Army } from '../models/army/Army'
+import { Kingdom } from '../models/kingdom/Kingdom'
 
 
 function loadState() {
@@ -40,11 +42,18 @@ function saveState(state){
 //They mused be revived before being passed back into state so that they regain all of their functionality
 function reviveState(parsedState){
   let {
+    mainKingdom,
+    aiKingdoms,
     randomNameGenerator,
     families,
     nobles,
     armies,
   } = parsedState
+  mainKingdom = new Kingdom(mainKingdom)
+  
+  for(let kingdom in aiKingdoms){
+    kingdom = new Kingdom(kingdom)
+  }
 
   const nobleIds = Object.keys(nobles)
   for(let i = 0; i<nobleIds.length; i++){
@@ -57,11 +66,14 @@ function reviveState(parsedState){
     if (royalFamily.familyName === 'BurnHammer'){
       royalFamily =  new BurnHammerFamily(royalFamily)
     }
-    if (royalFamily.familyName === 'GreenHeart'){
+    else if (royalFamily.familyName === 'GreenHeart'){
       royalFamily =  new GreenHeartFamily(royalFamily)
     } 
-    if (royalFamily.familyName === 'GoldFinger'){
+    else if (royalFamily.familyName === 'GoldFinger'){
       royalFamily =  new GoldFingerFamily(royalFamily)
+    }
+    else{
+      royalFamily = new RoyalFamily(royalFamily)
     }
     families[familyIds[i]] = royalFamily
   }
@@ -76,6 +88,8 @@ function reviveState(parsedState){
 
   const revivedState={
     ...parsedState,
+    mainKingdom,
+    aiKingdoms,
     randomNameGenerator,
     nobles,
     families

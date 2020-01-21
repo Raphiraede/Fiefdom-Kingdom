@@ -8,6 +8,20 @@ class Kingdom{
     this.color = color
     this.id = id
   }
+
+  armiesLoyalToThisKingdom(families, nobles, armies){
+    let armiesLoyalToThisKingdom = []
+    for (const familyId of this.familyIds){
+      const family = families[familyId]
+      for(const nobleId of family.nobleIds){
+        const noble = nobles[nobleId]
+        for (const armyId of noble.armies){
+          armiesLoyalToThisKingdom.push(armies[armyId])
+        }
+      }
+    }
+    return armiesLoyalToThisKingdom
+  }
 }
 
 export { Kingdom }

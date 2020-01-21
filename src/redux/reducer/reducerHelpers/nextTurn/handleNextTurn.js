@@ -24,13 +24,14 @@ function handleNextTurn(state){
 
   const armies = newState.armies
   const armyIds = Object.keys(armies)
+  }
   armyIds.forEach(id => {
     const army = armies[id]
     army.handleNextTurn({state, armies})
   })
   newState.indexes = createIndexes(newState)
 
-  aiKingdomTurn(state)
+  aiKingdomTurn(newState)
   return newState
 }
 
