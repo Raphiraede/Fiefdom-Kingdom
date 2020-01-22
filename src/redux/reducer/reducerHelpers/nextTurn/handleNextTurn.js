@@ -6,7 +6,7 @@ function handleNextTurn(state){
   let newState = {...state}
   newState.turnNumber++
 
-  calculateTaxesAndUpdateGoldAmount(state.mainKingdom, state.nobles, state.gameMap)
+  calculateTaxesAndUpdateGoldAmount(state)
 
   const families = newState.families
   const familyIds = Object.keys(families)
@@ -29,17 +29,24 @@ function handleNextTurn(state){
   return newState
 }
 
-function calculateTaxesAndUpdateGoldAmount(mainKingdom, nobles, gameMap){
+function calculateTaxesAndUpdateGoldAmount(state){
+  const kingdoms = [state.mainKingdom, ...state.aiKingdoms]
+  const nobles = state.nobles
+  const gameMap = state.gameMap
+
   for(let x = 0; x < gameMap.length; x++){
     for(let y = 0; y < gameMap[0].length; y++){
-
       const tile = gameMap[x][y]
-      if (tile.kingdomOwner && tile.fiefOwner){
+      const kingdomOwner = tile.kingdomOwner
+      const fiefOwner = tile.fiefOwner
+      if (kingdomOwner && fiefOwner){
         const taxLevel = nobles[tile.fiefOwner].taxLevel
         const pop = tile.population
         let totalTaxesForThisTile = Math.floor((taxLevel * pop + 100)/100)
         if(tile.type === 'goldOre') totalTaxesForThisTile+=100
-        mainKingdom.gold += totalTaxesForThisTile
+        kingdoms.forEach(kingdom => {
+          if(kingdom.id === kingdomOwner) kingdom.gold += totalTaxesForThisTile
+        })
       }
     }
   }
@@ -55,8 +62,6 @@ function handleArmiesNextTurn(state){
   armyArray.forEach(army => {
     const targetSquare = calculateTargetSquare(army)
     const blockingArmyId = checkIfArmyIsBlocking(targetSquare, armyArray, army)
-    console.log('army', army)
-    console.log('blocking', blockingArmyId)
     const kingdomIdWhichArmyIsLoyalTo = army.calculateKingdomIdThatArmyIsLoyalTo(state)
 
     if(blockingArmyId){
