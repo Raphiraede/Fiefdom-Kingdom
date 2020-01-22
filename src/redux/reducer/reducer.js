@@ -2,10 +2,7 @@
 import types from '../types'
 import { createNewGameState } from './reducerHelpers/newGameInitialization/newGameState'
 import { handleNextTurn } from './reducerHelpers/nextTurn/handleNextTurn'
-import { Army } from '../../models/army/Army'
-import { determineArmySpawnCoords } from './reducerHelpers/raiseArmy/determineArmySpawnCoords/determineArmySpawnCoords'
 import { handleSelection } from './reducerHelpers/handleSelection/handleSelection'
-import { createArmyDemographicsObject } from './reducerHelpers/raiseArmy/createArmyDemographicsObject/createArmyDemographicsObject'
 import { disbandArmyAndReturnSoldiersToTiles } from './reducerHelpers/disbandArmyAndReturnSoldiersToTiles/disbandArmyAndReturnSoldiersToTiles'
 import { raiseArmy } from './reducerHelpers/raiseArmy/raiseArmy'
 
@@ -116,7 +113,7 @@ function rootReducer(state, action){
     case types.SELECT:
       newState = {...state}
       const coords = newState.hoveredTileCoords
-      newState.selected = handleSelection({coords, armies: newState.armies })
+      newState.selected = handleSelection({state: newState, coords, armies: newState.armies })
       return newState
 
     case types.UPDATE_ARMY_DESTINATION:

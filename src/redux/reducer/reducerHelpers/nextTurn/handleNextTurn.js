@@ -93,17 +93,19 @@ function resolveBattles(battlesMapping, armies, state){
   for (const key in battlesMapping){
     const army1 = armies[key]
     const army2 = armies[battlesMapping[key]]
-    const army1Strength = army1.calculateTotalSize()
-    const army2Strength = army2.calculateTotalSize()
-    const damageDoneToArmy1 = Math.ceil(army2Strength * 0.4)
-    const damageDoneToArmy2 = Math.ceil(army1Strength * 0.4)
-    army1.takeDamage(damageDoneToArmy1)
-    army2.takeDamage(damageDoneToArmy2)
-    if(army1.calculateTotalSize() <= 0){
-      disbandArmyAndReturnSoldiersToTiles(state, army1.id)
-    } 
-    if(army2.calculateTotalSize() <= 0) {
-      disbandArmyAndReturnSoldiersToTiles(state, army2.id)
+    if(army1 && army2){
+      const army1Strength = army1.calculateTotalSize()
+      const army2Strength = army2.calculateTotalSize()
+      const damageDoneToArmy1 = Math.ceil(army2Strength * 0.4)
+      const damageDoneToArmy2 = Math.ceil(army1Strength * 0.4)
+      army1.takeDamage(damageDoneToArmy1)
+      army2.takeDamage(damageDoneToArmy2)
+      if(army1.calculateTotalSize() <= 0){
+        disbandArmyAndReturnSoldiersToTiles(state, army1.id)
+      } 
+      if(army2.calculateTotalSize() <= 0) {
+        disbandArmyAndReturnSoldiersToTiles(state, army2.id)
+      }
     }
   }
 }

@@ -7,6 +7,7 @@ function disbandArmyAndReturnSoldiersToTiles(state, armyId){
     const nobleWhoArmyIsLoyalTo = state.nobles[state.indexes.armiesToNobles[army.id]]
     const indexOfArmy = nobleWhoArmyIsLoyalTo.armies.indexOf(armyId)
     nobleWhoArmyIsLoyalTo.armies.splice(indexOfArmy, 1)
+    if(state.selected && state.selected.id === armyId) state.selected = null
     delete state.indexes.armiesToNobles[army.id]
     delete state.armies[armyId]
 }

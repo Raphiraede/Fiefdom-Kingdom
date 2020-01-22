@@ -12,16 +12,18 @@ class ArmyCommands extends React.Component{
 
     if(this.props.selected.id){
       const selectedArmy = this.props.armies[this.props.selected.id]
-      switch (selectedArmy.mode){
-        case 'conquer':
-          conquerButton.style.boxShadow = 'inset 0px 0px 20px #8b90b5'
-          break
-
-        case 'move':
-          moveButton.style.boxShadow = 'inset 0px 0px 20px #8b90b5'
-          break
-
-        default:
+      if(selectedArmy){
+        switch (selectedArmy.mode){
+          case 'conquer':
+            conquerButton.style.boxShadow = 'inset 0px 0px 20px #8b90b5'
+            break
+  
+          case 'move':
+            moveButton.style.boxShadow = 'inset 0px 0px 20px #8b90b5'
+            break
+  
+          default:
+        }
       }
     }
   }
