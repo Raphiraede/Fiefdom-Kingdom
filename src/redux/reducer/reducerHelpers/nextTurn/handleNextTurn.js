@@ -52,10 +52,11 @@ function handleArmiesNextTurn(state){
   for(const armyId in state.armies){
     armyArray.push(state.armies[armyId])
   }
-
   armyArray.forEach(army => {
     const targetSquare = calculateTargetSquare(army)
-    const blockingArmyId = checkIfArmyIsBlocking(army.coordinates, armyArray, army)
+    const blockingArmyId = checkIfArmyIsBlocking(targetSquare, armyArray, army)
+    console.log('army', army)
+    console.log('blocking', blockingArmyId)
     const kingdomIdWhichArmyIsLoyalTo = army.calculateKingdomIdThatArmyIsLoyalTo(state)
 
     if(blockingArmyId){
@@ -67,10 +68,10 @@ function handleArmiesNextTurn(state){
     }
     else{
       if(army.mode === 'move'){
-        this.moveTowardDestination(army, targetSquare)
+        moveTowardDestination(army, targetSquare)
       } 
       else if(army.mode === 'conquer'){
-        const kingdomOwnerOfTile = state.gameMap[this.coordinates.x][this.coordinates.y].kingdomOwner
+        const kingdomOwnerOfTile = state.gameMap[army.coordinates.x][army.coordinates.y].kingdomOwner
         if(kingdomIdWhichArmyIsLoyalTo === kingdomOwnerOfTile) moveTowardDestination(army, targetSquare)
       }
       if(army.turnsOnSameTile >= 2) army.conquerTerritory(state, kingdomIdWhichArmyIsLoyalTo)
@@ -78,7 +79,6 @@ function handleArmiesNextTurn(state){
       army.turnsOnSameTile++
     }
   })
-  console.log(battlesMapping)
 }
 
 
@@ -89,7 +89,8 @@ function moveTowardDestination(army, targetSquare){
 }
 
 function calculateTargetSquare(army){
-  let targetSquare = army.coordinates
+  //important to use spread operator so that targetSquare isn't modifying army.coordinates
+  let targetSquare = {...army.coordinates}
   if(army.coordinates.x < army.destination.x) targetSquare.x = army.coordinates.x + 1
   else if (army.coordinates.x > army.destination.x) targetSquare.x = army.coordinates.x - 1
 
@@ -100,13 +101,13 @@ function calculateTargetSquare(army){
 
 //currently the only thing which can block a path is another army
 function checkIfArmyIsBlocking(targetSquare, armyArray, mainArmy){
-  let blockingArmy = null
+  let blockingArmyId = null
   for (const army of armyArray){
-    if(targetSquare.x === army.coordinates.x && targetSquare.y === army.coordinates.y){
-      blockingArmy = army.id
+    if(targetSquare.x === army.coordinates.x && targetSquare.y === army.coordinates.y && army.id !== mainArmy.id){
+      blockingArmyId = army.id
     }
   }
-  return blockingArmy
+  return blockingArmyId
 }
 
 function handleConquerMode(state, kingdomId){
