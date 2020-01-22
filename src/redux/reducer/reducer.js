@@ -131,7 +131,9 @@ function rootReducer(state, action){
 
     case types.DISBAND_ARMY:
       newState = {...state}
-      disbandArmyAndReturnSoldiersToTiles(newState)
+      if(newState.selected){
+        disbandArmyAndReturnSoldiersToTiles(newState, newState.selected.id)
+      }
       newState.selected = null
       return newState
 

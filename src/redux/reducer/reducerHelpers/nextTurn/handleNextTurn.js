@@ -1,6 +1,7 @@
 
 import { createIndexes } from '../indexes/createIndexes'
 import { aiKingdomTurn } from './aiKingdomTurn'
+import { disbandArmyAndReturnSoldiersToTiles } from '../disbandArmyAndReturnSoldiersToTiles/disbandArmyAndReturnSoldiersToTiles'
 
 function handleNextTurn(state){
   let newState = {...state}
@@ -79,18 +80,47 @@ function handleArmiesNextTurn(state){
         const kingdomOwnerOfTile = state.gameMap[army.coordinates.x][army.coordinates.y].kingdomOwner
         if(kingdomIdWhichArmyIsLoyalTo === kingdomOwnerOfTile) moveTowardDestination(army, targetSquare)
       }
-      if(army.turnsOnSameTile >= 2) army.conquerTerritory(state, kingdomIdWhichArmyIsLoyalTo)
+      if(army.turnsOnSameTile >= 2) conquerTerritory(state, army, kingdomIdWhichArmyIsLoyalTo)
       army.payWages(state, kingdomIdWhichArmyIsLoyalTo)
       army.turnsOnSameTile++
     }
   })
+  filterBattlesMapping(battlesMapping)
+  resolveBattles(battlesMapping, state.armies, state)
 }
 
+function resolveBattles(battlesMapping, armies, state){
+  for (const key in battlesMapping){
+    const army1 = armies[key]
+    const army2 = armies[battlesMapping[key]]
+    const army1Strength = army1.calculateTotalSize()
+    const army2Strength = army2.calculateTotalSize()
+    const damageDoneToArmy1 = Math.ceil(army2Strength * 0.4)
+    const damageDoneToArmy2 = Math.ceil(army1Strength * 0.4)
+    army1.takeDamage(damageDoneToArmy1)
+    army2.takeDamage(damageDoneToArmy2)
+    if(army1.calculateTotalSize() <= 0){
+      disbandArmyAndReturnSoldiersToTiles(state, army1.id)
+    } 
+    if(army2.calculateTotalSize() <= 0) {
+      disbandArmyAndReturnSoldiersToTiles(state, army2.id)
+    }
+  }
+}
 
+//Currently battlesMapping is bound to have mirrored battles, aka {armyId1: armyId2, armyId2: armyId1}
+//This filters out the battlesMapping
+function filterBattlesMapping(battlesMapping){
+  for (const battleMappingKey in battlesMapping){
+    const battleMappingValue = battlesMapping[battleMappingKey]
+    const mirroredMappingChecker = battlesMapping[battleMappingValue]
+    if(mirroredMappingChecker === battleMappingKey) delete battlesMapping[battleMappingValue]
+  }
+}
 
 function moveTowardDestination(army, targetSquare){
+  if(army.coordinates.x !== targetSquare.x || army.coordinates.y !== targetSquare.y) army.turnsOnSameTile = 0
   army.coordinates = targetSquare
-  army.turnsOnSameTile = 0
 }
 
 function calculateTargetSquare(army){
@@ -115,13 +145,8 @@ function checkIfArmyIsBlocking(targetSquare, armyArray, mainArmy){
   return blockingArmyId
 }
 
-function handleConquerMode(state, kingdomId){
-  const kingdomOwnerOfTile = state.gameMap[this.coordinates.x][this.coordinates.y].kingdomOwner
-  if(kingdomId === kingdomOwnerOfTile) moveTowardDestination(state.armies)
-}
-
-function conquerTerritory(state, kingdomId){
-  state.gameMap[this.coordinates.x][this.coordinates.y].kingdomOwner = kingdomId
+function conquerTerritory(state, army, kingdomId){
+  state.gameMap[army.coordinates.x][army.coordinates.y].kingdomOwner = kingdomId
 }
 
 export { handleNextTurn }

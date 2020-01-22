@@ -12,6 +12,18 @@ class Army{
 
 
 
+  takeDamage(damage){
+    for(const key in this.demographics){
+      if(damage > this.demographics[key]){
+        damage -= this.demographics[key]
+        this.demographics[key] = 0
+      }
+      else{
+        this.demographics[key] -= damage
+        damage = 0
+      }
+    }
+  }
 
   payWages(state, kingdomId){
     const wageOwed = this.calculateTotalSize() * 10

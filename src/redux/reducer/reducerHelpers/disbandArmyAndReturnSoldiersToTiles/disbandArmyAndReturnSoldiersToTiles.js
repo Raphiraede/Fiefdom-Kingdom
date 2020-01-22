@@ -1,14 +1,14 @@
 
 
 
-function disbandArmyAndReturnSoldiersToTiles(state){
-  const selected = state.selected
-  if(selected && selected.type==='army'){
-    const army = state.armies[selected.id]
+function disbandArmyAndReturnSoldiersToTiles(state, armyId){
+    const army = state.armies[armyId]
     returnSoldiersToTiles(army.demographics, state.gameMap)
+    const nobleWhoArmyIsLoyalTo = state.nobles[state.indexes.armiesToNobles[army.id]]
+    const indexOfArmy = nobleWhoArmyIsLoyalTo.armies.indexOf(armyId)
+    nobleWhoArmyIsLoyalTo.armies.splice(indexOfArmy, 1)
     delete state.indexes.armiesToNobles[army.id]
-    delete state.armies[selected.id]
-  }
+    delete state.armies[armyId]
 }
 
 //Returns the soldiers back home from the tiles which they were raised from
