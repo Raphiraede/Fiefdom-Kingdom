@@ -7,8 +7,9 @@ class ArmyCommands extends React.Component{
   componentDidUpdate(){
     const conquerButton = this.refs.conquer
     const moveButton = this.refs.move
-    conquerButton.style.boxShadow = ''
-    moveButton.style.boxShadow = ''
+
+    if(conquerButton) conquerButton.style.boxShadow = ''
+    if(moveButton) moveButton.style.boxShadow = ''
 
     if(this.props.selected.id){
       const selectedArmy = this.props.armies[this.props.selected.id]
@@ -29,20 +30,25 @@ class ArmyCommands extends React.Component{
   }
 
   render(){
+    const selectedArmy = this.props.selected.id
     return (
-      <div className='ArmyCommandsWrapper'>
-        <button className='disbandButton' ref='disband' onClick={this.props.disbandArmy} >
-          X
-        </button>
-        <button className='ArmyCommandsButton' ref='conquer' onClick={() => this.props.toggleArmyMode('conquer')}>
-          Conquer
-        </button>
-        <button className='ArmyCommandsButton'>
-          Attack
-        </button>
-        <button className='ArmyCommandsButton' ref='move' onClick={() => this.props.toggleArmyMode('move')}>
-          Move
-        </button>
+      <div>
+        {
+          selectedArmy ?
+            <div className='ArmyCommandsWrapper'>
+              <button className='disbandButton' ref='disband' onClick={this.props.disbandArmy} >
+                X
+              </button>
+              <button className='ArmyCommandsButton' ref='conquer' onClick={() => this.props.toggleArmyMode('conquer')}>
+                Conquer
+              </button>
+              <button className='ArmyCommandsButton' ref='move' onClick={() => this.props.toggleArmyMode('move')}>
+                Move
+              </button>
+            </div>
+            : null
+
+        }
       </div>
     )
   }

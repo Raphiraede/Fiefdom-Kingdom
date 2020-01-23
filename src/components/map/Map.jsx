@@ -138,9 +138,8 @@ class Map extends React.Component{
 
   adjustCanvasDimensions(){
     const canvas = this.refs.canvas
-    //I don't know why, but window.innerHeight is too long and causes the canvas to be slightly taller than the screen, causing a scroll bar to appear
     if(canvas){
-      canvas.height = Math.floor(window.innerHeight * 0.99) 
+      canvas.height = Math.floor(window.innerHeight )
       canvas.width = Math.floor(window.innerWidth)
     }
   }

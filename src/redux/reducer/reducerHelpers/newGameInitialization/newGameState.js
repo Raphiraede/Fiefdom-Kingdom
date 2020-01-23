@@ -82,7 +82,7 @@ function createNewGameState(){
       
     },
     selected: null,
-    winner: null,
+    gameEnd: null,
   }
 
   newGameState.indexes = createIndexes(newGameState)

@@ -24,8 +24,8 @@ function handleNextTurn(state){
   })
 
   handleArmiesNextTurn(state)
-  const winner = checkForGameEnd(state.gameMap)
-  if(winner) newState.winner = winner
+  const gameEnd = checkForGameEnd(state.gameMap, state.mainKingdom)
+  if(gameEnd) newState.gameEnd = gameEnd
   newState.indexes = createIndexes(newState)
 
   aiKingdomTurn(newState)
