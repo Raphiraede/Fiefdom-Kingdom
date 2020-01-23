@@ -20,7 +20,7 @@ function initializeKingdomTerritory({gameMap, mainKingdom, aiKingdoms}){
     }
     
     
-    const castle = new Castle (undefined, castleX, castleY)
+    const castle = new Castle (undefined, castleX, castleY, kingdom.id)
     gameMap[castleX][castleY] = castle
     let sizeOfStartingKingdom = 30
 

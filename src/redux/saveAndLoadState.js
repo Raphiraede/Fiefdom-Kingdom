@@ -51,10 +51,11 @@ function reviveState(parsedState){
   } = parsedState
   mainKingdom = new Kingdom(mainKingdom)
   
-  for(let kingdom in aiKingdoms){
-    kingdom = new Kingdom(kingdom)
+  for(const index in aiKingdoms){
+    const revivedKingdom = new Kingdom(aiKingdoms[index])
+    aiKingdoms[index] = revivedKingdom
   }
-
+  
   const nobleIds = Object.keys(nobles)
   for(let i = 0; i<nobleIds.length; i++){
     nobles[nobleIds[i]] = new Noble (nobles[nobleIds[i]])
