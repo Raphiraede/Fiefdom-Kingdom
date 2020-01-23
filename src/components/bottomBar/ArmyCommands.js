@@ -31,8 +31,8 @@ class ArmyCommands extends React.Component{
   render(){
     return (
       <div className='ArmyCommandsWrapper'>
-        <button className='ArmyCommandsButton' ref='disband' onClick={this.props.disbandArmy}>
-          Disband
+        <button className='disbandButton' ref='disband' onClick={this.props.disbandArmy} >
+          X
         </button>
         <button className='ArmyCommandsButton' ref='conquer' onClick={() => this.props.toggleArmyMode('conquer')}>
           Conquer

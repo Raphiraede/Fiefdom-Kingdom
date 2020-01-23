@@ -24,10 +24,45 @@ function handleNextTurn(state){
   })
 
   handleArmiesNextTurn(state)
+  const winner = checkForGameEnd(state.gameMap)
+  if(winner) newState.winner = winner
   newState.indexes = createIndexes(newState)
 
   aiKingdomTurn(newState)
   return newState
+}
+
+//The winner of the game is decided when only one person still has control of their castle
+function checkForGameEnd(gameMap, mainKingdom){
+  const kingdomIdsWhoStillHaveTheirCastle = []
+  for(let x = 0; x < gameMap.length; x++){
+    for(let y = 0; y < gameMap[x].length; y++){
+      const tile = gameMap[x][y]
+      if(tile.type === 'castle' && tile.originalOwner === tile.kingdomOwner){
+
+      }
+    }
+  }
+  if(kingdomIdsWhoStillHaveTheirCastle.length === 1){
+    if(kingdomIdsWhoStillHaveTheirCastle[0] === mainKingdom.id){
+      return {
+        type: 'victory',
+        reason: 'conquest'
+      }
+    }
+    else{
+      return{
+        type: 'defeat',
+        reason: 'conquest'
+      }
+    }
+  }
+  if(mainKingdom.gold < -500){
+    return {
+      type: 'defeat',
+      reason: 'bankruptcy'
+    }
+  }
 }
 
 function calculateTaxesAndUpdateGoldAmount(state){

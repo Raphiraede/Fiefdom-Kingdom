@@ -26,32 +26,48 @@ function decisionMaker(state, aiKingdom){
   if(shouldRaiseArmy) {
     raiseArmy({state, nobleId: nobleIds[0]})
   }
-  if(state.turnNumber < 25){
-    sendArmiesToConquerVillages(state, aiKingdom)
+  if(state.turnNumber < 40){
+    randomlyAssignArmyTasks(state, aiKingdom, 11)
+  }
+  else if(state.turnNumber < 100){
+    randomlyAssignArmyTasks(state, aiKingdom, 9)
+  }
+  else if(state.turnNumber < 150){
+    randomlyAssignArmyTasks(state, aiKingdom, 5)
+  }
+  else{
+    randomlyAssignArmyTasks(state, aiKingdom, 3)
   }
 }
 
-function sendArmiesToConquerVillages(state, aiKingdom){
+//probabilityModifier control the probability that an army will be sent to conquer village tiles, or to attack the castle
+function randomlyAssignArmyTasks(state, aiKingdom, probabilityModifier){
   const armies = aiKingdom.armiesLoyalToThisKingdom(state.families, state.nobles, state.armies)
   
-  const villageTiles = findVillageTilesNotAlreadyOwned(state.gameMap, aiKingdom)
+  const villageTiles = findVillageTilesNotAlreadyOwnedByThisKingdom(state.gameMap, aiKingdom)
+  const mainKingdomCastleCoords = findKingdomCastleCoords(state.gameMap, state.mainKingdom)
   armies.forEach(army => {
     const currentTile = state.gameMap[army.coordinates.x][army.coordinates.y]
-    console.log(currentTile)
-    console.log(currentTile.kingdomOwner === aiKingdom.id)
-    const conquerOrMove = getRandomInt(0, 1)
+    
     if(army.destination.x === army.coordinates.x && army.destination.y === army.coordinates.y && currentTile.kingdomOwner === aiKingdom.id){
+      const conquerOrMove = getRandomInt(0, 1)
       if(conquerOrMove) army.mode = 'move'
       else army.mode = 'conquer'
-      const randomIndex = getRandomInt(0, villageTiles.length - 1)
-      const randomTile = villageTiles[randomIndex]
-      army.destination.x = randomTile.x
-      army.destination.y = randomTile.y
+      const randomDecision = getRandomInt(0, 10)
+      if(randomDecision < probabilityModifier){
+        const randomIndex = getRandomInt(0, villageTiles.length - 1)
+        const randomTile = villageTiles[randomIndex]
+        army.destination.x = randomTile.x
+        army.destination.y = randomTile.y
+      }
+      else{
+        army.destination = {...mainKingdomCastleCoords}
+      }
     }
   })
 }
 
-function findVillageTilesNotAlreadyOwned(gameMap, aiKingdom){
+function findVillageTilesNotAlreadyOwnedByThisKingdom(gameMap, aiKingdom){
   const villageTiles = []
   for(let x = 0; x < gameMap.length; x++){
     for(let y = 0; y < gameMap[x].length; y++){
@@ -62,6 +78,18 @@ function findVillageTilesNotAlreadyOwned(gameMap, aiKingdom){
     }
   }
   return villageTiles
+}
+
+function findKingdomCastleCoords(gameMap, kingdom){
+  for(let x = 0; x < gameMap.length; x++){
+    for(let y = 0; y < gameMap[x].length; y++){
+      if(gameMap[x][y].type === 'castle' && gameMap[x][y].originalOwner === kingdom.id){
+        return {
+          x, y
+        }
+      }
+    }
+  }
 }
 
 function decideWhetherToRaiseArmy(state, aiKingdom){
@@ -102,6 +130,5 @@ function loyalNobles(state, aiKingdom){
   })
   return nobleIds
 }
-
 
 export { aiKingdomTurn }

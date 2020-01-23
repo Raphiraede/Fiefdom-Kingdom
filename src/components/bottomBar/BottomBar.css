@@ -35,7 +35,7 @@
 }
 
 .ArmyCommandsWrapper{
-  width: 33.4%;
+  width: 25%;
   height: 100%;
   float: left;
 }
@@ -43,4 +43,6 @@
 .ArmyCommandsButton{
   height: 50%;
   width: 50%;
+  background-color: #3F3F3F;
+  color: #7F7F7F
 }
