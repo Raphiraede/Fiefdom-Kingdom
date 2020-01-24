@@ -57,8 +57,12 @@ function randomlyAssignArmyTasks(state, aiKingdom, probabilityModifier){
       if(randomDecision < probabilityModifier){
         const randomIndex = getRandomInt(0, villageTiles.length - 1)
         const randomTile = villageTiles[randomIndex]
-        army.destination.x = randomTile.x
-        army.destination.y = randomTile.y
+
+        //When all of the village tiles are conquered villageTiles will return an empty array, so its necessary to check before destination is set
+        if(randomTile){
+          army.destination.x = randomTile.x
+          army.destination.y = randomTile.y
+        }
       }
       else{
         army.destination = {...mainKingdomCastleCoords}
@@ -103,17 +107,6 @@ function decideWhetherToRaiseArmy(state, aiKingdom){
     return true
   }
   return false
-}
-
-function findMainKingdomCastle(state){
-  const mainKingdomId = state.mainKingdom.id
-  const gameMap = state.gameMap
-  for(let x = 0; x < gameMap.length; x++){
-    for (let y = 0; y < gameMap.length; y++){
-      const tile = gameMap[x][y]
-      if(tile.type === 'castle' && tile.kingdomOwner === mainKingdomId) return {x, y}
-    }
-  }
 }
 
 function loyalNobles(state, aiKingdom){

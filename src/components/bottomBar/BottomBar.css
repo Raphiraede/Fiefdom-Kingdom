@@ -4,34 +4,14 @@ body{
 
 .BottomBar{
   position: absolute;
-  background-color:rgb(56, 56, 56);
   width: 100%;
-  height: 150px;
+  height: 120px;
   bottom: 0%;
   float: left;
-  border-style: solid;
   background-color: #181818;
-}
-
-.leftSection{
-  height: 100%;
-  width: 33.3%;
-  float: left;
-}
-
-.middleSection{
-  height: 100%;
-  width: 33.3%;
-  text-align: center;
-  float: left;
-}
-
-.TileInfo{
-  position: relative;
-  background-color: blue;
-  text-align: center;
-  width: 100%;
-  height: calc(100% - 20px);
+  font-size: large;
+  color: #7F7F7F;
+  font-family:"TimesNewRoman"
 }
 
 .NextTurnButton{
@@ -45,9 +25,73 @@ body{
   float: left;
 }
 
-.ArmyCommandsButton{
-  height: 50%;
+.BottomBarSection{
+  height: 100%;
+  width: 33.3%;
+  float: left;
+}
+
+.Layer{
+  height: 33.33%;
+  width: 100%;
+}
+
+.ArmyStats{
+  text-align: center;
+  float: left;
   width: 50%;
+  height: 100%;
+}
+
+.Header{
+  text-align: center;
+  float: left;
+  margin: 0;
+  width: 100%;
+}
+
+.ArmyCommands{
+  height: 100%;
+}
+
+.BottomBarSection{
+  text-align: center;
+  float: left;
+  height: calc(100% - 6px);
+  width: calc(33.33% - 6px);
+  border-width: 3px;
+  border-style: ridge;
+  border-color: rgb(220, 220, 220);
+}
+
+.information{
+  padding-top: 7px;
+  text-align: center;
+  float: left;
+  height: calc(100% - 7px);
+  width: 50%;
+  line-height: 20px;
+}
+
+.Button{
+  height: 100%;
+  
   background-color: #3F3F3F;
-  color: #7F7F7F
+  color: #7F7F7F;
+  font-size: 80%;
+}
+
+.Button.Thirds{
+  width: 33.33%;
+}
+
+.Button.Halves{
+  width: 33.33%;
+  margin-right: 8.335%;
+  margin-left: 8.335%;
+}
+
+
+button:focus{
+  outline: none;
 }

@@ -10,7 +10,6 @@ function MapPage(){
     <div>
       <NavBar />
       <Map />
-      <FamiliesView />
       <BottomBar />
     </div>
   )

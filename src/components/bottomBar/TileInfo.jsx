@@ -6,6 +6,7 @@ function TileInfo(props){
     gameMap,
     hoveredTileCoords,
     mainKingdom,
+    aiKingdoms,
     nobles,
     armies,
   } = props
@@ -19,6 +20,15 @@ function TileInfo(props){
     kingdomOwner,
   } = tile
 
+  const mainKingdomId = mainKingdom.id
+  const allKingdoms = {}
+  allKingdoms[mainKingdomId] = mainKingdom
+  for (const aiKingdom of aiKingdoms){
+    allKingdoms[aiKingdom.id] = {
+      ...aiKingdom
+    }
+  }
+
   let hoveredArmy
 
   for (const id in armies){
@@ -27,26 +37,54 @@ function TileInfo(props){
   }
   
   return (
-    <div className='TileInfo'>
-      <span className='information'>X: {x}</span> <br />
-      <span className='information'>Y: {y}</span> <br />
-      <span className='information'>Type: {type}</span> <br />
-      <span className='information'>Pop: {population}</span> <br />
-      <span className='information'>Kingdom: {
-        mainKingdom.id === kingdomOwner ?
-        mainKingdom.name :
-        'Unclaimed'
-      }</span> <br />
-      {
-        tile.fiefOwner ?
-        (<span className='information'>Duke: {nobles[fiefOwner].firstName} of the {nobles[fiefOwner].familyName} family <br /></span> ):
-        null
-      }
-      {
-        hoveredArmy ?
-        <span className='information'>Army Size: {hoveredArmy.calculateTotalSize()}</span>:
-        null
-      }
+    <div className='BottomBarSection Middle'>
+      
+      <div className='Layer'>
+        <div className='information'><span>Type: {type}</span></div>
+        <div className='information'><span>Pop: {population}</span></div>
+      </div>
+
+      <div className='Layer'>
+        <div className='information'>
+          <span>
+            Kingdom: 
+            {
+              kingdomOwner ?
+              allKingdoms[kingdomOwner].name :
+              'Unclaimed'
+            }
+          </span>
+        </div>
+
+        <div className='information'>
+          <span>
+            Duke: 
+            {
+              nobles[fiefOwner] ? 
+              nobles[fiefOwner].firstName:
+              'None'
+            } 
+          </span>
+        </div>
+      </div>
+
+      <div className='Layer'>
+        <div className='information'>
+          <span>
+            X: {x}, Y: {y}
+          </span>
+        </div>
+        <div className='information'>Army Size: 
+          <span>
+            {
+              hoveredArmy ?
+              hoveredArmy.calculateTotalSize() :
+              null
+            }
+          </span>
+        </div>
+      </div>
+
     </div>
   )
 }
@@ -56,6 +94,7 @@ function mapStateToProps(state){
     gameMap: {...state.gameMap},
     hoveredTileCoords: {...state.hoveredTileCoords},
     mainKingdom: {...state.mainKingdom},
+    aiKingdoms: [...state.aiKingdoms],
     families: {...state.families},
     nobles: {...state.nobles},
     armies: {...state.armies},

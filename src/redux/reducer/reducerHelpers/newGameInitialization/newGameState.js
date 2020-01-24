@@ -36,12 +36,12 @@ function createNewGameState(){
   generateNobles({randomNameGenerator, nobles, royalFamily: greenHeartFamily, familySize: 5})
   generateNobles({randomNameGenerator, nobles, royalFamily: goldFingerFamily, familySize: 5})
 
-  const enemyKingdom = new Kingdom({name: 'The Enemy Kingdom'})
+  const enemyKingdom = new Kingdom({name: 'Enemy Kingdom'})
   const enemyKingdomFamily = new RoyalFamily({})
   families[enemyKingdomFamily.id] = enemyKingdomFamily
   enemyKingdom.familyIds.push(enemyKingdomFamily.id)
   const enemyKingdomNoble = new Noble({
-    firstName: 'enemyKingdomNoble',
+    firstName: 'Enemy Noble',
     familyName: enemyKingdomFamily.familyName,
     loyalty: 100,
     power: 100,

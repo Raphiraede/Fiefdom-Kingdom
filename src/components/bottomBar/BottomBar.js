@@ -1,27 +1,16 @@
 import React from 'react'
 import './BottomBar.css'
-import { nextTurn } from '../../redux/actions.js'
 import { connect } from 'react-redux'
 import { TileInfo } from './TileInfo'
 import { ArmyCommands } from './ArmyCommands'
+import { KingdomManagement } from './KingdomManagement'
 
 function BottomBar(props){
   return (
     <div className='BottomBar'>
-      <div className='leftSection'>
-        <TileInfo />
-        <button className='NextTurnButton' onClick={props.nextTurn}>
-          Next Turn
-        </button>
-      </div>
-
-      <div className='middleSection'>
-        <h1>
-          Fiefdom Kingdom
-        </h1>
-      </div>
-      
-        <ArmyCommands />
+      <KingdomManagement />
+      <TileInfo />
+      <ArmyCommands />
     </div>
   )
 }
@@ -33,12 +22,6 @@ function mapStateToProps(state){
   }
 }
 
-function mapDispatchToProps(dispatch){
-  return {
-    nextTurn: () => dispatch(nextTurn())
-  }
-}
-
-const BottomBarContainer = connect(mapStateToProps, mapDispatchToProps)(BottomBar)
+const BottomBarContainer = connect(mapStateToProps)(BottomBar)
 
 export { BottomBarContainer as BottomBar }

@@ -9,7 +9,7 @@ class FamiliesView extends React.Component{
     super()
 
     this.state={
-      selectedFamilyId: undefined // for keeping track of which family to is selected in dropwdown menu
+      selectedFamilyId: undefined // for keeping track of which family to is selected in dropdown menu
     }
   }
 
