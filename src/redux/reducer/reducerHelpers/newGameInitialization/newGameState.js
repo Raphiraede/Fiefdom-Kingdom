@@ -74,6 +74,7 @@ function createNewGameState(){
       x: 0,
       y: 0,
     },
+    familiesViewVisible: false,
     givingFief: {
       currentlyGivingFief: false,
       nobleId: null,

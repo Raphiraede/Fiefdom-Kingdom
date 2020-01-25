@@ -13,17 +13,30 @@ function NobleView(props){
   } = props.noble
 
   return (
-    <div>
-      <h3 className='NobleViewHeader'>{firstName}</h3>
-      <span className='stat'>loyalty: {loyalty}</span> <br/>
-      <span className='stat'>power: {power}</span> <br/>
-      <span className='stat'>taxLevel: {taxLevel}</span> <br/>
-      <span className='stat'>age: {age}</span> <br/>
-      <button onClick={() => props.initiateGiveFiefMode(id)}>Give Fief</button>
-      {
-        props.givingFief.nobleId === id ? <button onClick={props.uninitiateGiveFiefMode}>Commit</button> : null
-      }
-      <button onClick={() => props.raiseArmy(id)}>Raise Army</button>
+    <div className='NobleView'>
+      <div className='Layer'>
+        <h3 className='Header'>{firstName}</h3>
+      </div>
+
+
+      <div className='Layer'>
+        <div className='information'>
+          <span className='stat'>Tax Level: {taxLevel}</span>
+        </div>
+        <div className='information'>
+          <span className='stat'>Age: {age}</span>
+        </div>
+      </div>
+      
+      <div className='Layer'>
+          {
+            props.givingFief.nobleId === id ? 
+            <button className='NobleButton' onClick={props.uninitiateGiveFiefMode}>Commit</button> : 
+            <button className='NobleButton' onClick={() => props.initiateGiveFiefMode(id)}>Give Fief</button>
+          }
+        <button className='NobleButton' onClick={() => props.raiseArmy(id)}>Raise Army</button>
+      </div>
+        
     </div>
   )
 }

@@ -1,7 +1,6 @@
 import React from 'react'
-import { nextTurn } from '../../redux/actions.js'
+import { nextTurn, togglefamiliesViewVisibility } from '../../redux/actions.js'
 import { connect } from 'react-redux'
-import { FamiliesView } from '../sideBar/FamiliesView.js'
 
 
 function KingdomManagement(props){
@@ -17,16 +16,16 @@ function KingdomManagement(props){
 
       <div className='Layer'>
         <div className='information'>
-          <span>Turn Number: {props.turnNumber}</span>
+          <span>Gold: {props.gold}</span>
         </div>
         <div className='information'>
-          <span>Gold: {props.gold}</span>
+          <span>Turn Number: {props.turnNumber}</span>
         </div>
       </div>
 
       <div className='Layer'>
-        <button className='Button Halves'>
-          Nobles
+        <button className='Button Halves' onClick={props.togglefamiliesViewVisibility}>
+          Families
         </button>
         <button className='Button Halves' onClick={props.nextTurn}>
           Next Turn
@@ -45,7 +44,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return{
-    nextTurn: () => dispatch(nextTurn())
+    nextTurn: () => dispatch(nextTurn()),
+    togglefamiliesViewVisibility: () => dispatch(togglefamiliesViewVisibility())
   }
 }
 

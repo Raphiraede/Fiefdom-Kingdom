@@ -143,6 +143,11 @@ function rootReducer(state, action){
       }
       return newState
 
+    case types.TOGGLE_NOBLES_VIEW_VISIBILITY:
+      newState = {...state}
+      newState.familiesViewVisible = !newState.familiesViewVisible
+      return newState
+
     default:
       return state
   }

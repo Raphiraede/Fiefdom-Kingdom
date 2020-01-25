@@ -92,6 +92,12 @@ function toggleArmyMode(payload){
   }
 }
 
+function togglefamiliesViewVisibility(){
+  return{
+    type: types.TOGGLE_NOBLES_VIEW_VISIBILITY
+  }
+}
+
 export { newGame, 
   nextTurn,
   updateHoveredTileCoords,
@@ -105,5 +111,6 @@ export { newGame,
   select,
   updateArmyDestination,
   disbandArmy,
-  toggleArmyMode
+  toggleArmyMode,
+  togglefamiliesViewVisibility
 }

@@ -47,8 +47,7 @@ function TileInfo(props){
       <div className='Layer'>
         <div className='information'>
           <span>
-            Kingdom: 
-            {
+            Kingdom: {
               kingdomOwner ?
               allKingdoms[kingdomOwner].name :
               'Unclaimed'
@@ -58,8 +57,7 @@ function TileInfo(props){
 
         <div className='information'>
           <span>
-            Duke: 
-            {
+            Duke: {
               nobles[fiefOwner] ? 
               nobles[fiefOwner].firstName:
               'None'
@@ -74,8 +72,7 @@ function TileInfo(props){
             X: {x}, Y: {y}
           </span>
         </div>
-        <div className='information'>Army Size: 
-          <span>
+        <div className='information'>Army Size: <span>
             {
               hoveredArmy ?
               hoveredArmy.calculateTotalSize() :
