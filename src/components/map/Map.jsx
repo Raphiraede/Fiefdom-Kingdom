@@ -225,8 +225,6 @@ class Map extends React.Component{
     this.drawHoveredTileOutline(ctx)
     ctx.font = '40px serif'
     ctx.fillStyle = 'red'
-    ctx.fillText('fps:' + framesLastSecond, 25, 75)
-    ctx.fillText('gold:' + this.props.mainKingdom.gold, 200, 75)
     if(window.location.pathname==='/map'){ // this is to stop the animation loop when the user navigates away from the page
       requestAnimationFrame(() => {this.drawGame(ctx, currentSecond, framesLastSecond, frameCount)})
     }

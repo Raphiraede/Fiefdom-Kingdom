@@ -1,5 +1,6 @@
 import React from 'react'
 import { NobleView } from './NobleView'
+import uuidv1 from 'uuid/v1'
 
 function NoblesView(props){
 
@@ -8,7 +9,7 @@ function NoblesView(props){
     { props.nobles ? 
         props.nobles.map(noble => {
           return (
-              <NobleView noble={noble}></NobleView>
+              <NobleView key={uuidv1()} noble={noble}></NobleView>
           )
         }) :
         null

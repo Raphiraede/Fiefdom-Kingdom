@@ -2,3 +2,11 @@
   position: absolute;
   z-index: 1;
 }
+
+.NavButton{
+  height: 38px;
+  background-color: #3f3f3f;
+  color: #7F7F7F;
+  font-size: 80%;
+  width: 11vw;
+}

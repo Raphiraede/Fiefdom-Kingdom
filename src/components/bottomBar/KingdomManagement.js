@@ -3,42 +3,52 @@ import { nextTurn, togglefamiliesViewVisibility } from '../../redux/actions.js'
 import { connect } from 'react-redux'
 
 
-function KingdomManagement(props){
+class KingdomManagement extends React.Component{
 
-  return(
-    <div className='BottomBarSection Left'>
-      <div className='Layer'>
-        <h2 className='Header'>
-          Kingdom
-        </h2>
-      </div>
+  componentDidUpdate(){
+    const FamiliesButton = this.refs.families
+    FamiliesButton.style.boxShadow = ''
 
+    if(this.props.familiesViewVisible) FamiliesButton.style.boxShadow = 'inset 0px 0px 20px #020202'
+  }
 
-      <div className='Layer'>
-        <div className='information'>
-          <span>Gold: {props.gold}</span>
+  render(){
+    return(
+      <div className='BottomBarSection Left'>
+        <div className='Layer'>
+          <h2 className='Header'>
+            Kingdom
+          </h2>
         </div>
-        <div className='information'>
-          <span>Turn Number: {props.turnNumber}</span>
+  
+  
+        <div className='Layer'>
+          <div className='information'>
+            <span>Gold: {this.props.gold}</span>
+          </div>
+          <div className='information'>
+            <span>Turn Number: {this.props.turnNumber}</span>
+          </div>
+        </div>
+  
+        <div className='Layer'>
+          <button className='Button Halves' ref='families' onClick={this.props.togglefamiliesViewVisibility}>
+            Families
+          </button>
+          <button className='Button Halves' onClick={this.props.nextTurn}>
+            Next Turn
+          </button>
         </div>
       </div>
-
-      <div className='Layer'>
-        <button className='Button Halves' onClick={props.togglefamiliesViewVisibility}>
-          Families
-        </button>
-        <button className='Button Halves' onClick={props.nextTurn}>
-          Next Turn
-        </button>
-      </div>
-    </div>
-  )
+    )
+  }
 }
 
 function mapStateToProps(state){
   return{
     turnNumber: state.turnNumber,
-    gold: state.mainKingdom.gold
+    gold: state.mainKingdom.gold,
+    familiesViewVisible: state.familiesViewVisible
   }
 }
 

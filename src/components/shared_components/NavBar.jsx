@@ -1,5 +1,4 @@
 import React from 'react'
-import { Button } from './Button'
 import { Link } from 'react-router-dom'
 import './NavBar.css'
 function NavBar(){
@@ -7,16 +6,16 @@ function NavBar(){
   return (
     <div className='NavBar'>
       <Link to={'/'}>
-        <Button
-          text='Home Page'
-        />
+        <button className='NavButton'>
+          Home Page
+        </button>
       </Link>
 
-      <Link to = {'/map'}>
-        <Button
-          text='Map'
-        />
-      </Link>
+      {/* <Link to = {'/map'}>
+        <button className='NavButton'>
+          Map
+        </button>
+      </Link> */}
 
     </div>
   )

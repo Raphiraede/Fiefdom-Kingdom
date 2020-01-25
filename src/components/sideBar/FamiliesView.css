@@ -7,7 +7,7 @@
   font-family:"TimesNewRoman";
   width: 15%;
   height: calc(100% - 240px);
-  bottom: 120px;
+  bottom: calc(15% + 6px);
 }
 
 .FamiliesDropdownSection{
