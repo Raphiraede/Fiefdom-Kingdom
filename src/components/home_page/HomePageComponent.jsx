@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Button } from '../shared_components/Button.jsx'
 import { newGame } from '../../redux/actions.js'
 import './HomePageComponent.css'
 
@@ -11,14 +10,19 @@ class HomePageComponent extends React.Component{
   
   render(){
     return(
-      <div>
-        <h1 className='Title'>Fiefdom Kingdom</h1>
-        <Link to={'/map'}>
-          <Button 
-            text={'New Game!'}
-            onClick={this.props.newGame}
-          />
-        </Link>
+      <div className='HomePageMenuWrapper'>
+        <div className='HomePageMenu'>
+          <div className='ColumnOne'>
+          </div>
+          <h1 className='Title'>Fiefdom Kingdom</h1>
+          <Link to={'/map'}>
+            <button className='HomePageButton' onClick={this.props.newGame}>New Game</button>
+          </Link>
+
+          <Link to={'/map'}>
+            <button className='HomePageButton'>Load Game</button>
+          </Link>
+        </div>
       </div>
     )
   }

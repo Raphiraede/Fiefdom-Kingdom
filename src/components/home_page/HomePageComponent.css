@@ -1,6 +1,37 @@
 .Title{
-  width: 1000px;
+  width: 60%;
   margin: auto;
+  margin-top: 5%;
   text-align: center;
-  font-size: 60px;
+  font-size: 300%;
+}
+
+.HomePageButton{
+  height: 10%;
+  width: 50%;
+  margin-left: 25%;
+  margin-top: 10%;
+  background-color: #3F3F3F;
+  color: #7F7F7F;
+  font-size: 125%;
+}
+
+.HomePageMenuWrapper{
+  width: 100vw;
+  height: 100vh;
+}
+
+.HomePageMenu{
+  bottom: 10%;
+  width: 50%;
+  margin: auto;
+  margin-top: 5%;
+  height: 80%;
+  background-color: #181818;
+  font-size: large;
+  color: #7F7F7F;
+  font-family:"TimesNewRoman";
+  border-width: 3px;
+  border-style: ridge;
+  border-color: rgb(220, 220, 220);
 }

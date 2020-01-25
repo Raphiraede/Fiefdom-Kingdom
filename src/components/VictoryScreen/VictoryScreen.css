@@ -1,0 +1,51 @@
+.VictoryScreen{
+  height: 100vh;
+  width: 100vw;
+}
+
+.VictoryComponent{
+  margin: auto;
+  margin-top: 5%;
+  height: 80%;
+  width: 70%;
+  border-width: 3px;
+  border-style: ridge;
+  border-color: rgb(220, 220, 220);
+  background-color: #181818;
+}
+
+.VictoryPicture{
+  display: block;
+  height: 70%;
+  width: 70%;
+  margin: auto;
+}
+
+.VictoryScreenHeaderWrapper{
+  width: 100%;
+  height: 10%;
+}
+
+.VictoryScreenHeader{
+  color: #7F7F7F;
+  text-align: center;
+  margin-top: 1%;
+  font-size: 300%;
+}
+
+.EndscreenButton{
+  display: block;
+  height: 10%;
+  width: 50%;
+  margin: auto;
+  margin-top: 1%;
+  background-color: #3F3F3F;
+  color: #7F7F7F;
+  font-size: 125%;
+}
+
+a{
+  text-decoration: none;
+}
+
+

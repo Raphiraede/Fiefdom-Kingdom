@@ -43,7 +43,7 @@ function checkForGameEnd(gameMap, mainKingdom){
     for(let y = 0; y < gameMap[x].length; y++){
       const tile = gameMap[x][y]
       if(tile.type === 'castle' && tile.originalOwner === tile.kingdomOwner){
-
+        kingdomIdsWhoStillHaveTheirCastle.push(tile.kingdomOwner)
       }
     }
   }
