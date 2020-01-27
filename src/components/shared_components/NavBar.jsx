@@ -13,7 +13,7 @@ function NavBar(props){
       </Link>
 
         <button onClick={props.toggleTutorial}className='NavButton'>
-          Tutorial
+          How To Play
         </button>
 
       {/* <Link to = {'/map'}>
