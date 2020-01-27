@@ -5,6 +5,7 @@ import { FamiliesView } from '../sideBar/FamiliesView'
 import { Map } from './Map'
 import { BottomBar } from '../bottomBar/BottomBar'
 import { connect } from 'react-redux'
+import { Tutorial } from '../Tutorial/Tutorial'
 
 function MapPage(props){
   return (
@@ -17,6 +18,11 @@ function MapPage(props){
         null
       }
       <BottomBar />
+      {
+        props.tutorialOpen ? 
+        <Tutorial /> :
+        null
+      }
 
       
     </div>
@@ -25,7 +31,8 @@ function MapPage(props){
 
 function mapStateToProps(state){
   return{
-    familiesViewVisible: state.familiesViewVisible
+    tutorialOpen: state.tutorialOpen,
+    familiesViewVisible: state.familiesViewVisible,
   }
 }
 

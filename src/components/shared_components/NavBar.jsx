@@ -1,8 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './NavBar.css'
-function NavBar(){
-
+import { toggleTutorial } from '../../redux/actions'
+import { connect } from 'react-redux'
+function NavBar(props){
   return (
     <div className='NavBar'>
       <Link to={'/'}>
@@ -10,6 +11,10 @@ function NavBar(){
           Home Page
         </button>
       </Link>
+
+        <button onClick={props.toggleTutorial}className='NavButton'>
+          Tutorial
+        </button>
 
       {/* <Link to = {'/map'}>
         <button className='NavButton'>
@@ -19,7 +24,14 @@ function NavBar(){
 
     </div>
   )
-
 }
 
-export { NavBar }
+function mapDispatchToProps(dispatch){
+  return{
+    toggleTutorial: () => dispatch(toggleTutorial())
+  }
+}
+
+const NavBarContainer = connect(undefined, mapDispatchToProps)(NavBar)
+
+export { NavBarContainer as NavBar }

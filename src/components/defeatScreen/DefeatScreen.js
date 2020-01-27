@@ -1,20 +1,22 @@
 import React from 'react'
-import './VictoryScreen.css'
-import victoriousArmy from '../../images/victoriousArmy.jpg'
+import '../VictoryScreen/VictoryScreen.css'
 import { Link } from 'react-router-dom'
+import kingWatchingBurningCastle from '../../images/KingWatchingBurningCastle.jpg'
 
-function VictoryScreen(){
+function DefeatScreen(){
+
+  
   return(
     <div className='VictoryScreen'>
       <div className='VictoryComponent'>
         <div className='VictoryScreenHeaderWrapper'>
           <h1 className='VictoryScreenHeader'>
-            Victory!
+            Defeat
           </h1>
         </div>
         <img 
-          src={victoriousArmy}
-          alt='Victory' 
+          src={kingWatchingBurningCastle}
+          alt='Defeat' 
           className='VictoryPicture'
         />
         <Link to='/'>
@@ -27,4 +29,4 @@ function VictoryScreen(){
   )
 }
 
-export { VictoryScreen }
+export { DefeatScreen }

@@ -1,4 +1,5 @@
 import types from "./types";
+import { func } from "prop-types";
 
 function newGame(payload){
   return {
@@ -98,6 +99,12 @@ function togglefamiliesViewVisibility(){
   }
 }
 
+function toggleTutorial(){
+  return{
+    type: types.TOGGLE_TUTORIAL,
+  }
+}
+
 export { newGame, 
   nextTurn,
   updateHoveredTileCoords,
@@ -112,5 +119,6 @@ export { newGame,
   updateArmyDestination,
   disbandArmy,
   toggleArmyMode,
-  togglefamiliesViewVisibility
+  togglefamiliesViewVisibility,
+  toggleTutorial
 }

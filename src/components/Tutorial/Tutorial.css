@@ -1,0 +1,36 @@
+
+.TutorialWrapper{
+  position: absolute;
+  top: 0px;
+  width: 100vw;
+  height: 100vh;
+}
+
+.Tutorial{
+  overflow-y: scroll;
+  padding: 2%;
+  text-align: center;
+  position: absolute;
+  top: 50px;
+  left: 25%;
+  height: 80%;
+  width: 50%;
+  background-color: #181818;
+  font-size: large;
+  color: #7F7F7F;
+  font-family:"TimesNewRoman";
+  border-width: 3px;
+  border-style: ridge;
+  border-color: rgb(220, 220, 220);
+}
+
+.BasicKingdomsPicture{
+  float: left;
+  height: 50%;
+  width: 50%;
+}
+
+.ImageParagraphCombo{
+  display: flex;
+  margin-top: 1%;
+}

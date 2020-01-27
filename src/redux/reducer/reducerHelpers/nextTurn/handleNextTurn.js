@@ -61,7 +61,7 @@ function checkForGameEnd(gameMap, mainKingdom){
       }
     }
   }
-  if(mainKingdom.gold < -500){
+  if(mainKingdom.gold < -1000){
     return {
       type: 'defeat',
       reason: 'bankruptcy'

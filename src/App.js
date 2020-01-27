@@ -6,6 +6,7 @@ import {
   Route
 } from 'react-router-dom'
 import { VictoryScreen } from './components/VictoryScreen/VictoryScreen.js'
+import { DefeatScreen } from './components/defeatScreen/DefeatScreen.js'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route exact path='/' component={HomePageComponent} />
         <Route path='/map' component={MapPage} />
         <Route path='/victory' component={VictoryScreen} />
+        <Route path='/defeat' component={DefeatScreen} />
       </div>
     </BrowserRouter>
   )

@@ -148,6 +148,11 @@ function rootReducer(state, action){
       newState.familiesViewVisible = !newState.familiesViewVisible
       return newState
 
+    case types.TOGGLE_TUTORIAL:
+      newState = {...state}
+      newState.tutorialOpen = !newState.tutorialOpen
+      return newState
+
     default:
       return state
   }
