@@ -43,7 +43,7 @@ function Tutorial(){
             <br /> <br />
             Click the Give Fief button to award fiefs of land to that Noble, then press commit to stop giving Fiefs. This will allow the noble to collect taxes and raise armies from the land.
             Tax revenue is calculated based on the Noble's tax level and the population of the tiles under that Noble.
-            <br /> <bra />
+            <br /> <br />
             Click the Raise Army button to raise an Army from the Nobles Land. This will levee 10% of the population under that noble into an Army.
           </p>
         </div>

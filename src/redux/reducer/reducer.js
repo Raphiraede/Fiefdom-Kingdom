@@ -11,6 +11,7 @@ function rootReducer(state, action){
   let mouseOffset
   switch (action.type) {
     case types.NEW_GAME:
+      console.log('sup')
       const newGameState = createNewGameState()
       return newGameState
 

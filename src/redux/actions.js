@@ -1,5 +1,4 @@
-import types from "./types";
-import { func } from "prop-types";
+import types from "./types"
 
 function newGame(payload){
   return {

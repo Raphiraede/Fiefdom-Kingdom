@@ -5,8 +5,6 @@ import { connect } from 'react-redux'
 function NobleView(props){
   const {
     firstName,
-    loyalty,
-    power,
     taxLevel,
     age,
     id,

@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import { rootReducer } from './redux/reducer/reducer'
 import { saveState, loadState } from './redux/saveAndLoadState.js'
 import './index.css'
+import { BrowserRouter } from 'react-router-dom'
 
 
 const persistedState = loadState()
@@ -21,7 +22,9 @@ store.subscribe(() => {
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root')
 );

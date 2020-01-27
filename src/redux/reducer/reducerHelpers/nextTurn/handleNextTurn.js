@@ -25,11 +25,7 @@ function handleNextTurn(state){
 
   handleArmiesNextTurn(state)
   const gameEnd = checkForGameEnd(state.gameMap, state.mainKingdom)
-  if(gameEnd){
-    newState.gameEnd = gameEnd
-    if(gameEnd.type==='victory') window.location.pathname='/victory'
-    if(gameEnd.type==='defeat') window.location.pathname='/defeat'
-  } 
+  newState.gameEnd = gameEnd
   newState.indexes = createIndexes(newState)
 
   aiKingdomTurn(newState)

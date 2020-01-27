@@ -2,10 +2,10 @@ import React from 'react'
 import '../VictoryScreen/VictoryScreen.css'
 import { Link } from 'react-router-dom'
 import kingWatchingBurningCastle from '../../images/KingWatchingBurningCastle.jpg'
+import { newGame } from '../../redux/actions'
+import { connect } from 'react-redux'
 
-function DefeatScreen(){
-
-  
+function DefeatScreen(props){  
   return(
     <div className='VictoryScreen'>
       <div className='VictoryComponent'>
@@ -20,7 +20,7 @@ function DefeatScreen(){
           className='VictoryPicture'
         />
         <Link to='/'>
-          <button className='EndscreenButton'>
+          <button className='EndscreenButton' onClick={props.newGame}>
             Home Page
           </button>
         </Link>
@@ -29,4 +29,11 @@ function DefeatScreen(){
   )
 }
 
-export { DefeatScreen }
+function mapDispatchToProps(dispatch){
+  return{
+    newGame: () => dispatch(newGame())
+  }
+}
+
+const DefeatScreenContainer = connect(undefined, mapDispatchToProps)(DefeatScreen)
+export { DefeatScreenContainer as DefeatScreen }
