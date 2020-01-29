@@ -12,8 +12,8 @@ import { connect } from 'react-redux'
 
 class App extends React.Component {
   componentDidUpdate(){
-    if(this.props.gameEnd.type === 'victory' && window.location.pathname !== '/victory')this.props.history.push('/victory')
-    if(this.props.gameEnd.type === 'defeat' && window.location.pathname !== '/defeat') this.props.history.push('/defeat')
+    if(this.props && this.props.gameEnd && this.props.gameEnd.type === 'victory' && window.location.pathname !== '/victory')this.props.history.push('/victory')
+    if(this.props && this.props.gameEnd && this.props.gameEnd.type === 'defeat' && window.location.pathname !== '/defeat') this.props.history.push('/defeat')
   }
   render(){
     return (
@@ -28,9 +28,15 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state){
-  return{
-    gameEnd: {...state.gameEnd}
+  if(state && state.gameEnd){
+    return{
+      gameEnd: {...state.gameEnd}
+    }
   }
+  else{
+    return {}
+  }
+
 }
 
 const AppContainer = connect(mapStateToProps)(App)
