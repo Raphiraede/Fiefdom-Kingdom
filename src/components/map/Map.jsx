@@ -190,7 +190,7 @@ class Map extends React.Component{
             ctx.drawImage(this.Trees, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
           break
 
-          case 'goldOre':
+          case 'gold ore':
             ctx.drawImage(this.GoldOre, tileTopLeftPixelX, tileTopLeftPixelY, tileSize, tileSize)
           break
 

@@ -12,8 +12,6 @@ class HomePageComponent extends React.Component{
     return(
       <div className='HomePageMenuWrapper'>
         <div className='HomePageMenu'>
-          <div className='ColumnOne'>
-          </div>
           <h1 className='Title'>Fiefdom Kingdom</h1>
           <Link to={'/map'}>
             <button className='HomePageButton' onClick={this.props.newGame}>New Game</button>
